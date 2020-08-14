@@ -17,6 +17,7 @@ import type {
     JSONRegExpLiteral,
     JSONBigIntLiteral,
     JSONLiteral,
+    JSONProperty,
 } from "../parser/ast"
 
 /**
@@ -96,30 +97,44 @@ export function getStaticJSONValue(
     node: JSONExpression | JSONExpressionStatement,
 ): JSONValue
 export function getStaticJSONValue(node: JSONProgram): JSONValue
-/* eslint-disable complexity */
+export function getStaticJSONValue(node: JSONNode): JSONValue
 /**
  * Gets the static value for the given node.
  */
-export function getStaticJSONValue(
-    node:
-        | JSONExpression
-        | JSONProgram
-        | JSONExpressionStatement
-        | JSONTemplateElement,
-): JSONValue {
-    /* eslint-enable complexity */
-    if (node.type === "JSONObjectExpression") {
-        const object: { [key: string]: JSONValue } = {}
+export function getStaticJSONValue(node: JSONNode): JSONValue {
+    return resolver[node.type](node)
+}
+
+const resolver: { [key in JSONNode["type"]]: (node: any) => JSONValue } = {
+    Program(node: JSONProgram) {
+        if (
+            node.body.length !== 1 ||
+            node.body[0].type !== "JSONExpressionStatement"
+        ) {
+            throw new Error("Illegal argument")
+        }
+        return getStaticJSONValue(node.body[0])
+    },
+    JSONExpressionStatement(node: JSONExpressionStatement) {
+        return getStaticJSONValue(node.expression)
+    },
+    JSONObjectExpression(node: JSONObjectExpression) {
+        const object: JSONObjectValue = {}
         for (const prop of node.properties) {
-            const keyName =
-                prop.key.type === "JSONLiteral"
-                    ? `${prop.key.value}`
-                    : prop.key.name
-            object[keyName] = getStaticJSONValue(prop.value)
+            Object.assign(object, getStaticJSONValue(prop))
         }
         return object
-    }
-    if (node.type === "JSONArrayExpression") {
+    },
+    JSONProperty(node: JSONProperty) {
+        const keyName =
+            node.key.type === "JSONLiteral"
+                ? `${node.key.value}`
+                : node.key.name
+        return {
+            [keyName]: getStaticJSONValue(node.value),
+        }
+    },
+    JSONArrayExpression(node: JSONArrayExpression) {
         const array: JSONValue[] = []
         for (let index = 0; index < node.elements.length; index++) {
             const element = node.elements[index]
@@ -128,8 +143,8 @@ export function getStaticJSONValue(
             }
         }
         return array
-    }
-    if (node.type === "JSONLiteral") {
+    },
+    JSONLiteral(node: JSONLiteral) {
         if (node.regex) {
             try {
                 return new RegExp(node.regex.pattern, node.regex.flags)
@@ -145,12 +160,12 @@ export function getStaticJSONValue(
             }
         }
         return node.value
-    }
-    if (node.type === "JSONUnaryExpression") {
+    },
+    JSONUnaryExpression(node: JSONUnaryExpression) {
         const value = getStaticJSONValue(node.argument)
         return node.operator === "-" ? -value : value
-    }
-    if (node.type === "JSONIdentifier") {
+    },
+    JSONIdentifier(node: JSONIdentifier) {
         if (node.name === "Infinity") {
             return Infinity
         }
@@ -161,24 +176,11 @@ export function getStaticJSONValue(
             return undefined
         }
         throw new Error("Illegal argument")
-    }
-    if (node.type === "JSONTemplateLiteral") {
+    },
+    JSONTemplateLiteral(node: JSONTemplateLiteral) {
         return getStaticJSONValue(node.quasis[0])
-    }
-    if (node.type === "JSONTemplateElement") {
+    },
+    JSONTemplateElement(node: JSONTemplateElement) {
         return node.value.cooked
-    }
-    if (node.type === "Program") {
-        if (
-            node.body.length !== 1 ||
-            node.body[0].type !== "JSONExpressionStatement"
-        ) {
-            throw new Error("Illegal argument")
-        }
-        return getStaticJSONValue(node.body[0])
-    }
-    if (node.type === "JSONExpressionStatement") {
-        return getStaticJSONValue(node.expression)
-    }
-    throw new Error("Illegal argument")
+    },
 }
