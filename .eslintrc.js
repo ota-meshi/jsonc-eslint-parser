@@ -12,7 +12,7 @@ module.exports = {
         "plugin:@mysticatea/+node",
         "plugin:@mysticatea/+eslint-plugin",
         "plugin:jsonc/auto-config",
-        "plugin:jsonc/recommended-with-json",
+        "plugin:jsonc/recommended-with-jsonc",
     ],
     rules: {
         "require-jsdoc": "error",
