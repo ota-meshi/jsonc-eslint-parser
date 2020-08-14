@@ -95,6 +95,7 @@ export function getStaticJSONValue(node: JSONArrayExpression): JSONValue[]
 export function getStaticJSONValue(
     node: JSONExpression | JSONExpressionStatement,
 ): JSONValue
+export function getStaticJSONValue(node: JSONProgram): JSONValue
 /* eslint-disable complexity */
 /**
  * Gets the static value for the given node.
