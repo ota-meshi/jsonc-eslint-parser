@@ -15,7 +15,10 @@ export class ParseError extends SyntaxError {
      * Normalize the error object.
      * @param x The error object to normalize.
      */
-    public static normalize(x: any): ParseError | null {
+    public static normalize(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+        x: any,
+    ): ParseError | null {
         if (ParseError.isParseError(x)) {
             return x
         }
@@ -50,7 +53,10 @@ export class ParseError extends SyntaxError {
      * @param x The value to check.
      * @returns `true` if the value has `message`, `pos`, `loc` properties.
      */
-    public static isParseError(x: any): x is ParseError {
+    public static isParseError(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+        x: any,
+    ): x is ParseError {
         return (
             x instanceof ParseError ||
             (typeof x.message === "string" &&
@@ -191,6 +197,7 @@ export function throwUnexpectedNodeError(
         throw err
     }
     if (node.type === "Literal") {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- bigint
         const type = (node as any).bigint
             ? "bigint"
             : (node as RegExpLiteral).regex
@@ -249,6 +256,7 @@ export function throwUnexpectedNodeError(
  * Throw syntax error of outside of code.
  */
 export function throwErrorAsAdjustingOutsideOfCode(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
     err: any,
     code: string,
 ): never {
@@ -268,6 +276,7 @@ export function throwErrorAsAdjustingOutsideOfCode(
  * @returns `true` if the value has acorn style location information.
  */
 function isAcornStyleParseError(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
     x: any,
 ): x is { message: string; pos: number; loc: Position } {
     return (

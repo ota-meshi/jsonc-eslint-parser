@@ -13,7 +13,7 @@ import type {
     Expression,
 } from "estree"
 import type { AST } from "eslint"
-import {
+import type {
     JSONNode,
     JSONProgram,
     JSONExpressionStatement,
@@ -35,8 +35,8 @@ import {
     JSONStringLiteral,
 } from "./ast"
 import { getKeys, getNodes } from "./traverse"
+import type { ParseError } from "./errors"
 import {
-    ParseError,
     throwUnexpectedNodeError,
     throwExpectedTokenError,
     throwUnexpectedTokenError,
@@ -44,7 +44,8 @@ import {
     throwUnexpectedSpaceError,
     throwUnexpectedError,
 } from "./errors"
-import { TokenStore, isComma, MaybeNodeOrToken } from "./token-store"
+import type { TokenStore, MaybeNodeOrToken } from "./token-store"
+import { isComma } from "./token-store"
 
 const lineBreakPattern = /\r\n|[\r\n\u2028\u2029]/u
 
@@ -380,7 +381,10 @@ function convertLiteralNode(
             regex: node.regex,
             ...getFixLocation(node),
         } as JSONRegExpLiteral
-    } else if ((node as any).bigint) {
+    } else if (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- bigint
+        (node as any).bigint
+    ) {
         if (!ctx.bigintLiterals) {
             return throwUnexpectedNodeError(node, tokens)
         }
@@ -388,6 +392,7 @@ function convertLiteralNode(
             type: "JSONLiteral",
             value: node.value,
             raw: node.raw!,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- bigint
             bigint: (node as any).bigint,
             ...getFixLocation(node),
         } as JSONBigIntLiteral
@@ -653,7 +658,7 @@ function checkUnexpectedKeys(
  * Fix the location information of the given node.
  * @param node The node.
  */
-export function fixLocation(node: MaybeNodeOrToken | AST.Token) {
+export function fixLocation(node: MaybeNodeOrToken | AST.Token): void {
     const locs = getFixLocation(node)
     node.range = locs.range
     node.loc = locs.loc
@@ -663,7 +668,7 @@ export function fixLocation(node: MaybeNodeOrToken | AST.Token) {
  * Modify the location information of the given error with using the base offset and gaps of this calculator.
  * @param error The error to modify their location.
  */
-export function fixErrorLocation(error: ParseError) {
+export function fixErrorLocation(error: ParseError): void {
     error.index = Math.max(error.index - 2, 0)
     if (error.lineNumber === 0) {
         error.column = Math.max(error.column - 2, 0)

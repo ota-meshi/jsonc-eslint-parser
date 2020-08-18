@@ -1,5 +1,5 @@
 import type { ExpressionStatement, CallExpression } from "estree"
-import type { AST } from "eslint"
+import type { AST, SourceCode } from "eslint"
 import { getEspree } from "./espree"
 import {
     ParseError,
@@ -9,20 +9,31 @@ import {
     throwUnexpectedCommentError,
 } from "./errors"
 import { KEYS } from "./visitor-keys"
+import type { JSONSyntaxContext } from "./convert"
 import {
     convertNode,
     convertToken,
     fixLocation,
     fixErrorLocation,
-    JSONSyntaxContext,
 } from "./convert"
 import type { ParserOptions } from "../types"
 import { TokenStore, isComma } from "./token-store"
+import type { JSONProgram } from "./ast"
 
 /**
  * Parse source code
  */
-export function parseForESLint(code: string, options?: any) {
+export function parseForESLint(
+    code: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- any
+    options?: any,
+): {
+    ast: JSONProgram
+    visitorKeys: SourceCode.VisitorKeys
+    services: {
+        isJSON: boolean
+    }
+} {
     try {
         const ast = parseJS(`0(${code}\n)`, options)
 
@@ -81,7 +92,11 @@ export function parseForESLint(code: string, options?: any) {
  * @param options The parser options.
  * @returns The result of parsing.
  */
-function parseJS(code: string, options: any): AST.Program {
+function parseJS(
+    code: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+    options: any,
+): AST.Program {
     const espree = getEspree()
     try {
         return espree.parse(code, options)
