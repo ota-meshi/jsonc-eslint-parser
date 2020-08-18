@@ -27,7 +27,11 @@ export {
 /**
  * Parse JSON source code
  */
-export function parseJSON(code: string, options?: any): AST.JSONProgram {
+export function parseJSON(
+    code: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+    options?: any,
+): AST.JSONProgram {
     const parserOptions = Object.assign(
         { filePath: "<input>", ecmaVersion: 2019 },
         options || {},

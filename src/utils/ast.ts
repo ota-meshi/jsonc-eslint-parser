@@ -105,6 +105,7 @@ export function getStaticJSONValue(node: JSONNode): JSONValue {
     return resolver[node.type](node)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
 const resolver: { [key in JSONNode["type"]]: (node: any) => JSONValue } = {
     Program(node: JSONProgram) {
         if (

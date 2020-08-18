@@ -14,7 +14,7 @@ export class TokenStore {
         this.tokens = tokens
     }
 
-    public findIndexByOffset(offset: number) {
+    public findIndexByOffset(offset: number): number {
         return this.tokens.findIndex(
             (token) => token.range[0] <= offset && offset < token.range[1],
         )
@@ -76,6 +76,8 @@ export class TokenStore {
 /**
  * Checks if given token is comma
  */
-export function isComma(token: AST.Token) {
+export function isComma(
+    token: AST.Token,
+): token is AST.Token & { type: "Punctuator"; value: "," } {
     return token.type === "Punctuator" && token.value === ","
 }

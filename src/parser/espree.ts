@@ -5,7 +5,11 @@ import path from "path"
  * The interface of ESLint custom parsers.
  */
 export interface ESPree {
-    parse(code: string, options: any): AST.Program
+    parse(
+        code: string,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+        options: any,
+    ): AST.Program
 }
 
 let espreeCache: ESPree | null = null
@@ -36,7 +40,6 @@ export function getEspree(): ESPree {
             }
         }
     }
-    // eslint-disable-next-line @mysticatea/ts/no-require-imports
     return espreeCache || (espreeCache = require("espree"))
 }
 
@@ -44,9 +47,12 @@ export function getEspree(): ESPree {
  * createRequire
  */
 function createRequire(filename: string) {
-    // eslint-disable-next-line @mysticatea/ts/no-require-imports,  @mysticatea/ts/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-var-requires -- special require
     const Module = require("module")
-    const fn: (filename: string) => any =
+    const fn: (
+        filename: string,
+    ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+    any =
         // Added in v12.2.0
         Module.createRequire ||
         // Added in v10.12.0, but deprecated in v12.2.0.

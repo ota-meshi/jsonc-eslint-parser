@@ -12,7 +12,11 @@ import { KEYS } from "./visitor-keys"
  * @param key The key to check.
  * @returns `true` if the key should be traversed.
  */
-function fallbackKeysFilter(this: any, key: string): boolean {
+function fallbackKeysFilter(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+    this: any,
+    key: string,
+): boolean {
     let value = null
     return (
         key !== "comments" &&
@@ -43,7 +47,8 @@ export function getFallbackKeys(node: JSONNode): string[] {
  * @returns The keys to traverse.
  */
 export function getKeys(node: JSONNode, visitorKeys?: VisitorKeys): string[] {
-    const keys = (visitorKeys || KEYS)[node.type] || getFallbackKeys(node)
+    const keys: readonly string[] =
+        (visitorKeys || KEYS)[node.type] || getFallbackKeys(node)
 
     return keys.filter((key) => !getNodes(node, key).next().done)
 }
@@ -52,7 +57,11 @@ export function getKeys(node: JSONNode, visitorKeys?: VisitorKeys): string[] {
  * Get the nodes of the given node.
  * @param node The node to get.
  */
-export function* getNodes(node: any, key: string) {
+export function* getNodes(
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any -- any
+    node: any,
+    key: string,
+): IterableIterator<JSONNode> {
     const child = node[key]
     if (Array.isArray(child)) {
         for (const c of child) {
@@ -70,7 +79,10 @@ export function* getNodes(node: any, key: string) {
  * @param x The value to check.
  * @returns `true` if the value is a node.
  */
-function isNode(x: any): x is JSONNode {
+function isNode(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+    x: any,
+): x is JSONNode {
     return x !== null && typeof x === "object" && typeof x.type === "string"
 }
 

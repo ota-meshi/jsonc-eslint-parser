@@ -2,7 +2,7 @@ import assert from "assert"
 import { getStaticJSONValue, isExpression } from "../../../src/utils/ast"
 import { parseForESLint } from "../../../src/parser/parser"
 import espree from "espree"
-import { JSONProgram, JSONObjectExpression } from "../../../src/parser/ast"
+import type { JSONProgram, JSONObjectExpression } from "../../../src/parser/ast"
 import { traverseNodes } from "../../../src/parser/traverse"
 
 function parse(code: string) {
@@ -127,8 +127,8 @@ describe("getStaticJSONValue", () => {
         it(code, () => {
             const ast = parse(code).ast
             assert.strictEqual(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
                 stringify(getStaticJSONValue(ast as any)),
-                // eslint-disable-next-line no-eval
                 stringify(eval(`(${code})`)),
             )
         })
