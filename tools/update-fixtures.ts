@@ -28,7 +28,7 @@ function replacer(key: string, value: any) {
 function parse(code: string) {
     return parseForESLint(code, {
         comment: true,
-        ecmaVersion: 2020,
+        ecmaVersion: 2021,
         eslintScopeManager: true,
         eslintVisitorKeys: true,
         filePath: "test.json",

@@ -58,6 +58,7 @@ export type JSONSyntaxContext = {
     leadingOrTrailingDecimalPoints: boolean
     infinities: boolean
     nans: boolean
+    numericSeparators: boolean
     invalidJsonNumbers: boolean
     //
     multilineStrings: boolean
@@ -417,7 +418,9 @@ function convertLiteralNode(
 function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
     const value = node.value
     if (
-        (!ctx.invalidJsonNumbers || !ctx.leadingOrTrailingDecimalPoints) &&
+        (!ctx.invalidJsonNumbers ||
+            !ctx.leadingOrTrailingDecimalPoints ||
+            !ctx.numericSeparators) &&
         typeof value === "number"
     ) {
         const text = node.raw!
@@ -434,6 +437,24 @@ function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
                             column: node.loc!.end.column - 1,
                         },
                         end: node.loc!.end,
+                    },
+                })
+            }
+        }
+        if (!ctx.numericSeparators) {
+            if (text.includes("_")) {
+                const index = text.indexOf("_")
+                return throwUnexpectedTokenError("_", {
+                    range: [node.range![0] + index, node.range![0] + index + 1],
+                    loc: {
+                        start: {
+                            line: node.loc!.start.line,
+                            column: node.loc!.start.column + index,
+                        },
+                        end: {
+                            line: node.loc!.start.line,
+                            column: node.loc!.start.column + index + 1,
+                        },
                     },
                 })
             }

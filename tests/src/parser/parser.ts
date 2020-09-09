@@ -24,7 +24,7 @@ function replacer(key: string, value: any) {
 }
 
 function parse(code: string) {
-    return parseJSON(code, { ecmaVersion: 2020 })
+    return parseJSON(code, { ecmaVersion: 2021 })
 }
 
 describe("Check for AST.", () => {

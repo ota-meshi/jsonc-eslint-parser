@@ -8,7 +8,7 @@ import { traverseNodes } from "../../../src/parser/traverse"
 function parse(code: string) {
     const result = parseForESLint(code, {
         comment: true,
-        ecmaVersion: 2020,
+        ecmaVersion: 2021,
         eslintScopeManager: true,
         eslintVisitorKeys: true,
         filePath: "test.json",
@@ -137,7 +137,7 @@ describe("getStaticJSONValue", () => {
     it("Error on unknown Program", () => {
         const ast = espree.parse("a + b;", {
             comment: true,
-            ecmaVersion: 2020,
+            ecmaVersion: 2021,
             eslintScopeManager: true,
             eslintVisitorKeys: true,
             filePath: "test.json",
@@ -157,7 +157,7 @@ describe("getStaticJSONValue", () => {
     it("Error on unknown node", () => {
         const ast = espree.parse("a + b;", {
             comment: true,
-            ecmaVersion: 2020,
+            ecmaVersion: 2021,
             eslintScopeManager: true,
             eslintVisitorKeys: true,
             filePath: "test.json",
