@@ -7,7 +7,7 @@ function getParseError(code: string): ParseError {
     try {
         parseForESLint(code, {
             comment: true,
-            ecmaVersion: 2020,
+            ecmaVersion: 2021,
             eslintScopeManager: true,
             eslintVisitorKeys: true,
             filePath: "test.json",

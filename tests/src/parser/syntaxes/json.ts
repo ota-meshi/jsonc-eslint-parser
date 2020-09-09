@@ -7,7 +7,7 @@ function getParseError(code: string): ParseError {
     try {
         parseForESLint(code, {
             comment: true,
-            ecmaVersion: 2020,
+            ecmaVersion: 2021,
             eslintScopeManager: true,
             eslintVisitorKeys: true,
             filePath: "test.json",
@@ -48,6 +48,14 @@ describe("Check that parsing error is correct for JSON.", () => {
             column: 14,
             index: 13,
             char: "/",
+        },
+        {
+            code: '{"foo": 1_2_3}',
+            message: "Unexpected token '_'.",
+            lineNumber: 1,
+            column: 10,
+            index: 9,
+            char: "_",
         },
     ]) {
         it(`JSON parseForESLint error on ${JSON.stringify(code)}`, () => {
