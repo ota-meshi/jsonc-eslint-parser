@@ -9,7 +9,8 @@ export type MaybeNodeOrToken = {
 // type TokenType = AST.TokenType | "Template"
 
 export class TokenStore {
-    private tokens: AST.Token[]
+    private readonly tokens: AST.Token[]
+
     public constructor(tokens: AST.Token[]) {
         this.tokens = tokens
     }
@@ -19,6 +20,7 @@ export class TokenStore {
             (token) => token.range[0] <= offset && offset < token.range[1],
         )
     }
+
     public findTokenByOffset(offset: number): AST.Token | null {
         return this.tokens[this.findIndexByOffset(offset)]
     }
@@ -30,6 +32,7 @@ export class TokenStore {
     public getFirstToken(nodeOrToken: MaybeNodeOrToken): AST.Token {
         return this.findTokenByOffset(nodeOrToken.range![0])!
     }
+
     /**
      * Get the last token representing the given node.
      *
@@ -37,6 +40,7 @@ export class TokenStore {
     public getLastToken(nodeOrToken: MaybeNodeOrToken): AST.Token {
         return this.findTokenByOffset(nodeOrToken.range![1] - 1)!
     }
+
     /**
      * Get the first token before the given node or token.
      */
@@ -54,6 +58,7 @@ export class TokenStore {
         }
         return null
     }
+
     /**
      * Get the first token after the given node or token.
      */

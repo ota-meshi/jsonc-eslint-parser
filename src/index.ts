@@ -13,6 +13,7 @@ import { KEYS } from "./parser/visitor-keys"
 // parser
 export { parseForESLint }
 // Keys
+// eslint-disable-next-line @typescript-eslint/naming-convention -- parser module
 export const VisitorKeys = KEYS
 
 // tools

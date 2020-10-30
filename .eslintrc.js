@@ -17,6 +17,35 @@ module.exports = {
             },
             rules: {
                 "@typescript-eslint/no-non-null-assertion": "off",
+                "@typescript-eslint/naming-convention": [
+                    "error",
+                    {
+                        selector: "default",
+                        format: ["camelCase"],
+                        leadingUnderscore: "allow",
+                        trailingUnderscore: "allow",
+                    },
+
+                    {
+                        selector: "variable",
+                        format: ["camelCase", "UPPER_CASE"],
+                        leadingUnderscore: "allow",
+                        trailingUnderscore: "allow",
+                    },
+
+                    {
+                        selector: "typeLike",
+                        format: ["PascalCase"],
+                    },
+                    {
+                        selector: "property",
+                        format: ["camelCase", "PascalCase"],
+                    },
+                    {
+                        selector: "method",
+                        format: ["camelCase", "PascalCase"],
+                    },
+                ],
             },
         },
     ],

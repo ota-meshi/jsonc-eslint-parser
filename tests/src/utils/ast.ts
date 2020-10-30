@@ -129,6 +129,7 @@ describe("getStaticJSONValue", () => {
             assert.strictEqual(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
                 stringify(getStaticJSONValue(ast as any)),
+                // eslint-disable-next-line no-eval -- for test
                 stringify(eval(`(${code})`)),
             )
         })
