@@ -75,7 +75,7 @@ export function* getNodes(
 }
 
 /**
- * Check wheather a given value is a node.
+ * Check whether a given value is a node.
  * @param x The value to check.
  * @returns `true` if the value is a node.
  */

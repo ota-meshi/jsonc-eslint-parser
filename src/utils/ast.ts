@@ -76,35 +76,6 @@ export type JSONValue =
     | bigint
 export type JSONObjectValue = { [key: string]: JSONValue }
 
-export function getStaticJSONValue(
-    node: JSONUnaryExpression | JSONNumberIdentifier | JSONNumberLiteral,
-): number
-export function getStaticJSONValue(node: JSONUndefinedIdentifier): undefined
-export function getStaticJSONValue(node: JSONTemplateLiteral): string
-export function getStaticJSONValue(node: JSONTemplateElement): string
-export function getStaticJSONValue(node: JSONStringLiteral): string
-export function getStaticJSONValue(node: JSONNumberLiteral): number
-export function getStaticJSONValue(node: JSONKeywordLiteral): boolean | null
-export function getStaticJSONValue(node: JSONRegExpLiteral): RegExp
-export function getStaticJSONValue(node: JSONBigIntLiteral): bigint
-export function getStaticJSONValue(
-    node: JSONLiteral,
-): string | number | boolean | RegExp | bigint | null
-
-export function getStaticJSONValue(node: JSONObjectExpression): JSONObjectValue
-export function getStaticJSONValue(node: JSONArrayExpression): JSONValue[]
-export function getStaticJSONValue(
-    node: JSONExpression | JSONExpressionStatement,
-): JSONValue
-export function getStaticJSONValue(node: JSONProgram): JSONValue
-export function getStaticJSONValue(node: JSONNode): JSONValue
-/**
- * Gets the static value for the given node.
- */
-export function getStaticJSONValue(node: JSONNode): JSONValue {
-    return resolver[node.type](node)
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
 const resolver: { [key in JSONNode["type"]]: (node: any) => JSONValue } = {
     Program(node: JSONProgram) {
@@ -184,4 +155,31 @@ const resolver: { [key in JSONNode["type"]]: (node: any) => JSONValue } = {
     JSONTemplateElement(node: JSONTemplateElement) {
         return node.value.cooked
     },
+}
+
+export function getStaticJSONValue(
+    node: JSONUnaryExpression | JSONNumberIdentifier | JSONNumberLiteral,
+): number
+export function getStaticJSONValue(node: JSONUndefinedIdentifier): undefined
+export function getStaticJSONValue(
+    node: JSONTemplateLiteral | JSONTemplateElement | JSONStringLiteral,
+): string
+export function getStaticJSONValue(node: JSONKeywordLiteral): boolean | null
+export function getStaticJSONValue(node: JSONRegExpLiteral): RegExp
+export function getStaticJSONValue(node: JSONBigIntLiteral): bigint
+export function getStaticJSONValue(
+    node: JSONLiteral,
+): string | number | boolean | RegExp | bigint | null
+
+export function getStaticJSONValue(node: JSONObjectExpression): JSONObjectValue
+export function getStaticJSONValue(node: JSONArrayExpression): JSONValue[]
+export function getStaticJSONValue(
+    node: JSONExpression | JSONExpressionStatement | JSONProgram | JSONNode,
+): JSONValue
+
+/**
+ * Gets the static value for the given node.
+ */
+export function getStaticJSONValue(node: JSONNode): JSONValue {
+    return resolver[node.type](node)
 }

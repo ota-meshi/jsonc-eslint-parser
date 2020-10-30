@@ -40,6 +40,7 @@ export function getEspree(): ESPree {
             }
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
     return espreeCache || (espreeCache = require("espree"))
 }
 
@@ -47,10 +48,10 @@ export function getEspree(): ESPree {
  * createRequire
  */
 function createRequire(filename: string) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires -- special require
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports, @typescript-eslint/naming-convention -- special require
     const Module = require("module")
     const fn: (
-        filename: string,
+        fileName: string,
     ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
     any =
         // Added in v12.2.0

@@ -412,10 +412,12 @@ function convertLiteralNode(
     return nn
 }
 
+/* eslint-disable complexity -- ignore */
 /**
  * Validate literal
  */
 function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
+    /* eslint-enable complexity -- ignore */
     const value = node.value
     if (
         (!ctx.invalidJsonNumbers ||

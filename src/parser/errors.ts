@@ -8,7 +8,9 @@ import type { Comment } from "../types"
  */
 export class ParseError extends SyntaxError {
     public index: number
+
     public lineNumber: number
+
     public column: number
 
     /**
