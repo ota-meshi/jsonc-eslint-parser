@@ -59,6 +59,11 @@ If not specified, all syntaxes that express static values ​​are accepted. Fo
 
 **Note** : Recommended to loosen the syntax checking by the parser and use check rules of [eslint-plugin-jsonc] to automatically fix it.
 
+## Usage for Custom Rules / Plugins
+
+- [AST.md](./docs/AST.md) is AST specification.
+- [no-template-literals.ts](https://github.com/ota-meshi/eslint-plugin-jsonc/blob/master/lib/rules/no-template-literals.ts) is an example.
+
 ## :lock: License
 
 See the [LICENSE](LICENSE) file for license rights and limitations (MIT).
