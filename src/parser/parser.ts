@@ -34,8 +34,17 @@ export function parseForESLint(
         isJSON: boolean
     }
 } {
+    const parserOptions = Object.assign(options || {}, {
+        loc: true,
+        range: true,
+        raw: true,
+        tokens: true,
+        comment: true,
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+    })
     try {
-        const ast = parseJS(`0(${code}\n)`, options)
+        const ast = parseJS(`0(${code}\n)`, parserOptions)
 
         const tokens = ast.tokens || []
         const tokenStore = new TokenStore(tokens)
@@ -74,7 +83,7 @@ export function parseForESLint(
         statement.expression = expression
 
         return {
-            ast: postprocess(ast, tokenStore, options),
+            ast: postprocess(ast, tokenStore, parserOptions),
             visitorKeys: KEYS,
             services: {
                 isJSON: true,
