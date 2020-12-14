@@ -34,15 +34,19 @@ export function parseForESLint(
         isJSON: boolean
     }
 } {
-    const parserOptions = Object.assign(options || {}, {
-        loc: true,
-        range: true,
-        raw: true,
-        tokens: true,
-        comment: true,
-        eslintVisitorKeys: true,
-        eslintScopeManager: true,
-    })
+    const parserOptions = Object.assign(
+        { filePath: "<input>", ecmaVersion: 2019 },
+        options || {},
+        {
+            loc: true,
+            range: true,
+            raw: true,
+            tokens: true,
+            comment: true,
+            eslintVisitorKeys: true,
+            eslintScopeManager: true,
+        },
+    )
     try {
         const ast = parseJS(`0(${code}\n)`, parserOptions)
 
