@@ -170,6 +170,9 @@ export function getStaticJSONValue(node: JSONBigIntLiteral): bigint
 export function getStaticJSONValue(
     node: JSONLiteral,
 ): string | number | boolean | RegExp | bigint | null
+export function getStaticJSONValue(
+    node: Exclude<JSONExpression, JSONObjectExpression | JSONArrayExpression>,
+): Exclude<JSONValue, JSONObjectValue | JSONValue[]>
 
 export function getStaticJSONValue(node: JSONObjectExpression): JSONObjectValue
 export function getStaticJSONValue(node: JSONArrayExpression): JSONValue[]
