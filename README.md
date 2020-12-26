@@ -1,5 +1,12 @@
 # jsonc-eslint-parser
 
+[![NPM license](https://img.shields.io/npm/l/jsonc-eslint-parser.svg)](https://www.npmjs.com/package/jsonc-eslint-parser)
+[![NPM version](https://img.shields.io/npm/v/jsonc-eslint-parser.svg)](https://www.npmjs.com/package/jsonc-eslint-parser)
+[![NPM downloads](https://img.shields.io/npm/dw/jsonc-eslint-parser.svg)](http://www.npmtrends.com/jsonc-eslint-parser)
+[![NPM downloads](https://img.shields.io/npm/dm/jsonc-eslint-parser.svg)](http://www.npmtrends.com/jsonc-eslint-parser)
+[![Build Status](https://github.com/ota-meshi/jsonc-eslint-parser/workflows/CI/badge.svg?branch=master)](https://github.com/ota-meshi/jsonc-eslint-parser/actions?query=workflow%3ACI)
+[![Coverage Status](https://coveralls.io/repos/github/ota-meshi/jsonc-eslint-parser/badge.svg?branch=master)](https://coveralls.io/github/ota-meshi/jsonc-eslint-parser?branch=master)
+
 ## :name_badge: Introduction
 
 [JSON], [JSONC] and [JSON5] parser for use with [ESLint] plugins.
