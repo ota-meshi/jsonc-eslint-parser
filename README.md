@@ -72,6 +72,15 @@ If not specified, all syntaxes that express static values ​​are accepted. Fo
 - [no-template-literals.ts](https://github.com/ota-meshi/eslint-plugin-jsonc/blob/master/lib/rules/no-template-literals.ts) is an example.
 - You can see the AST on the [Online DEMO](https://ota-meshi.github.io/jsonc-eslint-parser/).
 
+## :couple: Related Packages
+
+- [eslint-plugin-jsonc](https://github.com/ota-meshi/eslint-plugin-jsonc) ... ESLint plugin for JSON, JSON with comments (JSONC) and JSON5.
+- [eslint-plugin-yml](https://github.com/ota-meshi/eslint-plugin-yml) ... ESLint plugin for YAML.
+- [eslint-plugin-toml](https://github.com/ota-meshi/eslint-plugin-toml) ... ESLint plugin for TOML.
+<!-- - [jsonc-eslint-parser](https://github.com/ota-meshi/jsonc-eslint-parser) ... JSON, JSONC and JSON5 parser for use with ESLint plugins. -->
+- [yaml-eslint-parser](https://github.com/ota-meshi/yaml-eslint-parser) ... YAML parser for use with ESLint plugins.
+- [toml-eslint-parser](https://github.com/ota-meshi/toml-eslint-parser) ... TOML parser for use with ESLint plugins.
+
 ## :lock: License
 
 See the [LICENSE](LICENSE) file for license rights and limitations (MIT).
