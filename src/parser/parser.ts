@@ -25,7 +25,7 @@ import type { JSONProgram } from "./ast"
  */
 export function parseForESLint(
     code: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
     options?: any,
 ): {
     ast: JSONProgram
