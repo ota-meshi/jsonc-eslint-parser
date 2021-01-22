@@ -55,6 +55,7 @@
         "eslint-plugin-jsonc": "^0.5.1",
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-prettier": "^3.1.4",
+        "eslint-plugin-regexp": "^0.1.1",
         "mocha": "^7.0.0",
         "nyc": "^15.1.0",
         "prettier": "^2.0.5",
