@@ -58,7 +58,7 @@ export function getKeys(node: JSONNode, visitorKeys?: VisitorKeys): string[] {
  * @param node The node to get.
  */
 export function* getNodes(
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any -- any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
     node: any,
     key: string,
 ): IterableIterator<JSONNode> {
