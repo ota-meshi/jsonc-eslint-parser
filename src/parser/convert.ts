@@ -625,7 +625,7 @@ function convertTemplateElementNode(
     const nn: JSONTemplateElement = {
         type: "JSONTemplateElement",
         tail: node.tail,
-        value: { cooked, raw },
+        value: { raw, cooked },
         ...getFixLocation(node),
         parent: null as never,
     }
