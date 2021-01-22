@@ -326,7 +326,7 @@ function convertArrayExpressionNode(
             const beforeIndex = index - 1
             const before =
                 beforeIndex >= 0
-                    ? tokens.getLastToken(node.elements[beforeIndex])
+                    ? tokens.getLastToken(node.elements[beforeIndex]!)
                     : tokens.getFirstToken(node)
             return throwUnexpectedTokenError(
                 ",",
@@ -617,11 +617,15 @@ function convertTemplateElementNode(
     if (node.type !== "TemplateElement") {
         return throwUnexpectedNodeError(node, tokens)
     }
+    const { cooked, raw } = node.value
+    if (cooked == null) {
+        return throwUnexpectedNodeError(node, tokens)
+    }
 
     const nn: JSONTemplateElement = {
         type: "JSONTemplateElement",
         tail: node.tail,
-        value: node.value,
+        value: { raw, cooked },
         ...getFixLocation(node),
         parent: null as never,
     }
