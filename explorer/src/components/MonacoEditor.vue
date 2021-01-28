@@ -3,6 +3,19 @@
 </template>
 
 <script>
+const monacoScript = Array.from(window.document.head.querySelectorAll("script")).find(
+    (script) => script.src && script.src.includes("monaco"),
+)
+window.require.config({
+    paths: {
+        vs: monacoScript.src.replace(/\/vs\/.*$/u, "/vs"),
+    },
+    "vs/nls": {
+        availableLanguages: {
+            "*": "ja",
+        },
+    },
+})
 const editorLoaded = new Promise((resolve) => {
     window.require(["vs/editor/editor.main"], (r) => {
         resolve(r)
