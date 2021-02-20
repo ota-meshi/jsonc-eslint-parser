@@ -1,7 +1,7 @@
 /.nyc_output
 /coverage
+/lib
 /node_modules
 /tests/fixtures/integrations
 /assets
-/lib
 /tests/fixtures
