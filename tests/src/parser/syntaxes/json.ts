@@ -57,6 +57,46 @@ describe("Check that parsing error is correct for JSON.", () => {
             index: 9,
             char: "_",
         },
+        {
+            code: '{"\\u{31}":"foo"}',
+            message: "Unexpected unicode codepoint escape.",
+            lineNumber: 1,
+            column: 2,
+            index: 1,
+            char: '"',
+        },
+        {
+            code: '{"foo": "\\u{31}"}',
+            message: "Unexpected unicode codepoint escape.",
+            lineNumber: 1,
+            column: 9,
+            index: 8,
+            char: '"',
+        },
+        {
+            code: '{a\\u{31}:"foo"}',
+            message: "Unexpected identifier 'a1'.",
+            lineNumber: 1,
+            column: 2,
+            index: 1,
+            char: "a",
+        },
+        {
+            code: "0b1",
+            message: "Unexpected binary numeric literal.",
+            lineNumber: 1,
+            column: 1,
+            index: 0,
+            char: "0",
+        },
+        {
+            code: "0o1",
+            message: "Unexpected octal numeric literal.",
+            lineNumber: 1,
+            column: 1,
+            index: 0,
+            char: "0",
+        },
     ]) {
         it(`JSON parseForESLint error on ${JSON.stringify(code)}`, () => {
             const e = getParseError(code)

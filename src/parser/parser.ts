@@ -170,6 +170,9 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             infinities: false,
             nans: false,
             numericSeparators: false,
+            binaryNumericLiterals: false,
+            octalNumericLiterals: false,
+            legacyOctalNumericLiterals: false,
             invalidJsonNumbers: false,
             multilineStrings: false,
             unquoteProperties: false,
@@ -180,6 +183,8 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             regExpLiterals: false,
             templateLiterals: false,
             bigintLiterals: false,
+            unicodeCodepointEscapes: false,
+            escapeSequenceInIdentifier: false,
         }
     }
     if (upperCase === "JSONC") {
@@ -192,6 +197,9 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             infinities: false,
             nans: false,
             numericSeparators: false,
+            binaryNumericLiterals: false,
+            octalNumericLiterals: false,
+            legacyOctalNumericLiterals: false,
             invalidJsonNumbers: false,
             multilineStrings: false,
             unquoteProperties: false,
@@ -202,6 +210,8 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             regExpLiterals: false,
             templateLiterals: false,
             bigintLiterals: false,
+            unicodeCodepointEscapes: false,
+            escapeSequenceInIdentifier: false,
         }
     }
     if (upperCase === "JSON5") {
@@ -214,6 +224,9 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             infinities: true,
             nans: true,
             numericSeparators: false,
+            binaryNumericLiterals: false,
+            octalNumericLiterals: false,
+            legacyOctalNumericLiterals: false,
             invalidJsonNumbers: true,
             multilineStrings: true,
             unquoteProperties: true,
@@ -224,6 +237,8 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             regExpLiterals: false,
             templateLiterals: false,
             bigintLiterals: false,
+            unicodeCodepointEscapes: false,
+            escapeSequenceInIdentifier: false,
         }
     }
     return {
@@ -235,6 +250,9 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
         infinities: true,
         nans: true,
         numericSeparators: true,
+        binaryNumericLiterals: true,
+        octalNumericLiterals: true,
+        legacyOctalNumericLiterals: true,
         invalidJsonNumbers: true,
         multilineStrings: true,
         unquoteProperties: true,
@@ -245,5 +263,7 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
         regExpLiterals: true,
         templateLiterals: true,
         bigintLiterals: true,
+        unicodeCodepointEscapes: true,
+        escapeSequenceInIdentifier: true,
     }
 }
