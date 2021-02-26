@@ -8,7 +8,7 @@ const FIXTURE_ROOT = path.resolve(__dirname, "../tests/fixtures/parser/ast")
 /**
  * Remove `parent` properties from the given AST.
  */
-function replacer(key: string, value: any) {
+function replacer(key: string, value: unknown) {
     if (key === "parent") {
         return undefined
     }
