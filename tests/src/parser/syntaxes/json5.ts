@@ -145,6 +145,14 @@ describe("Check that parsing error is correct for JSON5.", () => {
             index: 0,
             char: "0",
         },
+        {
+            code: "09",
+            message: "Unexpected legacy octal numeric literal.",
+            lineNumber: 1,
+            column: 1,
+            index: 0,
+            char: "0",
+        },
     ]) {
         it(`JSON5 parseForESLint error on ${JSON.stringify(code)}`, () => {
             const e = getParseError(code)
