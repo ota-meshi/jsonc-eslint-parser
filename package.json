@@ -15,7 +15,7 @@
         "test:base": "mocha --require ts-node/register \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
         "test": "npm run test:base",
         "test:nyc": "nyc --reporter=lcov npm run test:base",
-        "test:debug": "mocha --require ts-node/register --inspect \"tests/src/**/*.ts\" --reporter dot",
+        "test:debug": "mocha --require ts-node/register/transpile-only --inspect \"tests/src/**/*.ts\" --reporter dot",
         "update": "ts-node ./tools/update.ts && npm run eslint-fix && npm run test:nyc",
         "preversion": "npm test && npm run update && git add .",
         "version": "npm run eslint-fix && git add .",
@@ -67,6 +67,7 @@
         "vue-eslint-parser": "^7.2.0"
     },
     "dependencies": {
+        "eslint-utils": "^2.1.0",
         "eslint-visitor-keys": "^2.0.0",
         "espree": "^6.0.0 || ^7.2.0"
     }

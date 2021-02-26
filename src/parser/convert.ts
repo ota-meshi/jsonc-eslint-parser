@@ -13,6 +13,7 @@ import type {
     Expression,
 } from "estree"
 import type { AST } from "eslint"
+import { PatternMatcher } from "eslint-utils"
 import type {
     JSONNode,
     JSONProgram,
@@ -48,6 +49,10 @@ import type { TokenStore, MaybeNodeOrToken } from "./token-store"
 import { isComma } from "./token-store"
 
 const lineBreakPattern = /\r\n|[\r\n\u2028\u2029]/u
+const codePointEscapeMatcher = new PatternMatcher(/\\u\{[\da-fA-F]+\}/gu)
+const octalNumericLiteralPattern = /^0[oO]/u
+const legacyOctalNumericLiteralPattern = /^0[0-7]/u
+const binaryNumericLiteralPattern = /^0[bB]/u
 
 export type JSONSyntaxContext = {
     trailingCommas: boolean
@@ -59,6 +64,9 @@ export type JSONSyntaxContext = {
     infinities: boolean
     nans: boolean
     numericSeparators: boolean
+    binaryNumericLiterals: boolean
+    octalNumericLiterals: boolean
+    legacyOctalNumericLiterals: boolean
     invalidJsonNumbers: boolean
     //
     multilineStrings: boolean
@@ -70,6 +78,8 @@ export type JSONSyntaxContext = {
     regExpLiterals: boolean
     templateLiterals: boolean
     bigintLiterals: boolean
+    unicodeCodepointEscapes: boolean
+    escapeSequenceInIdentifier: boolean
 }
 
 export function convertNode(
@@ -141,7 +151,7 @@ export function convertNode(
         return convertUnaryExpressionNode(node, tokens, ctx)
     }
     if (node.type === "Identifier") {
-        return convertIdentifierNode(node, tokens)
+        return convertIdentifierNode(node, tokens, ctx)
     }
     if (node.type === "TemplateLiteral") {
         return convertTemplateLiteralNode(node, tokens, ctx)
@@ -461,6 +471,24 @@ function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
                 })
             }
         }
+        if (!ctx.octalNumericLiterals) {
+            if (octalNumericLiteralPattern.test(text)) {
+                return throwUnexpectedError("octal numeric literal", node)
+            }
+        }
+        if (!ctx.legacyOctalNumericLiterals) {
+            if (legacyOctalNumericLiteralPattern.test(text)) {
+                return throwUnexpectedError(
+                    "legacy octal numeric literal",
+                    node,
+                )
+            }
+        }
+        if (!ctx.binaryNumericLiterals) {
+            if (binaryNumericLiteralPattern.test(text)) {
+                return throwUnexpectedError("binary numeric literal", node)
+            }
+        }
         if (!ctx.invalidJsonNumbers) {
             try {
                 JSON.parse(text)
@@ -470,7 +498,9 @@ function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
         }
     }
     if (
-        (!ctx.multilineStrings || !ctx.singleQuotes) &&
+        (!ctx.multilineStrings ||
+            !ctx.singleQuotes ||
+            !ctx.unicodeCodepointEscapes) &&
         typeof value === "string"
     ) {
         if (!ctx.singleQuotes) {
@@ -481,6 +511,11 @@ function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
         if (!ctx.multilineStrings) {
             if (lineBreakPattern.test(node.raw!)) {
                 return throwUnexpectedError("multiline string", node)
+            }
+        }
+        if (!ctx.unicodeCodepointEscapes) {
+            if (codePointEscapeMatcher.test(node.raw!)) {
+                return throwUnexpectedError("unicode codepoint escape", node)
             }
         }
     }
@@ -547,10 +582,17 @@ function convertUnaryExpressionNode(
 function convertIdentifierNode(
     node: Identifier,
     tokens: TokenStore,
+    ctx: JSONSyntaxContext,
 ): JSONIdentifier {
     /* istanbul ignore next */
     if (node.type !== "Identifier") {
         return throwUnexpectedNodeError(node, tokens)
+    }
+
+    if (!ctx.escapeSequenceInIdentifier) {
+        if (node.name.length < node.range![1] - node.range![0]) {
+            return throwUnexpectedError("escape sequence", node)
+        }
     }
     const nn: JSONIdentifier = {
         type: "JSONIdentifier",
@@ -591,6 +633,11 @@ function convertTemplateLiteralNode(
         return throwUnexpectedTokenError("$", loc)
     }
 
+    if (!ctx.unicodeCodepointEscapes) {
+        if (codePointEscapeMatcher.test(node.quasis[0].value.raw)) {
+            return throwUnexpectedError("unicode codepoint escape", node)
+        }
+    }
     const quasis: [JSONTemplateElement] = [
         convertTemplateElementNode(node.quasis[0], tokens),
     ]
