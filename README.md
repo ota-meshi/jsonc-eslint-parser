@@ -72,6 +72,10 @@ If not specified, all syntaxes that express static values ​​are accepted. Fo
 - [no-template-literals.ts](https://github.com/ota-meshi/eslint-plugin-jsonc/blob/master/lib/rules/no-template-literals.ts) is an example.
 - You can see the AST on the [Online DEMO](https://ota-meshi.github.io/jsonc-eslint-parser/).
 
+## :traffic_light: Semantic Versioning Policy
+
+**jsonc-eslint-parser** follows [Semantic Versioning](http://semver.org/).
+
 ## :couple: Related Packages
 
 - [eslint-plugin-jsonc](https://github.com/ota-meshi/eslint-plugin-jsonc) ... ESLint plugin for JSON, JSON with comments (JSONC) and JSON5.
