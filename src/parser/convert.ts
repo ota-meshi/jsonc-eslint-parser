@@ -51,7 +51,7 @@ import { isComma } from "./token-store"
 const lineBreakPattern = /\r\n|[\r\n\u2028\u2029]/u
 const codePointEscapeMatcher = new PatternMatcher(/\\u\{[\da-fA-F]+\}/gu)
 const octalNumericLiteralPattern = /^0[oO]/u
-const legacyOctalNumericLiteralPattern = /^0[0-7]/u
+const legacyOctalNumericLiteralPattern = /^0\d/u
 const binaryNumericLiteralPattern = /^0[bB]/u
 
 export type JSONSyntaxContext = {
