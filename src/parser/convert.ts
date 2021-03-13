@@ -48,11 +48,11 @@ import {
 import type { TokenStore, MaybeNodeOrToken } from "./token-store"
 import { isComma } from "./token-store"
 
-const lineBreakPattern = /\r\n|[\r\n\u2028\u2029]/u
-const codePointEscapeMatcher = new PatternMatcher(/\\u\{[\da-fA-F]+\}/gu)
-const octalNumericLiteralPattern = /^0[oO]/u
+const lineBreakPattern = /\r\n|[\n\r\u2028\u2029]/u
+const codePointEscapeMatcher = new PatternMatcher(/\\u\{[\dA-Fa-f]+\}/gu)
+const octalNumericLiteralPattern = /^0[Oo]/u
 const legacyOctalNumericLiteralPattern = /^0\d/u
-const binaryNumericLiteralPattern = /^0[bB]/u
+const binaryNumericLiteralPattern = /^0[Bb]/u
 
 export type JSONSyntaxContext = {
     trailingCommas: boolean
