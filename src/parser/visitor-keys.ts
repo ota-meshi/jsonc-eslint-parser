@@ -1,5 +1,5 @@
 import type { SourceCode } from "eslint"
-import Evk from "eslint-visitor-keys"
+import * as Evk from "eslint-visitor-keys"
 import type { JSONNode } from "./ast"
 
 const jsonKeys: { [key in JSONNode["type"]]: string[] } = {
