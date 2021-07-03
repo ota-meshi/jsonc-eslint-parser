@@ -1,5 +1,6 @@
 import type { ExpressionStatement, CallExpression } from "estree"
 import type { AST, SourceCode } from "eslint"
+import type { ESPree } from "./espree"
 import { getEspree } from "./espree"
 import {
     ParseError,
@@ -19,6 +20,9 @@ import {
 import type { ParserOptions } from "../types"
 import { TokenStore, isComma } from "./token-store"
 import type { JSONProgram } from "./ast"
+import { lte } from "semver"
+
+const DEFAULT_ECMA_VERSION = 2019
 
 /**
  * Parse source code
@@ -35,7 +39,7 @@ export function parseForESLint(
     }
 } {
     const parserOptions = Object.assign(
-        { filePath: "<input>", ecmaVersion: 2019 },
+        { filePath: "<input>", ecmaVersion: DEFAULT_ECMA_VERSION },
         options || {},
         {
             loc: true,
@@ -111,8 +115,12 @@ function parseJS(
     options: any,
 ): AST.Program {
     const espree = getEspree()
+    const ecmaVersion = normalizeEcmaVersion(espree, options.ecmaVersion)
     try {
-        return espree.parse(code, options)
+        return espree.parse(code, {
+            ...options,
+            ecmaVersion,
+        })
     } catch (err) {
         const perr = ParseError.normalize(err)
         if (perr) {
@@ -266,4 +274,38 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
         unicodeCodepointEscapes: true,
         escapeSequenceInIdentifier: true,
     }
+}
+
+/**
+ * Normalize ECMAScript version
+ */
+function normalizeEcmaVersion(
+    espree: ESPree,
+    version: number | "latest" | undefined,
+) {
+    if (version == null || version === "latest") {
+        return getLatestEcmaVersion(espree)
+    }
+    if (version > 5 && version < 2015) {
+        return version + 2009
+    }
+    return version
+}
+
+/**
+ * Get the latest ecma version from espree
+ */
+function getLatestEcmaVersion(espree: ESPree): number {
+    if (espree.latestEcmaVersion == null) {
+        for (const { v, latest } of [
+            { v: "6.1.0", latest: 2020 },
+            { v: "4.0.0", latest: 2019 },
+        ]) {
+            if (lte(v, espree.version)) {
+                return latest
+            }
+        }
+        return 2018
+    }
+    return normalizeEcmaVersion(espree, espree.latestEcmaVersion)
 }
