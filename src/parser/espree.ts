@@ -10,6 +10,8 @@ export interface ESPree {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
         options: any,
     ): AST.Program
+    latestEcmaVersion?: number
+    version: string
 }
 
 let espreeCache: ESPree | null = null
