@@ -5,3 +5,5 @@
 /tests/fixtures/integrations
 /assets
 /tests/fixtures
+/explorer/node_modules
+/explorer/dist
