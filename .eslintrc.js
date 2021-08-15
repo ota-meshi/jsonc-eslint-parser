@@ -5,6 +5,7 @@ module.exports = {
         "plugin:@ota-meshi/recommended",
         "plugin:@ota-meshi/+typescript",
         "plugin:@ota-meshi/+json",
+        "plugin:@ota-meshi/+package-json",
         "plugin:@ota-meshi/+node",
         "plugin:@ota-meshi/+prettier",
     ],
