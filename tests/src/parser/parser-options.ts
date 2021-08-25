@@ -12,6 +12,13 @@ describe("Parser options.", () => {
             },
             errors: [],
         },
+        {
+            code: "1_2_3",
+            parserOptions: {
+                ecmaVersion: 2099,
+            },
+            errors: [],
+        },
     ]) {
         it(`${JSON.stringify(code)} with parserOptions: ${JSON.stringify(
             parserOptions,
