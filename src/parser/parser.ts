@@ -283,13 +283,11 @@ function normalizeEcmaVersion(
     espree: ESPree,
     version: number | "latest" | undefined,
 ) {
+    const latestEcmaVersion = getLatestEcmaVersion(espree)
     if (version == null || version === "latest") {
-        return getLatestEcmaVersion(espree)
+        return latestEcmaVersion
     }
-    if (version > 5 && version < 2015) {
-        return version + 2009
-    }
-    return version
+    return Math.min(getEcmaVersionYear(version), latestEcmaVersion)
 }
 
 /**
@@ -307,5 +305,12 @@ function getLatestEcmaVersion(espree: ESPree): number {
         }
         return 2018
     }
-    return normalizeEcmaVersion(espree, espree.latestEcmaVersion)
+    return getEcmaVersionYear(espree.latestEcmaVersion)
+}
+
+/**
+ * Get ECMAScript version year
+ */
+function getEcmaVersionYear(version: number) {
+    return version > 5 && version < 2015 ? version + 2009 : version
 }
