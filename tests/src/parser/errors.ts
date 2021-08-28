@@ -16,7 +16,7 @@ function getParseError(code: string): ParseError {
             raw: true,
             tokens: true,
         })
-    } catch (e) {
+    } catch (e: any) {
         return e
     }
     return assert.fail("Expected parsing error, but nor error")

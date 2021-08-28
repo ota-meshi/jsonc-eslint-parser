@@ -17,7 +17,7 @@ function getParseError(code: string): ParseError {
             tokens: true,
             jsonSyntax: "json5",
         })
-    } catch (e) {
+    } catch (e: any) {
         return e
     }
     return assert.fail("Expected parsing error, but nor error")
