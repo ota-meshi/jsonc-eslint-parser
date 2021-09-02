@@ -9,7 +9,7 @@ import {
     throwErrorAsAdjustingOutsideOfCode,
     throwUnexpectedCommentError,
 } from "./errors"
-import { KEYS } from "./visitor-keys"
+import { getVisitorKeys } from "./visitor-keys"
 import type { JSONSyntaxContext } from "./convert"
 import {
     convertNode,
@@ -92,7 +92,7 @@ export function parseForESLint(
 
         return {
             ast: postprocess(ast, tokenStore, parserOptions),
-            visitorKeys: KEYS,
+            visitorKeys: getVisitorKeys(),
             services: {
                 isJSON: true,
             },
