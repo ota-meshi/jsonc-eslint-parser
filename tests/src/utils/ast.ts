@@ -1,7 +1,7 @@
 import assert from "assert"
 import { getStaticJSONValue, isExpression } from "../../../src/utils/ast"
 import { parseForESLint } from "../../../src/parser/parser"
-import espree from "espree"
+import * as espree from "espree"
 import type { JSONProgram, JSONObjectExpression } from "../../../src/parser/ast"
 import { traverseNodes } from "../../../src/parser/traverse"
 
@@ -137,7 +137,7 @@ describe("getStaticJSONValue", () => {
     it("Error on unknown Program", () => {
         const ast = espree.parse("a + b;", {
             comment: true,
-            ecmaVersion: 2021,
+            ecmaVersion: 2015,
             eslintScopeManager: true,
             eslintVisitorKeys: true,
             filePath: "test.json",
@@ -157,7 +157,7 @@ describe("getStaticJSONValue", () => {
     it("Error on unknown node", () => {
         const ast = espree.parse("a + b;", {
             comment: true,
-            ecmaVersion: 2021,
+            ecmaVersion: 2015,
             eslintScopeManager: true,
             eslintVisitorKeys: true,
             filePath: "test.json",

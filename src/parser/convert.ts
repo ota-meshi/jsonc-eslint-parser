@@ -13,7 +13,7 @@ import type {
     Expression,
 } from "estree"
 import type { AST } from "eslint"
-import { PatternMatcher } from "eslint-utils"
+import type * as eslintUtils from "eslint-utils"
 import type {
     JSONNode,
     JSONProgram,
@@ -47,12 +47,29 @@ import {
 } from "./errors"
 import type { TokenStore, MaybeNodeOrToken } from "./token-store"
 import { isComma } from "./token-store"
+import { requireFromCwd, requireFromLinter } from "./require-utils"
 
 const lineBreakPattern = /\r\n|[\n\r\u2028\u2029]/u
-const codePointEscapeMatcher = new PatternMatcher(/\\u\{[\dA-Fa-f]+\}/gu)
 const octalNumericLiteralPattern = /^0[Oo]/u
 const legacyOctalNumericLiteralPattern = /^0\d/u
 const binaryNumericLiteralPattern = /^0[Bb]/u
+
+let cacheCodePointEscapeMatcher: eslintUtils.PatternMatcher | null
+
+/** Get codePointEscape matcher */
+function getCodePointEscapeMatcher(): eslintUtils.PatternMatcher {
+    if (!cacheCodePointEscapeMatcher) {
+        const utils: typeof eslintUtils =
+            requireFromCwd("eslint-utils") ||
+            requireFromLinter("eslint-utils") ||
+            // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
+            require("eslint-utils")
+        cacheCodePointEscapeMatcher = new utils.PatternMatcher(
+            /\\u\{[\dA-Fa-f]+\}/gu,
+        )
+    }
+    return cacheCodePointEscapeMatcher
+}
 
 export type JSONSyntaxContext = {
     trailingCommas: boolean
@@ -514,7 +531,7 @@ function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
             }
         }
         if (!ctx.unicodeCodepointEscapes) {
-            if (codePointEscapeMatcher.test(node.raw!)) {
+            if (getCodePointEscapeMatcher().test(node.raw!)) {
                 return throwUnexpectedError("unicode codepoint escape", node)
             }
         }
@@ -634,7 +651,7 @@ function convertTemplateLiteralNode(
     }
 
     if (!ctx.unicodeCodepointEscapes) {
-        if (codePointEscapeMatcher.test(node.quasis[0].value.raw)) {
+        if (getCodePointEscapeMatcher().test(node.quasis[0].value.raw)) {
             return throwUnexpectedError("unicode codepoint escape", node)
         }
     }

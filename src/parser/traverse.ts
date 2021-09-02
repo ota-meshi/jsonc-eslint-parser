@@ -1,6 +1,6 @@
 import type { VisitorKeys } from "eslint-visitor-keys"
 import type { JSONNode } from "./ast"
-import { KEYS } from "./visitor-keys"
+import { getVisitorKeys } from "./visitor-keys"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -48,7 +48,7 @@ export function getFallbackKeys(node: JSONNode): string[] {
  */
 export function getKeys(node: JSONNode, visitorKeys?: VisitorKeys): string[] {
     const keys: readonly string[] =
-        (visitorKeys || KEYS)[node.type] || getFallbackKeys(node)
+        (visitorKeys || getVisitorKeys())[node.type] || getFallbackKeys(node)
 
     return keys.filter((key) => !getNodes(node, key).next().done)
 }

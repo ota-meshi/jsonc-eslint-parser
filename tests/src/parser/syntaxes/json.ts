@@ -1,4 +1,6 @@
+/* eslint @typescript-eslint/no-require-imports:0, @typescript-eslint/no-var-requires:0 -- for test */
 import assert from "assert"
+import semver from "semver"
 
 import { parseForESLint } from "../../../../src/parser/parser"
 import type { ParseError } from "../../../../src/parser/errors"
@@ -49,14 +51,18 @@ describe("Check that parsing error is correct for JSON.", () => {
             index: 13,
             char: "/",
         },
-        {
-            code: '{"foo": 1_2_3}',
-            message: "Unexpected token '_'.",
-            lineNumber: 1,
-            column: 10,
-            index: 9,
-            char: "_",
-        },
+        ...(semver.satisfies(require("espree/package.json").version, ">=7.2.0")
+            ? [
+                  {
+                      code: '{"foo": 1_2_3}',
+                      message: "Unexpected token '_'.",
+                      lineNumber: 1,
+                      column: 10,
+                      index: 9,
+                      char: "_",
+                  },
+              ]
+            : []),
         {
             code: '{"\\u{31}":"foo"}',
             message: "Unexpected unicode codepoint escape.",

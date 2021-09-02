@@ -1,6 +1,9 @@
+/* eslint @typescript-eslint/no-require-imports:0, @typescript-eslint/no-var-requires:0 -- for test */
+/* globals process, require -- for test */
 import assert from "assert"
 import path from "path"
 import fs from "fs"
+import semver from "semver"
 
 import { parseJSON } from "../../../src/index"
 
@@ -42,6 +45,25 @@ describe("Check for AST.", () => {
                 /input\.json[56x]$/u,
                 "output.json",
             )
+
+            const requirementsPath = inputFileName.replace(
+                /input\.json[56x]$/u,
+                "requirements.json",
+            )
+            const requirements = fs.existsSync(requirementsPath)
+                ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
+                : {}
+            if (
+                Object.entries(requirements).some(([pkgName, pkgVersion]) => {
+                    const version =
+                        pkgName === "node"
+                            ? process.version
+                            : require(`${pkgName}/package.json`).version
+                    return !semver.satisfies(version, pkgVersion as string)
+                })
+            ) {
+                return
+            }
 
             const input = fs.readFileSync(inputFileName, "utf8")
             const ast = parse(input)
