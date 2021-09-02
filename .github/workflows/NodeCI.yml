@@ -61,6 +61,8 @@ jobs:
         node-version: 14.x
     - name: Install Packages
       run: npm install
+    - name: Install espree
+      run: npm install espree@latest
     - name: Test
       run: npm run test:nyc
     - name: Coveralls GitHub Action
