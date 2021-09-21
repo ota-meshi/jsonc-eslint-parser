@@ -1,7 +1,8 @@
-import type { Position, Node, RegExpLiteral } from "estree"
-import { getFixLocation } from "./convert"
+import type { Node } from "estree"
 import type { TokenStore, MaybeNodeOrToken } from "./token-store"
 import type { Comment } from "../types"
+import type { JSONNode } from "./ast"
+import { isRegExpLiteral } from "./utils"
 
 /**
  * JSON parse errors.
@@ -12,23 +13,6 @@ export class ParseError extends SyntaxError {
     public lineNumber: number
 
     public column: number
-
-    /**
-     * Normalize the error object.
-     * @param x The error object to normalize.
-     */
-    public static normalize(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-        x: any,
-    ): ParseError | null {
-        if (ParseError.isParseError(x)) {
-            return x
-        }
-        if (isAcornStyleParseError(x)) {
-            return new ParseError(x.message, x.pos, x.loc.line, x.loc.column)
-        }
-        return null
-    }
 
     /**
      * Initialize this ParseError instance.
@@ -49,38 +33,6 @@ export class ParseError extends SyntaxError {
         this.lineNumber = line
         this.column = column
     }
-
-    /**
-     * Type guard for ParseError.
-     * @param x The value to check.
-     * @returns `true` if the value has `message`, `pos`, `loc` properties.
-     */
-    public static isParseError(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-        x: any,
-    ): x is ParseError {
-        return (
-            x instanceof ParseError ||
-            (typeof x.message === "string" &&
-                typeof x.index === "number" &&
-                typeof x.lineNumber === "number" &&
-                typeof x.column === "number")
-        )
-    }
-}
-
-/**
- * Throw syntax error for empty.
- */
-export function throwEmptyError(expected: string): never {
-    const err = new ParseError(
-        `Expected to be ${expected}, but got empty.`,
-        0,
-        1,
-        1,
-    )
-
-    throw err
 }
 
 /**
@@ -92,10 +44,10 @@ export function throwExpectedTokenError(
     name: string,
     beforeToken: MaybeNodeOrToken,
 ): never {
-    const locs = getFixLocation(beforeToken)
+    const locs = getLocation(beforeToken)
     const err = new ParseError(
         `Expected token '${name}'.`,
-        locs.range[1],
+        locs.end,
         locs.loc.end.line,
         locs.loc.end.column + 1,
     )
@@ -112,10 +64,10 @@ export function throwUnexpectedError(
     name: string,
     token: MaybeNodeOrToken,
 ): never {
-    const locs = getFixLocation(token)
+    const locs = getLocation(token)
     const err = new ParseError(
         `Unexpected ${name}.`,
-        locs.range[0],
+        locs.start,
         locs.loc.start.line,
         locs.loc.start.column + 1,
     )
@@ -150,10 +102,10 @@ export function throwUnexpectedCommentError(token: Comment): never {
 export function throwUnexpectedSpaceError(
     beforeToken: MaybeNodeOrToken,
 ): never {
-    const locs = getFixLocation(beforeToken)
+    const locs = getLocation(beforeToken)
     const err = new ParseError(
         "Unexpected whitespace.",
-        locs.range[1],
+        locs.end,
         locs.loc.end.line,
         locs.loc.end.column + 1,
     )
@@ -168,10 +120,10 @@ export function throwInvalidNumberError(
     text: string,
     token: MaybeNodeOrToken,
 ): never {
-    const locs = getFixLocation(token)
+    const locs = getLocation(token)
     const err = new ParseError(
         `Invalid number ${text}.`,
-        locs.range[0],
+        locs.start,
         locs.loc.start.line,
         locs.loc.start.column + 1,
     )
@@ -184,43 +136,46 @@ export function throwInvalidNumberError(
  * @param node The token object to get that location.
  */
 export function throwUnexpectedNodeError(
-    node: Node,
+    node: Node | JSONNode,
     tokens: TokenStore,
     offset?: number,
 ): never {
-    if (node.type === "Identifier") {
-        const locs = getFixLocation(node)
+    if (node.type === "Identifier" || node.type === "JSONIdentifier") {
+        const locs = getLocation(node)
         const err = new ParseError(
             `Unexpected identifier '${node.name}'.`,
-            locs.range[0],
+            locs.start,
             locs.loc.start.line,
             locs.loc.start.column + 1,
         )
         throw err
     }
-    if (node.type === "Literal") {
+    if (node.type === "Literal" || node.type === "JSONLiteral") {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- bigint
         const type = (node as any).bigint
             ? "bigint"
-            : (node as RegExpLiteral).regex
+            : isRegExpLiteral(node)
             ? "regex"
             : node.value === null
             ? "null"
             : typeof node.value
-        const locs = getFixLocation(node)
+        const locs = getLocation(node)
         const err = new ParseError(
             `Unexpected ${type} literal.`,
-            locs.range[0],
+            locs.start,
             locs.loc.start.line,
             locs.loc.start.column + 1,
         )
         throw err
     }
-    if (node.type === "TemplateLiteral") {
-        const locs = getFixLocation(node)
+    if (
+        node.type === "TemplateLiteral" ||
+        node.type === "JSONTemplateLiteral"
+    ) {
+        const locs = getLocation(node)
         const err = new ParseError(
             "Unexpected template literal.",
-            locs.range[0],
+            locs.start,
             locs.loc.start.line,
             locs.loc.start.column + 1,
         )
@@ -230,11 +185,14 @@ export function throwUnexpectedNodeError(
         node.type.endsWith("Expression") &&
         node.type !== "FunctionExpression"
     ) {
-        const name = node.type.replace(/\B([A-Z])/gu, " $1").toLowerCase()
-        const locs = getFixLocation(node)
+        const name = node.type
+            .replace(/^JSON/u, "")
+            .replace(/\B([A-Z])/gu, " $1")
+            .toLowerCase()
+        const locs = getLocation(node)
         const err = new ParseError(
             `Unexpected ${name}.`,
-            locs.range[0],
+            locs.start,
             locs.loc.start.line,
             locs.loc.start.column + 1,
         )
@@ -243,10 +201,10 @@ export function throwUnexpectedNodeError(
     const index = node.range![0] + (offset || 0)
     const t = tokens.findTokenByOffset(index)
     const name = t?.value || "unknown"
-    const locs = getFixLocation(t || node)
+    const locs = getLocation(t || node)
     const err = new ParseError(
         `Unexpected token '${name}'.`,
-        locs.range[0],
+        locs.start,
         locs.loc.start.line,
         locs.loc.start.column + 1,
     )
@@ -254,39 +212,12 @@ export function throwUnexpectedNodeError(
     throw err
 }
 
-/**
- * Throw syntax error of outside of code.
- */
-export function throwErrorAsAdjustingOutsideOfCode(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-    err: any,
-    code: string,
-): never {
-    if (ParseError.isParseError(err)) {
-        const endOffset = code.length
-        if (err.index >= endOffset) {
-            err.message = "Unexpected end of expression."
-        }
-    }
-
-    throw err
-}
-
-/**
- * Check whether the given value has acorn style location information.
- * @param x The value to check.
- * @returns `true` if the value has acorn style location information.
- */
-function isAcornStyleParseError(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-    x: any,
-): x is { message: string; pos: number; loc: Position } {
-    return (
-        typeof x.message === "string" &&
-        typeof x.pos === "number" &&
-        typeof x.loc === "object" &&
-        x.loc !== null &&
-        typeof x.loc.line === "number" &&
-        typeof x.loc.column === "number"
-    )
+/** get locations */
+function getLocation(
+    token: MaybeNodeOrToken & { start?: number; end?: number },
+) {
+    const start = token.range?.[0] || token.start!
+    const end = token.range?.[1] || token.end!
+    const loc = token.loc!
+    return { start, end, loc }
 }

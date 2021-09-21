@@ -1,15 +1,9 @@
-import type { AST } from "eslint"
-import { requireFromCwd, requireFromLinter } from "./require-utils"
+import { requireFromCwd, requireFromLinter } from "../require-utils"
 
 /**
  * The interface of ESLint custom parsers.
  */
 export interface ESPree {
-    parse(
-        code: string,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-        options: any,
-    ): AST.Program
     latestEcmaVersion?: number
     version: string
 }

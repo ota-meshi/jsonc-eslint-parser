@@ -2,25 +2,9 @@ import path from "path"
 import fs from "fs"
 
 import { parseForESLint } from "../src/parser/parser"
+import { nodeReplacer } from "../tests/src/parser/utils"
 
 const FIXTURE_ROOT = path.resolve(__dirname, "../tests/fixtures/parser/ast")
-
-/**
- * Remove `parent` properties from the given AST.
- */
-function replacer(key: string, value: unknown) {
-    if (key === "parent") {
-        return undefined
-    }
-    if (value instanceof RegExp) {
-        return String(value)
-    }
-    if (typeof value === "bigint") {
-        return null // Make it null so it can be checked on node8.
-        // return `${String(value)}n`
-    }
-    return value
-}
 
 /**
  * Parse
@@ -55,9 +39,10 @@ for (const filename of fs
 
     const input = fs.readFileSync(inputFileName, "utf8")
     try {
-        const ast = JSON.stringify(parse(input).ast, replacer, 2)
+        const ast = JSON.stringify(parse(input).ast, nodeReplacer, 2)
         fs.writeFileSync(outputFileName, ast, "utf8")
-    } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
+    } catch (e: any) {
         fs.writeFileSync(
             outputFileName,
             `${e.message}@line:${e.lineNumber},column:${e.column}`,
