@@ -6,25 +6,9 @@ import fs from "fs"
 import semver from "semver"
 
 import { parseJSON } from "../../../src/index"
+import { nodeReplacer } from "./utils"
 
 const FIXTURE_ROOT = path.resolve(__dirname, "../../fixtures/parser/ast")
-
-/**
- * Remove `parent` properties from the given AST.
- */
-function replacer(key: string, value: any) {
-    if (key === "parent") {
-        return undefined
-    }
-    if (value instanceof RegExp) {
-        return String(value)
-    }
-    if (typeof value === "bigint") {
-        return null // Make it null so it can be checked on node8.
-        // return `${String(value)}n`
-    }
-    return value
-}
 
 function parse(code: string) {
     return parseJSON(code, { ecmaVersion: 2021 })
@@ -67,7 +51,7 @@ describe("Check for AST.", () => {
 
             const input = fs.readFileSync(inputFileName, "utf8")
             const ast = parse(input)
-            const astJson = JSON.stringify(ast, replacer, 2)
+            const astJson = JSON.stringify(ast, nodeReplacer, 2)
             const output = fs.readFileSync(outputFileName, "utf8")
             assert.strictEqual(astJson, output)
 

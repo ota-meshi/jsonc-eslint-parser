@@ -9,13 +9,17 @@ export type MaybeNodeOrToken = {
 // type TokenType = AST.TokenType | "Template"
 
 export class TokenStore {
-    private readonly tokens: AST.Token[]
+    public readonly tokens: AST.Token[]
 
     public constructor(tokens: AST.Token[]) {
         this.tokens = tokens
     }
 
-    public findIndexByOffset(offset: number): number {
+    public add(token: AST.Token): void {
+        this.tokens.push(token)
+    }
+
+    private findIndexByOffset(offset: number): number {
         return this.tokens.findIndex(
             (token) => token.range[0] <= offset && offset < token.range[1],
         )

@@ -1,26 +1,14 @@
-import type { ExpressionStatement, CallExpression } from "estree"
+import type { Comment, Node } from "estree"
 import type { AST, SourceCode } from "eslint"
-import type { ESPree } from "./espree"
-import { getEspree } from "./espree"
-import {
-    ParseError,
-    throwEmptyError,
-    throwUnexpectedTokenError,
-    throwErrorAsAdjustingOutsideOfCode,
-    throwUnexpectedCommentError,
-} from "./errors"
+import type { ESPree } from "./modules/espree"
+import { getEspree } from "./modules/espree"
 import { getVisitorKeys } from "./visitor-keys"
 import type { JSONSyntaxContext } from "./convert"
-import {
-    convertNode,
-    convertToken,
-    fixLocation,
-    fixErrorLocation,
-} from "./convert"
-import type { ParserOptions } from "../types"
-import { TokenStore, isComma } from "./token-store"
+import { convertProgramNode } from "./convert"
+import { TokenStore } from "./token-store"
 import type { JSONProgram } from "./ast"
 import { lte } from "semver"
+import { getParser } from "./extend-parser"
 
 const DEFAULT_ECMA_VERSION = 2019
 
@@ -51,116 +39,34 @@ export function parseForESLint(
             eslintScopeManager: true,
         },
     )
-    try {
-        const ast = parseJS(`0(${code}\n)`, parserOptions)
-
-        const tokens = ast.tokens || []
-        const tokenStore = new TokenStore(tokens)
-        const statement = ast.body[0] as ExpressionStatement
-        const callExpression = statement.expression as CallExpression
-        const expression = callExpression.arguments[0]
-
-        if (!expression) {
-            return throwEmptyError("an expression")
-        }
-        if (expression && expression.type === "SpreadElement") {
-            return throwUnexpectedTokenError("...", expression)
-        }
-        if (callExpression.arguments[1]) {
-            const node = callExpression.arguments[1]
-            return throwUnexpectedTokenError(
-                ",",
-                tokenStore.getTokenBefore(node, isComma)!,
-            )
-        }
-
-        // Remove parens.
-        tokens.shift()
-        tokens.shift()
-        tokens.pop()
-        const last = tokens[tokens.length - 1]
-
-        if (last && isComma(last)) {
-            return throwUnexpectedTokenError(",", last)
-        }
-
-        ast.range[1] = statement.range![1] = last.range[1]
-        ast.loc.end.line = statement.loc!.end.line = last.loc.end.line
-        ast.loc.end.column = statement.loc!.end.column = last.loc.end.column
-        ast.body = [statement]
-        statement.expression = expression
-
-        return {
-            ast: postprocess(ast, tokenStore, parserOptions),
-            visitorKeys: getVisitorKeys(),
-            services: {
-                isJSON: true,
-            },
-        }
-    } catch (err) {
-        return throwErrorAsAdjustingOutsideOfCode(err, code)
+    parserOptions.ecmaVersion = normalizeEcmaVersion(parserOptions.ecmaVersion)
+    const ctx: JSONSyntaxContext = getJSONSyntaxContext(
+        parserOptions.jsonSyntax,
+    )
+    const tokens: AST.Token[] = []
+    const comments: Comment[] = []
+    const tokenStore = new TokenStore(tokens)
+    const nodes: Node[] = []
+    parserOptions.ctx = ctx
+    parserOptions.tokenStore = tokenStore
+    parserOptions.comments = comments
+    parserOptions.nodes = nodes
+    const baseAst = getParser().parseExpressionAt(code, 0, parserOptions)
+    // transform json nodes
+    for (const node of nodes) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
+        ;(node as any).type = `JSON${node.type}`
     }
-}
-
-/**
- * Parse the given source code.
- *
- * @param code The source code to parse.
- * @param options The parser options.
- * @returns The result of parsing.
- */
-function parseJS(
-    code: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-    options: any,
-): AST.Program {
-    const espree = getEspree()
-    const ecmaVersion = normalizeEcmaVersion(espree, options.ecmaVersion)
-    try {
-        return espree.parse(code, {
-            ...options,
-            ecmaVersion,
-        })
-    } catch (err) {
-        const perr = ParseError.normalize(err)
-        if (perr) {
-            fixErrorLocation(perr)
-            throw perr
-        }
-        throw err
+    const ast = convertProgramNode(baseAst as never, tokenStore, ctx, code)
+    ast.tokens = tokens
+    ast.comments = comments
+    return {
+        ast,
+        visitorKeys: getVisitorKeys(),
+        services: {
+            isJSON: true,
+        },
     }
-}
-
-/**
- * Do post-process of parsing an expression.
- *
- * 1. Convert node type.
- * 2. Fix `node.range` and `node.loc` for JSON entities.
- *
- * @param result The parsing result to modify.
- */
-function postprocess(
-    ast: AST.Program,
-    tokenStore: TokenStore,
-    options?: ParserOptions,
-) {
-    const ctx: JSONSyntaxContext = getJSONSyntaxContext(options?.jsonSyntax)
-    const jsonAst = convertNode(ast, tokenStore, ctx)
-
-    const tokens = []
-    for (const token of ast.tokens || []) {
-        tokens.push(convertToken(token))
-    }
-    const comments = ast.comments || []
-    if (!ctx.comments && comments.length > 0) {
-        return throwUnexpectedCommentError(comments[0])
-    }
-    for (const comment of comments) {
-        fixLocation(comment)
-    }
-    jsonAst.tokens = tokens
-    jsonAst.comments = comments
-    return jsonAst
 }
 
 /**
@@ -279,10 +185,8 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
 /**
  * Normalize ECMAScript version
  */
-function normalizeEcmaVersion(
-    espree: ESPree,
-    version: number | "latest" | undefined,
-) {
+function normalizeEcmaVersion(version: number | "latest" | undefined) {
+    const espree = getEspree()
     const latestEcmaVersion = getLatestEcmaVersion(espree)
     if (version == null || version === "latest") {
         return latestEcmaVersion

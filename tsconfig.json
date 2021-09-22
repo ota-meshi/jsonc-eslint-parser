@@ -20,6 +20,12 @@
         "declaration": true,
         "esModuleInterop": true
     },
-    "include": ["src/**/*", "tests/src/**/*", "tools/**/*", "typings/**/*"],
+    "include": [
+        "src/**/*",
+        "tests/src/**/*",
+        "tools/**/*",
+        "typings/**/*",
+        "benchmark/**/*"
+    ],
     "exclude": ["lib/**/*"]
 }
