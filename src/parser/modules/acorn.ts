@@ -1,6 +1,12 @@
 import type * as acorn from "acorn"
 import { createRequire } from "module"
-import { getRequireFromCwd, getRequireFromLinter } from "../require-utils"
+import {
+    getRequireFromCwd,
+    getRequireFromLinter,
+    loadNewest,
+    requireFromCwd,
+    requireFromLinter,
+} from "./require-utils"
 
 let acornCache: typeof acorn | undefined
 /**
@@ -9,20 +15,78 @@ let acornCache: typeof acorn | undefined
  */
 export function getAcorn(): typeof acorn {
     if (!acornCache) {
-        try {
-            const nodeRequire = getRequireFromCwd() || getRequireFromLinter()
-            if (nodeRequire) {
-                acornCache = createRequire(nodeRequire.resolve("espree"))(
-                    "acorn",
-                )
-            }
-        } catch {
-            // ignore
-        }
-        if (!acornCache) {
-            // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-            acornCache = require("acorn")
-        }
+        acornCache = loadNewest([
+            {
+                getPkg() {
+                    return requireFromCwd("acorn/package.json")
+                },
+                get() {
+                    return requireFromCwd("acorn")
+                },
+            },
+            {
+                getPkg() {
+                    return requireFromEspree("acorn/package.json")
+                },
+                get() {
+                    return requireFromEspree("acorn")
+                },
+            },
+            {
+                getPkg() {
+                    // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
+                    return require("acorn/package.json")
+                },
+                get() {
+                    // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
+                    return require("acorn")
+                },
+            },
+        ])
     }
     return acornCache!
+}
+
+/**
+ * Get module from espree
+ */
+function requireFromEspree<T>(module: string): T | null {
+    // Lookup the loaded espree
+    try {
+        return createRequire(getEspreePath())(module)
+    } catch {
+        // ignore
+    }
+    return null
+}
+
+/** Get espree path */
+function getEspreePath(): string {
+    return loadNewest([
+        {
+            getPkg() {
+                return requireFromCwd("espree/package.json")
+            },
+            get() {
+                return getRequireFromCwd()!.resolve("espree")
+            },
+        },
+        {
+            getPkg() {
+                return requireFromLinter("espree/package.json")
+            },
+            get() {
+                return getRequireFromLinter()!.resolve("espree")
+            },
+        },
+        {
+            getPkg() {
+                // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
+                return require("espree/package.json")
+            },
+            get() {
+                return require.resolve("espree")
+            },
+        },
+    ])
 }

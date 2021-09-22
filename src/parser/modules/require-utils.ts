@@ -1,4 +1,5 @@
 import path from "path"
+import { lte } from "semver"
 import type ModuleClass from "module"
 
 /**
@@ -93,4 +94,20 @@ export function requireFromCwd<T>(module: string): T | null {
         // ignore
     }
     return null
+}
+
+/**
+ * Get the newest `espree` kind from the loaded ESLint or dependency.
+ */
+export function loadNewest<T>(
+    items: { getPkg: () => { version: string } | null; get: () => T | null }[],
+): T {
+    let target: { version: string; get: () => T | null } | null = null
+    for (const item of items) {
+        const pkg = item.getPkg()
+        if (pkg != null && (!target || lte(target.version, pkg.version))) {
+            target = { version: pkg.version, get: item.get }
+        }
+    }
+    return target!.get()!
 }
