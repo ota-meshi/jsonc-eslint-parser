@@ -20,9 +20,13 @@ import {
 } from "./errors"
 import type { TokenStore, MaybeNodeOrToken } from "./token-store"
 import { isComma } from "./token-store"
-import { requireFromCwd, requireFromLinter } from "./require-utils"
 import { isRegExpLiteral } from "./utils"
 import type { JSONIdentifier } from "./ast"
+import {
+    loadNewest,
+    requireFromCwd,
+    requireFromLinter,
+} from "./modules/require-utils"
 
 const lineBreakPattern = /\r\n|[\n\r\u2028\u2029]/u
 const octalNumericLiteralPattern = /^0[Oo]/u
@@ -34,11 +38,34 @@ let cacheCodePointEscapeMatcher: eslintUtils.PatternMatcher | null
 /** Get codePointEscape matcher */
 function getCodePointEscapeMatcher(): eslintUtils.PatternMatcher {
     if (!cacheCodePointEscapeMatcher) {
-        const utils: typeof eslintUtils =
-            requireFromCwd("eslint-utils") ||
-            requireFromLinter("eslint-utils") ||
-            // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-            require("eslint-utils")
+        const utils: typeof eslintUtils = loadNewest([
+            {
+                getPkg() {
+                    return requireFromCwd("eslint-utils/package.json")
+                },
+                get() {
+                    return requireFromCwd("eslint-utils")
+                },
+            },
+            {
+                getPkg() {
+                    return requireFromLinter("eslint-utils/package.json")
+                },
+                get() {
+                    return requireFromLinter("eslint-utils")
+                },
+            },
+            {
+                getPkg() {
+                    // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
+                    return require("eslint-utils/package.json")
+                },
+                get() {
+                    // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
+                    return require("eslint-utils")
+                },
+            },
+        ])
         cacheCodePointEscapeMatcher = new utils.PatternMatcher(
             /\\u\{[\dA-Fa-f]+\}/gu,
         )
