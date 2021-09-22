@@ -73,15 +73,17 @@ function normalizeObject(value: any) {
     }
     const nodeType: string | null = isNode ? value.type : null
 
-    return Object.fromEntries(
-        entries.sort(([a], [b]) => {
-            const c =
-                firsts(a, nodeType) - firsts(b, nodeType) ||
-                lasts(a, nodeType) - lasts(b, nodeType)
-            if (c) {
-                return c
-            }
-            return a < b ? -1 : a > b ? 1 : 0
-        }),
-    )
+    const newData: Record<string, unknown> = {}
+    for (const [key, val] of entries.sort(([a], [b]) => {
+        const c =
+            firsts(a, nodeType) - firsts(b, nodeType) ||
+            lasts(a, nodeType) - lasts(b, nodeType)
+        if (c) {
+            return c
+        }
+        return a < b ? -1 : a > b ? 1 : 0
+    })) {
+        newData[key] = val
+    }
+    return newData
 }
