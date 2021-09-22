@@ -216,8 +216,8 @@ export function throwUnexpectedNodeError(
 function getLocation(
     token: MaybeNodeOrToken & { start?: number; end?: number },
 ) {
-    const start = token.range?.[0] || token.start!
-    const end = token.range?.[1] || token.end!
+    const start = token.range?.[0] ?? token.start!
+    const end = token.range?.[1] ?? token.end!
     const loc = token.loc!
     return { start, end, loc }
 }
