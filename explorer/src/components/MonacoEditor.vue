@@ -3,9 +3,9 @@
 </template>
 
 <script>
-const monacoScript = Array.from(window.document.head.querySelectorAll("script")).find(
-    (script) => script.src && script.src.includes("monaco"),
-)
+const monacoScript = Array.from(
+    window.document.head.querySelectorAll("script"),
+).find((script) => script.src && script.src.includes("monaco"))
 window.require.config({
     paths: {
         vs: monacoScript.src.replace(/\/vs\/.*$/u, "/vs"),
@@ -81,6 +81,9 @@ export default {
         })
         vm.editor.onDidFocusEditorText((evt) => {
             vm.$emit("focusEditorText", evt)
+        })
+        monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+            validate: false,
         })
     },
     methods: {

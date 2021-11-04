@@ -123,7 +123,7 @@ describe("Check that parsing error is correct for JSONC.", () => {
         },
         {
             code: '{a\\u{31}:"foo"}',
-            message: "Unexpected identifier 'a1'.",
+            message: "Unexpected escape sequence.",
             lineNumber: 1,
             column: 2,
             index: 1,

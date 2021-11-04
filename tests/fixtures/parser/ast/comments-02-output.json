@@ -7,31 +7,31 @@
         "type": "JSONObjectExpression",
         "properties": [],
         "range": [
-          11,
-          30
+          0,
+          19
         ],
         "loc": {
           "start": {
-            "line": 2,
+            "line": 1,
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 3,
             "column": 1
           }
         }
       },
       "range": [
-        11,
-        30
+        0,
+        19
       ],
       "loc": {
         "start": {
-          "line": 2,
+          "line": 1,
           "column": 0
         },
         "end": {
-          "line": 4,
+          "line": 3,
           "column": 1
         }
       }
@@ -39,38 +39,38 @@
   ],
   "comments": [
     {
-      "type": "Line",
-      "value": " comment",
+      "type": "Block",
+      "value": " comment ",
       "range": [
-        0,
-        10
+        4,
+        17
       ],
       "loc": {
         "start": {
-          "line": 1,
-          "column": 0
+          "line": 2,
+          "column": 2
         },
         "end": {
-          "line": 1,
-          "column": 10
+          "line": 2,
+          "column": 15
         }
       }
     },
     {
-      "type": "Block",
-      "value": " comment ",
+      "type": "Line",
+      "value": " comment",
       "range": [
-        15,
-        28
+        20,
+        30
       ],
       "loc": {
         "start": {
-          "line": 3,
-          "column": 2
+          "line": 4,
+          "column": 0
         },
         "end": {
-          "line": 3,
-          "column": 15
+          "line": 4,
+          "column": 10
         }
       }
     }
@@ -80,16 +80,16 @@
       "type": "Punctuator",
       "value": "{",
       "range": [
-        11,
-        12
+        0,
+        1
       ],
       "loc": {
         "start": {
-          "line": 2,
+          "line": 1,
           "column": 0
         },
         "end": {
-          "line": 2,
+          "line": 1,
           "column": 1
         }
       }
@@ -98,16 +98,16 @@
       "type": "Punctuator",
       "value": "}",
       "range": [
-        29,
-        30
+        18,
+        19
       ],
       "loc": {
         "start": {
-          "line": 4,
+          "line": 3,
           "column": 0
         },
         "end": {
-          "line": 4,
+          "line": 3,
           "column": 1
         }
       }
@@ -115,7 +115,7 @@
   ],
   "range": [
     0,
-    30
+    31
   ],
   "loc": {
     "start": {
@@ -123,8 +123,8 @@
       "column": 0
     },
     "end": {
-      "line": 4,
-      "column": 1
+      "line": 5,
+      "column": 0
     }
   }
 }

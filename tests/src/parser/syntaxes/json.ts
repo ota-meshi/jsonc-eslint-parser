@@ -28,6 +28,14 @@ function getParseError(code: string): ParseError {
 describe("Check that parsing error is correct for JSON.", () => {
     for (const { code, message, lineNumber, column, index, char } of [
         {
+            code: "/**/1",
+            message: "Unexpected comment.",
+            lineNumber: 1,
+            column: 1,
+            index: 0,
+            char: "/",
+        },
+        {
             code: "[1,]",
             message: "Unexpected token ','.",
             lineNumber: 1,
@@ -81,7 +89,7 @@ describe("Check that parsing error is correct for JSON.", () => {
         },
         {
             code: '{a\\u{31}:"foo"}',
-            message: "Unexpected identifier 'a1'.",
+            message: "Unexpected escape sequence.",
             lineNumber: 1,
             column: 2,
             index: 1,

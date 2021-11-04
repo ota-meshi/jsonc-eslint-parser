@@ -30,7 +30,7 @@ describe("Check that parsing error is correct.", () => {
   a: }
 }`,
 
-            message: "Unexpected token }",
+            message: "Unexpected token '}'.",
             lineNumber: 3,
             column: 6,
             index: 8,
@@ -63,6 +63,16 @@ describe("Check that parsing error is correct.", () => {
         },
         {
             code: `
+{foo}
+`,
+            message: "Expected token ':'.",
+            lineNumber: 2,
+            column: 5,
+            index: 5,
+            char: "}",
+        },
+        {
+            code: `
 ...spread
 `,
             message: "Unexpected token '...'.",
@@ -75,11 +85,11 @@ describe("Check that parsing error is correct.", () => {
             code: `
 {},{}
 `,
-            message: "Unexpected token ','.",
+            message: "Unexpected sequence expression.",
             lineNumber: 2,
-            column: 3,
-            index: 3,
-            char: ",",
+            column: 1,
+            index: 1,
+            char: "{",
         },
         {
             code: `
@@ -135,21 +145,21 @@ describe("Check that parsing error is correct.", () => {
             code: `
 {get foo(){}}
 `,
-            message: "Expected token ':'.",
+            message: "Unexpected token '('.",
             lineNumber: 2,
-            column: 5,
-            index: 5,
-            char: " ",
+            column: 9,
+            index: 9,
+            char: "(",
         },
         {
             code: `
 {set foo(p){}}
 `,
-            message: "Expected token ':'.",
+            message: "Unexpected token '('.",
             lineNumber: 2,
-            column: 5,
-            index: 5,
-            char: " ",
+            column: 9,
+            index: 9,
+            char: "(",
         },
         {
             code: `
@@ -175,11 +185,11 @@ describe("Check that parsing error is correct.", () => {
             code: `
 [call()]
 `,
-            message: "Unexpected call expression.",
+            message: "Unexpected token '('.",
             lineNumber: 2,
-            column: 2,
-            index: 2,
-            char: "c",
+            column: 6,
+            index: 6,
+            char: "(",
         },
         {
             code: `
@@ -245,17 +255,17 @@ typeof 123
             code: `
 +(+1)
 `,
-            message: "Unexpected unary expression.",
+            message: "Unexpected token '('.",
             lineNumber: 2,
-            column: 3,
-            index: 3,
-            char: "+",
+            column: 2,
+            index: 2,
+            char: "(",
         },
         {
             code: `
 \`\${''}\`
 `,
-            message: "Unexpected token '$'.",
+            message: "Unexpected token '${'.",
             lineNumber: 2,
             column: 2,
             index: 2,
@@ -265,7 +275,7 @@ typeof 123
             code: `
 \`a\${''}b\`
 `,
-            message: "Unexpected token '$'.",
+            message: "Unexpected token '${'.",
             lineNumber: 2,
             column: 3,
             index: 3,

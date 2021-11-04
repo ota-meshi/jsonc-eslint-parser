@@ -158,6 +158,10 @@
     },
     {
       "type": "RegularExpression",
+      "regex": {
+        "flags": "",
+        "pattern": "reg"
+      },
       "value": "/reg/",
       "range": [
         3,

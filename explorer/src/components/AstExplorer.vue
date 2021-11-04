@@ -1,6 +1,9 @@
 <template>
     <div class="ast-explorer-root">
-        <AstOptions v-model="options" />
+        <div class="ast-tools">
+            <span class="ast-tools__time">{{ time }}</span
+            ><AstOptions v-model="options" />
+        </div>
         <div class="ast-explorer">
             <MonacoEditor
                 ref="sourceEditor"
@@ -33,8 +36,8 @@ export default {
         return {
             options: {
                 showLocations: false,
-                ecmaVersion: '',
-                jsonSyntax: '',
+                ecmaVersion: "",
+                jsonSyntax: "",
             },
             jsoncValue: `// Welcome to jconc-eslint-parser!!
 {
@@ -45,6 +48,7 @@ export default {
 `,
             astJson: {},
             modeEditor: "",
+            time: "",
         }
     },
     watch: {
@@ -60,21 +64,27 @@ export default {
     methods: {
         refresh() {
             const options = {}
-            if(this.options.ecmaVersion) {
+            if (this.options.ecmaVersion) {
                 options.ecmaVersion = Number(this.options.ecmaVersion)
             }
-            if(this.options.jsonSyntax) {
+            if (this.options.jsonSyntax) {
                 options.jsonSyntax = this.options.jsonSyntax
             }
+            const start = Date.now()
             let ast
             try {
-                ast = jsoncEslintParser.parseForESLint(this.jsoncValue, options).ast
+                ast = jsoncEslintParser.parseForESLint(
+                    this.jsoncValue,
+                    options,
+                ).ast
             } catch (e) {
                 ast = {
                     message: e.message,
                     ...e,
                 }
             }
+            const time = Date.now() - start
+            this.time = `${time}ms`
             const json = createAstJson(this.options, ast)
             this.astJson = json
         },
@@ -317,6 +327,13 @@ function isNode(value) {
     display: flex;
     flex-direction: column;
     height: 100%;
+}
+.ast-tools {
+    display: flex;
+    text-align: right;
+}
+.ast-tools__time {
+    margin-right: auto;
 }
 .ast-explorer {
     min-width: 1px;
