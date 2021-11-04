@@ -27,6 +27,7 @@ import {
     requireFromCwd,
     requireFromLinter,
 } from "./modules/require-utils"
+import type { JSONSyntaxContext } from "./syntax-context"
 
 const lineBreakPattern = /\r\n|[\n\r\u2028\u2029]/u
 const octalNumericLiteralPattern = /^0[Oo]/u
@@ -71,36 +72,6 @@ function getCodePointEscapeMatcher(): eslintUtils.PatternMatcher {
         )
     }
     return cacheCodePointEscapeMatcher
-}
-
-export type JSONSyntaxContext = {
-    trailingCommas: boolean
-    comments: boolean
-    // invalid JSON numbers
-    plusSigns: boolean
-    spacedSigns: boolean
-    leadingOrTrailingDecimalPoints: boolean
-    infinities: boolean
-    nans: boolean
-    numericSeparators: boolean
-    binaryNumericLiterals: boolean
-    octalNumericLiterals: boolean
-    legacyOctalNumericLiterals: boolean
-    invalidJsonNumbers: boolean
-    // statics
-    multilineStrings: boolean
-    unquoteProperties: boolean
-    singleQuotes: boolean
-    numberProperties: boolean
-    undefinedKeywords: boolean
-    sparseArrays: boolean
-    regExpLiterals: boolean
-    templateLiterals: boolean
-    bigintLiterals: boolean
-    unicodeCodepointEscapes: boolean
-    escapeSequenceInIdentifier: boolean
-    // JS-likes
-    // staticExpression: boolean
 }
 
 /**

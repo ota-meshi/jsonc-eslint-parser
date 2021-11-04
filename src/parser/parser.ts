@@ -3,12 +3,12 @@ import type { AST, SourceCode } from "eslint"
 import type { ESPree } from "./modules/espree"
 import { getEspree } from "./modules/espree"
 import { getVisitorKeys } from "./visitor-keys"
-import type { JSONSyntaxContext } from "./convert"
 import { convertProgramNode } from "./convert"
 import { TokenStore } from "./token-store"
 import type { JSONProgram } from "./ast"
 import { lte } from "semver"
 import { getParser } from "./extend-parser"
+import type { JSONSyntaxContext } from "./syntax-context"
 
 const DEFAULT_ECMA_VERSION = 2019
 
@@ -99,6 +99,7 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             bigintLiterals: false,
             unicodeCodepointEscapes: false,
             escapeSequenceInIdentifier: false,
+            parentheses: false,
         }
     }
     if (upperCase === "JSONC") {
@@ -126,6 +127,7 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             bigintLiterals: false,
             unicodeCodepointEscapes: false,
             escapeSequenceInIdentifier: false,
+            parentheses: false,
         }
     }
     if (upperCase === "JSON5") {
@@ -153,6 +155,7 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             bigintLiterals: false,
             unicodeCodepointEscapes: false,
             escapeSequenceInIdentifier: false,
+            parentheses: false,
         }
     }
     return {
@@ -179,6 +182,7 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
         bigintLiterals: true,
         unicodeCodepointEscapes: true,
         escapeSequenceInIdentifier: true,
+        parentheses: true,
     }
 }
 

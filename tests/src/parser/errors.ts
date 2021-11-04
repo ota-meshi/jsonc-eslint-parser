@@ -125,11 +125,11 @@ describe("Check that parsing error is correct.", () => {
             code: `
 {method(){}}
 `,
-            message: "Unexpected token '('.",
+            message: "Unexpected token '{'.",
             lineNumber: 2,
-            column: 8,
-            index: 8,
-            char: "(",
+            column: 10,
+            index: 10,
+            char: "{",
         },
         {
             code: `
@@ -145,31 +145,21 @@ describe("Check that parsing error is correct.", () => {
             code: `
 {get foo(){}}
 `,
-            message: "Unexpected token '('.",
+            message: "Unexpected token '{'.",
             lineNumber: 2,
-            column: 9,
-            index: 9,
-            char: "(",
+            column: 11,
+            index: 11,
+            char: "{",
         },
         {
             code: `
 {set foo(p){}}
 `,
-            message: "Unexpected token '('.",
+            message: "Unexpected token '{'.",
             lineNumber: 2,
-            column: 9,
-            index: 9,
-            char: "(",
-        },
-        {
-            code: `
-[('a')]
-`,
-            message: "Unexpected token '('.",
-            lineNumber: 2,
-            column: 2,
-            index: 2,
-            char: "(",
+            column: 12,
+            index: 12,
+            char: "{",
         },
         {
             code: `
@@ -185,11 +175,11 @@ describe("Check that parsing error is correct.", () => {
             code: `
 [call()]
 `,
-            message: "Unexpected token '('.",
+            message: "Unexpected call expression.",
             lineNumber: 2,
-            column: 6,
-            index: 6,
-            char: "(",
+            column: 2,
+            index: 2,
+            char: "c",
         },
         {
             code: `
@@ -255,11 +245,11 @@ typeof 123
             code: `
 +(+1)
 `,
-            message: "Unexpected token '('.",
+            message: "Unexpected unary expression.",
             lineNumber: 2,
-            column: 2,
-            index: 2,
-            char: "(",
+            column: 3,
+            index: 3,
+            char: "+",
         },
         {
             code: `
