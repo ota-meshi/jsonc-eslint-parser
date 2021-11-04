@@ -11,45 +11,19 @@ import type { Token as AcornToken, tokTypes as AcornTokTypes } from "acorn"
 import { isStaticValueIdentifier } from "./validate"
 import { throwUnexpectedNodeError, throwUnexpectedTokenError } from "./errors"
 import { getAcorn } from "./modules/acorn"
-
-export type JSONSyntaxContext = {
-    trailingCommas: boolean
-    comments: boolean
-    // invalid JSON numbers
-    plusSigns: boolean
-    spacedSigns: boolean
-    leadingOrTrailingDecimalPoints: boolean
-    infinities: boolean
-    nans: boolean
-    numericSeparators: boolean
-    binaryNumericLiterals: boolean
-    octalNumericLiterals: boolean
-    legacyOctalNumericLiterals: boolean
-    invalidJsonNumbers: boolean
-    // statics
-    multilineStrings: boolean
-    unquoteProperties: boolean
-    singleQuotes: boolean
-    numberProperties: boolean
-    undefinedKeywords: boolean
-    sparseArrays: boolean
-    regExpLiterals: boolean
-    templateLiterals: boolean
-    bigintLiterals: boolean
-    unicodeCodepointEscapes: boolean
-    escapeSequenceInIdentifier: boolean
-    // JS-likes
-    // staticExpression: boolean
-}
+import type { JSONSyntaxContext } from "./syntax-context"
 
 export class TokenConvertor {
+    private readonly ctx: JSONSyntaxContext
+
     private readonly code: string
 
     private readonly templateBuffer: AcornToken[] = []
 
     private readonly tokTypes: typeof AcornTokTypes
 
-    public constructor(code: string) {
+    public constructor(ctx: JSONSyntaxContext, code: string) {
+        this.ctx = ctx
         this.code = code
         this.tokTypes = getAcorn().tokTypes
     }
@@ -125,6 +99,12 @@ export class TokenConvertor {
                 pattern: reValue.pattern,
             }
             value = `/${reValue.pattern}/${reValue.flags}`
+        } else if (
+            this.ctx.parentheses &&
+            (token.type === tokTypes.parenL || token.type === tokTypes.parenR)
+        ) {
+            type = "Punctuator"
+            value = this.code.slice(...token.range!)
         } else {
             // const key = Object.keys(tokTypes).find(
             //     (k) => tokTypes[k] === token.type,

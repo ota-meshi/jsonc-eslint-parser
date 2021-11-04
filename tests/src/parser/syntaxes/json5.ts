@@ -153,6 +153,22 @@ describe("Check that parsing error is correct for JSON5.", () => {
             index: 0,
             char: "0",
         },
+        {
+            code: "(42)",
+            message: "Unexpected token '('.",
+            lineNumber: 1,
+            column: 1,
+            index: 0,
+            char: "(",
+        },
+        {
+            code: "[('a')]",
+            message: "Unexpected token '('.",
+            lineNumber: 1,
+            column: 2,
+            index: 1,
+            char: "(",
+        },
     ]) {
         it(`JSON5 parseForESLint error on ${JSON.stringify(code)}`, () => {
             const e = getParseError(code)

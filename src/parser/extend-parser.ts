@@ -1,5 +1,4 @@
 import type { TokenStore } from "./token-store"
-import type { JSONSyntaxContext } from "./validate"
 import { validateNode } from "./validate"
 import type { Parser, Options } from "acorn"
 import type { Comment } from "../types"
@@ -7,6 +6,7 @@ import type { Node } from "estree"
 import { getAcorn } from "./modules/acorn"
 import { ParseError, throwUnexpectedCommentError } from "./errors"
 import { TokenConvertor } from "./convert"
+import type { JSONSyntaxContext } from "./syntax-context"
 
 let parserCache: typeof Parser | undefined
 
@@ -39,7 +39,7 @@ export function getParser(): typeof Parser {
         ) {
             super(
                 ((): Options => {
-                    const tokenConvertor = new TokenConvertor(code)
+                    const tokenConvertor = new TokenConvertor(options.ctx, code)
                     return {
                         // do not use spread, because we don't want to pass any unknown options to acorn
                         ecmaVersion: options.ecmaVersion,
