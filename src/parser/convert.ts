@@ -161,7 +161,8 @@ export function convertProgramNode(
         node.type !== "JSONLiteral" &&
         node.type !== "JSONUnaryExpression" &&
         node.type !== "JSONIdentifier" &&
-        node.type !== "JSONTemplateLiteral"
+        node.type !== "JSONTemplateLiteral" &&
+        node.type !== "JSONBinaryExpression"
     ) {
         return throwUnexpectedNodeError(node, tokens)
     }
