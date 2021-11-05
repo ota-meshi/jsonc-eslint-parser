@@ -170,7 +170,7 @@ export interface JSONBinaryExpression extends BaseJSONNode {
     operator: "-" | "+" | "*" | "/" | "%" | "**"
     left: JSONNumberLiteral | JSONUnaryExpression | JSONBinaryExpression
     right: JSONNumberLiteral | JSONUnaryExpression | JSONBinaryExpression
-    parent?:
+    parent:
         | JSONArrayExpression
         | JSONProperty
         | JSONExpressionStatement
