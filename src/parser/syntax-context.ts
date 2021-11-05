@@ -26,5 +26,5 @@ export type JSONSyntaxContext = {
     escapeSequenceInIdentifier: boolean
     // JS-likes
     parentheses: boolean
-    // staticExpression: boolean
+    staticExpressions: boolean
 }

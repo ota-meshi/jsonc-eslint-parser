@@ -18,6 +18,7 @@ const jsonKeys: { [key in JSONNode["type"]]: string[] } = {
     JSONUnaryExpression: ["argument"],
     JSONTemplateLiteral: ["quasis", "expressions"],
     JSONTemplateElement: [],
+    JSONBinaryExpression: ["left", "right"],
 }
 
 let cache: SourceCode.VisitorKeys | null = null

@@ -5,7 +5,7 @@ import path from "path"
 import fs from "fs"
 import semver from "semver"
 
-import { parseJSON } from "../../../src/index"
+import { getStaticJSONValue, parseJSON } from "../../../src/index"
 import { nodeReplacer } from "./utils"
 
 const FIXTURE_ROOT = path.resolve(__dirname, "../../fixtures/parser/ast")
@@ -23,32 +23,31 @@ describe("Check for AST.", () => {
                 f.endsWith("input.json6") ||
                 f.endsWith("input.jsonx"),
         )) {
-        it(filename, () => {
-            const inputFileName = path.join(FIXTURE_ROOT, filename)
-            const outputFileName = inputFileName.replace(
-                /input\.json[56x]$/u,
-                "output.json",
-            )
+        const inputFileName = path.join(FIXTURE_ROOT, filename)
+        const outputFileName = inputFileName.replace(
+            /input\.json[56x]$/u,
+            "output.json",
+        )
 
-            const requirementsPath = inputFileName.replace(
-                /input\.json[56x]$/u,
-                "requirements.json",
-            )
-            const requirements = fs.existsSync(requirementsPath)
-                ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
-                : {}
-            if (
-                Object.entries(requirements).some(([pkgName, pkgVersion]) => {
-                    const version =
-                        pkgName === "node"
-                            ? process.version
-                            : require(`${pkgName}/package.json`).version
-                    return !semver.satisfies(version, pkgVersion as string)
-                })
-            ) {
-                return
-            }
-
+        const requirementsPath = inputFileName.replace(
+            /input\.json[56x]$/u,
+            "requirements.json",
+        )
+        const requirements = fs.existsSync(requirementsPath)
+            ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
+            : {}
+        if (
+            Object.entries(requirements).some(([pkgName, pkgVersion]) => {
+                const version =
+                    pkgName === "node"
+                        ? process.version
+                        : require(`${pkgName}/package.json`).version
+                return !semver.satisfies(version, pkgVersion as string)
+            })
+        ) {
+            continue
+        }
+        it(`AST:${filename}`, () => {
             const input = fs.readFileSync(inputFileName, "utf8")
             const ast = parse(input)
             const astJson = JSON.stringify(ast, nodeReplacer, 2)
@@ -56,6 +55,16 @@ describe("Check for AST.", () => {
             assert.strictEqual(astJson, output)
 
             assert.strictEqual(ast.range[1] - ast.range[0], input.length)
+        })
+        it(`Static Value:${filename}`, () => {
+            const input = fs.readFileSync(inputFileName, "utf8")
+            const ast = parse(input)
+            const value = getStaticJSONValue(ast)
+
+            assert.deepStrictEqual(
+                value,
+                new Function(`return (${input.trim()}\n)`)(),
+            )
         })
     }
 })

@@ -161,6 +161,14 @@ describe("Check that parsing error is correct for JSONC.", () => {
             index: 1,
             char: "(",
         },
+        {
+            code: "42+1",
+            message: "Unexpected binary expression.",
+            lineNumber: 1,
+            column: 1,
+            index: 0,
+            char: "4",
+        },
     ]) {
         it(`JSONC parseForESLint error on ${JSON.stringify(code)}`, () => {
             const e = getParseError(code)

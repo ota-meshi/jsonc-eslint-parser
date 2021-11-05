@@ -18,6 +18,7 @@ import type {
     JSONBigIntLiteral,
     JSONLiteral,
     JSONProperty,
+    JSONBinaryExpression,
 } from "../parser/ast"
 
 /**
@@ -37,7 +38,8 @@ export function isExpression<N extends JSONNode>(
         node.type === "JSONObjectExpression" ||
         node.type === "JSONArrayExpression" ||
         node.type === "JSONUnaryExpression" ||
-        node.type === "JSONTemplateLiteral"
+        node.type === "JSONTemplateLiteral" ||
+        node.type === "JSONBinaryExpression"
     ) {
         return true
     }
@@ -137,6 +139,25 @@ const resolver: { [key in JSONNode["type"]]: (node: any) => JSONValue } = {
         const value = getStaticJSONValue(node.argument)
         return node.operator === "-" ? -value : value
     },
+    JSONBinaryExpression(node: JSONBinaryExpression) {
+        const left = getStaticJSONValue(node.left)
+        const right = getStaticJSONValue(node.right)
+        return node.operator === "+"
+            ? left + right
+            : node.operator === "-"
+            ? left - right
+            : node.operator === "*"
+            ? left * right
+            : node.operator === "/"
+            ? left / right
+            : node.operator === "%"
+            ? left % right
+            : node.operator === "**"
+            ? left ** right
+            : (() => {
+                  throw new Error(`Unknown operator: ${node.operator}`)
+              })()
+    },
     JSONIdentifier(node: JSONIdentifier) {
         if (node.name === "Infinity") {
             return Infinity
@@ -158,7 +179,11 @@ const resolver: { [key in JSONNode["type"]]: (node: any) => JSONValue } = {
 }
 
 export function getStaticJSONValue(
-    node: JSONUnaryExpression | JSONNumberIdentifier | JSONNumberLiteral,
+    node:
+        | JSONUnaryExpression
+        | JSONNumberIdentifier
+        | JSONNumberLiteral
+        | JSONBinaryExpression,
 ): number
 export function getStaticJSONValue(node: JSONUndefinedIdentifier): undefined
 export function getStaticJSONValue(
