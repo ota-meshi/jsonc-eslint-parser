@@ -51,6 +51,7 @@ export type JSONExpression =
     | JSONNumberIdentifier
     | JSONUndefinedIdentifier
     | JSONTemplateLiteral
+    | JSONBinaryExpression
 
 export interface JSONArrayExpression extends BaseJSONNode {
     type: "JSONArrayExpression"
@@ -100,6 +101,7 @@ interface JSONLiteralBase extends BaseJSONNode {
         | JSONProperty
         | JSONExpressionStatement
         | JSONUnaryExpression
+        | JSONBinaryExpression
 }
 
 export interface JSONStringLiteral extends JSONLiteralBase {
@@ -161,4 +163,17 @@ export interface JSONTemplateElement extends BaseJSONNode {
         raw: string
     }
     parent: JSONTemplateLiteral
+}
+
+export interface JSONBinaryExpression extends BaseJSONNode {
+    type: "JSONBinaryExpression"
+    operator: "-" | "+" | "*" | "/" | "%" | "**"
+    left: JSONNumberLiteral | JSONUnaryExpression | JSONBinaryExpression
+    right: JSONNumberLiteral | JSONUnaryExpression | JSONBinaryExpression
+    parent?:
+        | JSONArrayExpression
+        | JSONProperty
+        | JSONExpressionStatement
+        | JSONUnaryExpression
+        | JSONBinaryExpression
 }

@@ -10,7 +10,7 @@ import { lte } from "semver"
 import { getParser } from "./extend-parser"
 import type { JSONSyntaxContext } from "./syntax-context"
 
-const DEFAULT_ECMA_VERSION = 2019
+const DEFAULT_ECMA_VERSION = "latest"
 
 /**
  * Parse source code
@@ -100,6 +100,7 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             unicodeCodepointEscapes: false,
             escapeSequenceInIdentifier: false,
             parentheses: false,
+            staticExpressions: false,
         }
     }
     if (upperCase === "JSONC") {
@@ -128,6 +129,7 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             unicodeCodepointEscapes: false,
             escapeSequenceInIdentifier: false,
             parentheses: false,
+            staticExpressions: false,
         }
     }
     if (upperCase === "JSON5") {
@@ -156,6 +158,7 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
             unicodeCodepointEscapes: false,
             escapeSequenceInIdentifier: false,
             parentheses: false,
+            staticExpressions: false,
         }
     }
     return {
@@ -183,6 +186,7 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
         unicodeCodepointEscapes: true,
         escapeSequenceInIdentifier: true,
         parentheses: true,
+        staticExpressions: true,
     }
 }
 

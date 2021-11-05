@@ -105,6 +105,15 @@ export class TokenConvertor {
         ) {
             type = "Punctuator"
             value = this.code.slice(...token.range!)
+        } else if (
+            this.ctx.staticExpressions &&
+            (token.type === tokTypes.star ||
+                token.type === tokTypes.slash ||
+                token.type === tokTypes.modulo ||
+                token.type === tokTypes.starstar)
+        ) {
+            type = "Punctuator"
+            value = this.code.slice(...token.range!)
         } else {
             // const key = Object.keys(tokTypes).find(
             //     (k) => tokTypes[k] === token.type,

@@ -8,6 +8,8 @@ import type {
     UnaryExpression,
     TemplateLiteral,
     TemplateElement,
+    BinaryExpression,
+    Expression,
 } from "estree"
 import type * as eslintUtils from "eslint-utils"
 import {
@@ -112,6 +114,10 @@ export function validateNode(
     }
     if (node.type === "TemplateElement") {
         validateTemplateElementNode(node, tokens)
+        return
+    }
+    if (node.type === "BinaryExpression") {
+        validateBinaryExpressionNode(node, tokens, ctx)
         return
     }
 
@@ -494,6 +500,66 @@ function validateTemplateElementNode(
 
     node.loc!.start.column += startOffset
     node.loc!.end.column += endOffset
+}
+
+/**
+ * Validate BinaryExpression node
+ */
+function validateBinaryExpressionNode(
+    node: BinaryExpression,
+    tokens: TokenStore,
+    ctx: JSONSyntaxContext,
+): void {
+    /* istanbul ignore next */
+    if (node.type !== "BinaryExpression") {
+        throw throwUnexpectedNodeError(node, tokens)
+    }
+    if (!ctx.staticExpressions) {
+        throw throwUnexpectedNodeError(node, tokens)
+    }
+    const { operator, left, right } = node
+    if (
+        operator !== "+" &&
+        operator !== "-" &&
+        operator !== "*" &&
+        operator !== "/" &&
+        operator !== "%" &&
+        operator !== "**"
+    ) {
+        throw throwOperatorError()
+    }
+    validateExpr(left, throwOperatorError)
+    validateExpr(right, () => throwUnexpectedNodeError(right, tokens))
+
+    /**
+     * Validate Expression node
+     */
+    function validateExpr(expr: Expression, throwError: () => void) {
+        if (expr.type === "Literal") {
+            if (typeof expr.value !== "number") {
+                throw throwError()
+            }
+        } else if (
+            expr.type !== "BinaryExpression" &&
+            expr.type !== "UnaryExpression"
+        ) {
+            throw throwError()
+        }
+        setParent(expr, node)
+    }
+
+    /**
+     * Throw error
+     */
+    function throwOperatorError(): never {
+        throw throwUnexpectedTokenError(
+            operator,
+            tokens.getTokenAfter(
+                tokens.getFirstToken(node),
+                (t) => t.value === operator,
+            ) || node,
+        )
+    }
 }
 
 /**

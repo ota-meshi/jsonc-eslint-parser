@@ -165,11 +165,11 @@ describe("Check that parsing error is correct.", () => {
             code: `
 ['a'+'b']
 `,
-            message: "Unexpected binary expression.",
+            message: "Unexpected token '+'.",
             lineNumber: 2,
-            column: 2,
-            index: 2,
-            char: "'",
+            column: 5,
+            index: 5,
+            char: "+",
         },
         {
             code: `
@@ -290,6 +290,26 @@ typeof 123
             column: 2,
             index: 2,
             char: "u",
+        },
+        {
+            code: `
+42 + 'str'
+`,
+            message: "Unexpected string literal.",
+            lineNumber: 2,
+            column: 6,
+            index: 6,
+            char: "'",
+        },
+        {
+            code: `
+42 in 2
+`,
+            message: "Unexpected token 'in'.",
+            lineNumber: 2,
+            column: 4,
+            index: 4,
+            char: "i",
         },
     ]) {
         it(`parseForESLint error on ${JSON.stringify(code)}`, () => {
