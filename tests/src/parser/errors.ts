@@ -25,6 +25,22 @@ function getParseError(code: string): ParseError {
 describe("Check that parsing error is correct.", () => {
     for (const { code, message, lineNumber, column, index, char } of [
         {
+            code: `"foo": 42`,
+            message: "Unexpected token ':'.",
+            lineNumber: 1,
+            column: 6,
+            index: 5,
+            char: ":",
+        },
+        {
+            code: `"foo":`,
+            message: "Unexpected token ':'.",
+            lineNumber: 1,
+            column: 6,
+            index: 5,
+            char: ":",
+        },
+        {
             code: `
 {
   a: }

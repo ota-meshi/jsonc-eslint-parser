@@ -7,7 +7,7 @@ import { convertProgramNode } from "./convert"
 import { TokenStore } from "./token-store"
 import type { JSONProgram } from "./ast"
 import { lte } from "semver"
-import { getParser } from "./extend-parser"
+import { getAnyTokenErrorParser, getParser } from "./extend-parser"
 import type { JSONSyntaxContext } from "./syntax-context"
 
 const DEFAULT_ECMA_VERSION = "latest"
@@ -58,6 +58,27 @@ export function parseForESLint(
         ;(node as any).type = `JSON${node.type}`
     }
     const ast = convertProgramNode(baseAst as never, tokenStore, ctx, code)
+    let lastIndex = Math.max(
+        baseAst.range![1],
+        comments[comments.length - 1]?.range![1] ?? 0,
+    )
+    let lastChar = code[lastIndex]
+    while (
+        lastChar === "\n" ||
+        lastChar === "\r" ||
+        lastChar === " " ||
+        lastChar === "\t"
+    ) {
+        lastIndex++
+        lastChar = code[lastIndex]
+    }
+    if (lastIndex < code.length) {
+        getAnyTokenErrorParser().parseExpressionAt(
+            code,
+            lastIndex,
+            parserOptions,
+        )
+    }
     ast.tokens = tokens
     ast.comments = comments
     return {
