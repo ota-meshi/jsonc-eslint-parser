@@ -4,7 +4,11 @@ import type { Parser, Options } from "acorn"
 import type { Comment } from "../types"
 import type { Node } from "estree"
 import { getAcorn } from "./modules/acorn"
-import { ParseError, throwUnexpectedCommentError } from "./errors"
+import {
+    ParseError,
+    throwUnexpectedCommentError,
+    throwUnexpectedTokenError,
+} from "./errors"
 import { TokenConvertor } from "./convert"
 import type { JSONSyntaxContext } from "./syntax-context"
 
@@ -36,10 +40,20 @@ export function getParser(): typeof Parser {
                 nodes: Node[]
             },
             code: string,
+            pos: number,
         ) {
             super(
                 ((): Options => {
                     const tokenConvertor = new TokenConvertor(options.ctx, code)
+
+                    const onToken: Options["onToken"] =
+                        options.onToken ||
+                        ((token) => {
+                            const t = tokenConvertor.convertToken(token)
+                            if (t) {
+                                this[PRIVATE].tokenStore.add(t)
+                            }
+                        })
                     return {
                         // do not use spread, because we don't want to pass any unknown options to acorn
                         ecmaVersion: options.ecmaVersion,
@@ -49,12 +63,7 @@ export function getParser(): typeof Parser {
                         allowReserved: true,
 
                         // Collect tokens
-                        onToken: (token) => {
-                            const t = tokenConvertor.convertToken(token)
-                            if (t) {
-                                this[PRIVATE].tokenStore.add(t)
-                            }
-                        },
+                        onToken,
 
                         // Collect comments
                         onComment: (
@@ -82,6 +91,7 @@ export function getParser(): typeof Parser {
                     }
                 })(),
                 code,
+                pos,
             )
             this[PRIVATE] = {
                 code,
@@ -170,4 +180,27 @@ export function getParser(): typeof Parser {
     }
 
     return parserCache
+}
+
+/** Get extend parser */
+export function getAnyTokenErrorParser(): typeof Parser {
+    const parser = class ExtendParser extends getParser() {
+        public constructor(options: Options, code: string, pos: number) {
+            super(
+                {
+                    ...options,
+                    onToken: (token) => {
+                        return throwUnexpectedTokenError(
+                            code.slice(...token.range!),
+                            token,
+                        )
+                    },
+                },
+                code,
+                pos,
+            )
+        }
+    }
+
+    return parser
 }
