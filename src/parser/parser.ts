@@ -60,6 +60,7 @@ export function parseForESLint(
     const ast = convertProgramNode(baseAst as never, tokenStore, ctx, code)
     let lastIndex = Math.max(
         baseAst.range![1],
+        tokens[tokens.length - 1]?.range[1] ?? 0,
         comments[comments.length - 1]?.range![1] ?? 0,
     )
     let lastChar = code[lastIndex]
