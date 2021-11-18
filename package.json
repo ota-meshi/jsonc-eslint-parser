@@ -1,6 +1,6 @@
 {
     "name": "jsonc-eslint-parser",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "description": "JSON, JSONC and JSON5 parser for use with ESLint plugins",
     "main": "lib/index.js",
     "files": [
