@@ -327,6 +327,14 @@ typeof 123
             index: 4,
             char: "i",
         },
+        {
+            code: "(42)-",
+            message: "Unexpected token '-'.",
+            lineNumber: 1,
+            column: 5,
+            index: 4,
+            char: "-",
+        },
     ]) {
         it(`parseForESLint error on ${JSON.stringify(code)}`, () => {
             const e = getParseError(code)
