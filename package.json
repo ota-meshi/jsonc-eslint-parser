@@ -79,5 +79,8 @@
         "eslint-visitor-keys": "^3.0.0",
         "espree": "^9.0.0",
         "semver": "^7.3.5"
+    },
+    "peerDependencies": {
+        "eslint": ">=5"
     }
 }
