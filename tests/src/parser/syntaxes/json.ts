@@ -88,6 +88,22 @@ describe("Check that parsing error is correct for JSON.", () => {
             char: '"',
         },
         {
+            code: '{"foo": "\\u{1}"}',
+            message: "Unexpected unicode codepoint escape.",
+            lineNumber: 1,
+            column: 9,
+            index: 8,
+            char: '"',
+        },
+        {
+            code: '{"foo": "___\\u{1}"}',
+            message: "Unexpected unicode codepoint escape.",
+            lineNumber: 1,
+            column: 9,
+            index: 8,
+            char: '"',
+        },
+        {
             code: '{a\\u{31}:"foo"}',
             message: "Unexpected escape sequence.",
             lineNumber: 1,

@@ -10,8 +10,19 @@ import { nodeReplacer } from "./utils"
 
 const FIXTURE_ROOT = path.resolve(__dirname, "../../fixtures/parser/ast")
 
-function parse(code: string) {
-    return parseJSON(code, { ecmaVersion: 2021 })
+function parse(code: string, fileName: string) {
+    const ext = path.extname(fileName)
+    return parseJSON(code, {
+        ecmaVersion: 2021,
+        jsonSyntax:
+            ext === ".json"
+                ? "JSON"
+                : ext === ".jsonc"
+                ? "JSONC"
+                : ext === ".json5"
+                ? "JSON5"
+                : undefined,
+    })
 }
 
 describe("Check for AST.", () => {
@@ -21,16 +32,18 @@ describe("Check for AST.", () => {
             (f) =>
                 f.endsWith("input.json5") ||
                 f.endsWith("input.json6") ||
-                f.endsWith("input.jsonx"),
+                f.endsWith("input.jsonx") ||
+                f.endsWith("input.jsonc") ||
+                f.endsWith("input.json"),
         )) {
         const inputFileName = path.join(FIXTURE_ROOT, filename)
         const outputFileName = inputFileName.replace(
-            /input\.json[56x]$/u,
+            /input\.json[56cx]?$/u,
             "output.json",
         )
 
         const requirementsPath = inputFileName.replace(
-            /input\.json[56x]$/u,
+            /input\.json[56cx]?$/u,
             "requirements.json",
         )
         const requirements = fs.existsSync(requirementsPath)
@@ -49,7 +62,7 @@ describe("Check for AST.", () => {
         }
         it(`AST:${filename}`, () => {
             const input = fs.readFileSync(inputFileName, "utf8")
-            const ast = parse(input)
+            const ast = parse(input, inputFileName)
             const astJson = JSON.stringify(ast, nodeReplacer, 2)
             const output = fs.readFileSync(outputFileName, "utf8")
             assert.strictEqual(astJson, output)
@@ -58,7 +71,7 @@ describe("Check for AST.", () => {
         })
         it(`Static Value:${filename}`, () => {
             const input = fs.readFileSync(inputFileName, "utf8")
-            const ast = parse(input)
+            const ast = parse(input, inputFileName)
             const value = getStaticJSONValue(ast)
 
             assert.deepStrictEqual(

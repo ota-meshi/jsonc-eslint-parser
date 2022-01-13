@@ -11,7 +11,6 @@ import type {
     BinaryExpression,
     Expression,
 } from "estree"
-import type * as eslintUtils from "eslint-utils"
 import {
     throwUnexpectedNodeError,
     throwExpectedTokenError,
@@ -24,11 +23,6 @@ import type { TokenStore, MaybeNodeOrToken } from "./token-store"
 import { isComma } from "./token-store"
 import { isRegExpLiteral } from "./utils"
 import type { JSONIdentifier } from "./ast"
-import {
-    loadNewest,
-    requireFromCwd,
-    requireFromLinter,
-} from "./modules/require-utils"
 import type { JSONSyntaxContext } from "./syntax-context"
 
 const lineBreakPattern = /\r\n|[\n\r\u2028\u2029]/u
@@ -36,44 +30,28 @@ const octalNumericLiteralPattern = /^0[Oo]/u
 const legacyOctalNumericLiteralPattern = /^0\d/u
 const binaryNumericLiteralPattern = /^0[Bb]/u
 
-let cacheCodePointEscapeMatcher: eslintUtils.PatternMatcher | null
+const unicodeCodepointEscapePattern = /\\u\{[\dA-Fa-f]+\}/uy
 
-/** Get codePointEscape matcher */
-function getCodePointEscapeMatcher(): eslintUtils.PatternMatcher {
-    if (!cacheCodePointEscapeMatcher) {
-        const utils: typeof eslintUtils = loadNewest([
-            {
-                getPkg() {
-                    return requireFromCwd("eslint-utils/package.json")
-                },
-                get() {
-                    return requireFromCwd("eslint-utils")
-                },
-            },
-            {
-                getPkg() {
-                    return requireFromLinter("eslint-utils/package.json")
-                },
-                get() {
-                    return requireFromLinter("eslint-utils")
-                },
-            },
-            {
-                getPkg() {
-                    // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-                    return require("eslint-utils/package.json")
-                },
-                get() {
-                    // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-                    return require("eslint-utils")
-                },
-            },
-        ])
-        cacheCodePointEscapeMatcher = new utils.PatternMatcher(
-            /\\u\{[\dA-Fa-f]+\}/gu,
-        )
+/**
+ * Check if given string has unicode codepoint escape
+ */
+function hasUnicodeCodepointEscapes(code: string) {
+    let escaped = false
+    for (let index = 0; index < code.length - 4; index++) {
+        if (escaped) {
+            escaped = false
+            continue
+        }
+        const char = code[index]
+        if (char === "\\") {
+            unicodeCodepointEscapePattern.lastIndex = index
+            if (unicodeCodepointEscapePattern.test(code)) {
+                return true
+            }
+            escaped = true
+        }
     }
-    return cacheCodePointEscapeMatcher
+    return false
 }
 
 /**
@@ -361,7 +339,7 @@ function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
             }
         }
         if (!ctx.unicodeCodepointEscapes) {
-            if (getCodePointEscapeMatcher().test(node.raw!)) {
+            if (hasUnicodeCodepointEscapes(node.raw!)) {
                 throw throwUnexpectedError("unicode codepoint escape", node)
             }
         }
@@ -463,7 +441,7 @@ function validateTemplateLiteralNode(
     }
 
     if (!ctx.unicodeCodepointEscapes) {
-        if (getCodePointEscapeMatcher().test(node.quasis[0].value.raw)) {
+        if (hasUnicodeCodepointEscapes(node.quasis[0].value.raw)) {
             throw throwUnexpectedError("unicode codepoint escape", node)
         }
     }
