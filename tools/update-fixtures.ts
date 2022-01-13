@@ -29,11 +29,13 @@ for (const filename of fs
         (f) =>
             f.endsWith("input.json5") ||
             f.endsWith("input.json6") ||
-            f.endsWith("input.jsonx"),
+            f.endsWith("input.jsonx") ||
+            f.endsWith("input.jsonc") ||
+            f.endsWith("input.json"),
     )) {
     const inputFileName = path.join(FIXTURE_ROOT, filename)
     const outputFileName = inputFileName.replace(
-        /input\.json[56x]$/u,
+        /input\.json[56cx]?$/u,
         "output.json",
     )
 
