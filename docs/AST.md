@@ -53,6 +53,7 @@ export interface JSONLiteralBase extends BaseJSONNode {
         | JSONProperty
         | JSONExpressionStatement
         | JSONUnaryExpression
+        | JSONBinaryExpression
 }
 ```
 
@@ -101,6 +102,7 @@ export type JSONExpression =
     | JSONUnaryExpression
     | ( JSONIdentifier & { name: "Infinity" | "NaN" | "undefined" } )
     | JSONTemplateLiteral
+    | JSONBinaryExpression
 ```
 
 This parser can parse `"Infinity"`, `"NaN"` and `"undefined"` as values. But you can't use these values in actual JSON, JSONC and JSON5.
@@ -161,6 +163,27 @@ export interface JSONUnaryExpression extends BaseJSONNode {
 This node is [UnaryExpression](https://github.com/estree/estree/blob/master/es5.md#unaryexpression) for JSON.
 
 Only `"-"` can be used by `operator` in JSON and JSONC.
+
+### JSONBinaryExpression
+
+```ts
+export interface JSONUnaryExpression extends BaseJSONNode {
+    type: "JSONBinaryExpression"
+    operator: "-" | "+" | "*" | "/" | "%" | "**"
+    left: JSONNumberLiteral | JSONUnaryExpression | JSONBinaryExpression
+    right: JSONNumberLiteral | JSONUnaryExpression | JSONBinaryExpression
+    parent:
+        | JSONArrayExpression
+        | JSONProperty
+        | JSONExpressionStatement
+        | JSONUnaryExpression
+        | JSONBinaryExpression
+}
+```
+
+This node is [BinaryExpression](https://github.com/estree/estree/blob/master/es5.md#binaryexpression) for JSON.
+
+This parser can only parse binary expressions of static numbers. You cannot use binary expressions in actual JSON, JSONC and JSON5.
 
 ## Statements
 
