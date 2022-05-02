@@ -1,8 +1,8 @@
 import type { TokenStore } from "./token-store"
 import { validateNode } from "./validate"
-import type { Parser, Options } from "acorn"
+import type { Parser, Options, Node } from "acorn"
 import type { Comment } from "../types"
-import type { Node } from "estree"
+import type { Node as ESTreeNode } from "estree"
 import { getAcorn } from "./modules/acorn"
 import {
     ParseError,
@@ -102,32 +102,24 @@ export function getParser(): typeof Parser {
             }
         }
 
-        protected finishNode(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
-            ...args: any[]
-        ) {
-            // @ts-expect-error -- ignore
+        public finishNode(...args: Parameters<Parser["finishNode"]>) {
             const result: Node = super.finishNode(...args)
             return this[PRIVATE_PROCESS_NODE](result)
         }
 
-        protected finishNodeAt(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
-            ...args: any[]
-        ) {
-            // @ts-expect-error -- ignore
+        public finishNodeAt(...args: Parameters<Parser["finishNodeAt"]>) {
             const result: Node = super.finishNodeAt(...args)
             return this[PRIVATE_PROCESS_NODE](result)
         }
 
         private [PRIVATE_PROCESS_NODE](node: Node) {
             const { tokenStore, ctx, nodes } = this[PRIVATE]
-            validateNode(node, tokenStore, ctx)
+            validateNode(node as ESTreeNode, tokenStore, ctx)
             nodes.push(node)
             return node
         }
 
-        protected raise(pos: number, message: string) {
+        public raise(pos: number, message: string) {
             const loc = getAcorn().getLineInfo(this[PRIVATE].code, pos)
             const err = new ParseError(
                 message,
@@ -138,11 +130,11 @@ export function getParser(): typeof Parser {
             throw err
         }
 
-        protected raiseRecoverable(pos: number, message: string) {
+        public raiseRecoverable(pos: number, message: string) {
             this.raise(pos, message)
         }
 
-        protected unexpected(pos?: number) {
+        public unexpected(pos?: number) {
             if (pos != null) {
                 this.raise(pos, "Unexpected token.")
                 return
