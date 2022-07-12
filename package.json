@@ -48,7 +48,7 @@
     "@types/benchmark": "^2.1.0",
     "@types/eslint": "^8.0.0",
     "@types/eslint-visitor-keys": "^1.0.0",
-    "@types/estree": "^0.0.52",
+    "@types/estree": "^1.0.0",
     "@types/mocha": "^9.0.0",
     "@types/natural-compare": "^1.4.0",
     "@types/node": "^16.0.0",
