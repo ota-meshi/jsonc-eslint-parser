@@ -1,40 +1,40 @@
-import { parseForESLint } from "./parser/parser"
-import { traverseNodes } from "./parser/traverse"
+import { parseForESLint } from "./parser/parser";
+import { traverseNodes } from "./parser/traverse";
 import {
-    getStaticJSONValue,
-    isExpression,
-    isNumberIdentifier,
-    isUndefinedIdentifier,
-} from "./utils/ast"
+  getStaticJSONValue,
+  isExpression,
+  isNumberIdentifier,
+  isUndefinedIdentifier,
+} from "./utils/ast";
 
-import type * as AST from "./parser/ast"
-import { getVisitorKeys } from "./parser/visitor-keys"
+import type * as AST from "./parser/ast";
+import { getVisitorKeys } from "./parser/visitor-keys";
 
 // parser
-export { parseForESLint }
+export { parseForESLint };
 // Keys
 // eslint-disable-next-line @typescript-eslint/naming-convention -- parser module
-export const VisitorKeys = getVisitorKeys()
+export const VisitorKeys = getVisitorKeys();
 
 // tools
 export {
-    traverseNodes,
-    getStaticJSONValue,
-    isExpression,
-    isNumberIdentifier,
-    isUndefinedIdentifier,
-}
+  traverseNodes,
+  getStaticJSONValue,
+  isExpression,
+  isNumberIdentifier,
+  isUndefinedIdentifier,
+};
 
 /**
  * Parse JSON source code
  */
 export function parseJSON(
-    code: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-    options?: any,
+  code: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+  options?: any
 ): AST.JSONProgram {
-    return parseForESLint(code, options).ast as never
+  return parseForESLint(code, options).ast as never;
 }
 
 // types
-export { AST }
+export { AST };
