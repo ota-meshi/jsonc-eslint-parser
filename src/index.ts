@@ -10,6 +10,8 @@ import {
 import type * as AST from "./parser/ast";
 import { getVisitorKeys } from "./parser/visitor-keys";
 
+export const name = "jsonc-eslint-parser";
+
 // parser
 export { parseForESLint };
 // Keys
