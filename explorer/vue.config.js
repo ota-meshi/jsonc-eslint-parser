@@ -8,6 +8,7 @@ module.exports = {
           module: require.resolve("./shim/module"),
           path: require.resolve("./shim/path"),
         },
+        fallback: { util: false },
       },
     };
   },

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "ota-meshi/jsonc-eslint-parser"
+    }
+  ],
+  "commit": false,
+  "linked": [],
+  "baseBranch": "master",
+  "updateInternalDependencies": "patch",
+  "bumpVersionsWithWorkspaceProtocolOnly": true,
+  "ignore": []
+}
