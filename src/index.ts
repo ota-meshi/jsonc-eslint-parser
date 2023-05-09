@@ -9,8 +9,8 @@ import {
 
 import type * as AST from "./parser/ast";
 import { getVisitorKeys } from "./parser/visitor-keys";
-
-export const name = "jsonc-eslint-parser";
+export * as meta from "./meta";
+export { name } from "./meta";
 
 // parser
 export { parseForESLint };
