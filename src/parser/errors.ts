@@ -26,7 +26,7 @@ export class ParseError extends SyntaxError {
     message: string,
     offset: number,
     line: number,
-    column: number
+    column: number,
   ) {
     super(message);
     this.index = offset;
@@ -42,14 +42,14 @@ export class ParseError extends SyntaxError {
  */
 export function throwExpectedTokenError(
   name: string,
-  beforeToken: MaybeNodeOrToken
+  beforeToken: MaybeNodeOrToken,
 ): never {
   const locs = getLocation(beforeToken);
   const err = new ParseError(
     `Expected token '${name}'.`,
     locs.end,
     locs.loc.end.line,
-    locs.loc.end.column + 1
+    locs.loc.end.column + 1,
   );
 
   throw err;
@@ -62,14 +62,14 @@ export function throwExpectedTokenError(
  */
 export function throwUnexpectedError(
   name: string,
-  token: MaybeNodeOrToken
+  token: MaybeNodeOrToken,
 ): never {
   const locs = getLocation(token);
   const err = new ParseError(
     `Unexpected ${name}.`,
     locs.start,
     locs.loc.start.line,
-    locs.loc.start.column + 1
+    locs.loc.start.column + 1,
   );
 
   throw err;
@@ -82,7 +82,7 @@ export function throwUnexpectedError(
  */
 export function throwUnexpectedTokenError(
   name: string,
-  token: MaybeNodeOrToken
+  token: MaybeNodeOrToken,
 ): never {
   return throwUnexpectedError(`token '${name}'`, token);
 }
@@ -100,14 +100,14 @@ export function throwUnexpectedCommentError(token: Comment): never {
  * Throw syntax error for unexpected whitespace.
  */
 export function throwUnexpectedSpaceError(
-  beforeToken: MaybeNodeOrToken
+  beforeToken: MaybeNodeOrToken,
 ): never {
   const locs = getLocation(beforeToken);
   const err = new ParseError(
     "Unexpected whitespace.",
     locs.end,
     locs.loc.end.line,
-    locs.loc.end.column + 1
+    locs.loc.end.column + 1,
   );
 
   throw err;
@@ -118,14 +118,14 @@ export function throwUnexpectedSpaceError(
  */
 export function throwInvalidNumberError(
   text: string,
-  token: MaybeNodeOrToken
+  token: MaybeNodeOrToken,
 ): never {
   const locs = getLocation(token);
   const err = new ParseError(
     `Invalid number ${text}.`,
     locs.start,
     locs.loc.start.line,
-    locs.loc.start.column + 1
+    locs.loc.start.column + 1,
   );
 
   throw err;
@@ -138,7 +138,7 @@ export function throwInvalidNumberError(
 export function throwUnexpectedNodeError(
   node: Node | JSONNode,
   tokens: TokenStore,
-  offset?: number
+  offset?: number,
 ): never {
   if (node.type === "Identifier" || node.type === "JSONIdentifier") {
     const locs = getLocation(node);
@@ -146,7 +146,7 @@ export function throwUnexpectedNodeError(
       `Unexpected identifier '${node.name}'.`,
       locs.start,
       locs.loc.start.line,
-      locs.loc.start.column + 1
+      locs.loc.start.column + 1,
     );
     throw err;
   }
@@ -164,7 +164,7 @@ export function throwUnexpectedNodeError(
       `Unexpected ${type} literal.`,
       locs.start,
       locs.loc.start.line,
-      locs.loc.start.column + 1
+      locs.loc.start.column + 1,
     );
     throw err;
   }
@@ -174,7 +174,7 @@ export function throwUnexpectedNodeError(
       "Unexpected template literal.",
       locs.start,
       locs.loc.start.line,
-      locs.loc.start.column + 1
+      locs.loc.start.column + 1,
     );
     throw err;
   }
@@ -188,7 +188,7 @@ export function throwUnexpectedNodeError(
       `Unexpected ${name}.`,
       locs.start,
       locs.loc.start.line,
-      locs.loc.start.column + 1
+      locs.loc.start.column + 1,
     );
     throw err;
   }
@@ -200,7 +200,7 @@ export function throwUnexpectedNodeError(
     `Unexpected token '${name}'.`,
     locs.start,
     locs.loc.start.line,
-    locs.loc.start.column + 1
+    locs.loc.start.column + 1,
   );
 
   throw err;
@@ -208,7 +208,7 @@ export function throwUnexpectedNodeError(
 
 /** get locations */
 function getLocation(
-  token: MaybeNodeOrToken & { start?: number; end?: number }
+  token: MaybeNodeOrToken & { start?: number; end?: number },
 ) {
   const start = token.range?.[0] ?? token.start!;
   const end = token.range?.[1] ?? token.end!;

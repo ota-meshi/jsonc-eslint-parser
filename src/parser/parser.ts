@@ -18,7 +18,7 @@ const DEFAULT_ECMA_VERSION = "latest";
 export function parseForESLint(
   code: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-  options?: any
+  options?: any,
 ): {
   ast: JSONProgram;
   visitorKeys: SourceCode.VisitorKeys;
@@ -37,7 +37,7 @@ export function parseForESLint(
       comment: true,
       eslintVisitorKeys: true,
       eslintScopeManager: true,
-    }
+    },
   );
   parserOptions.ecmaVersion = normalizeEcmaVersion(parserOptions.ecmaVersion);
   const ctx: JSONSyntaxContext = getJSONSyntaxContext(parserOptions.jsonSyntax);
@@ -59,7 +59,7 @@ export function parseForESLint(
   let lastIndex = Math.max(
     baseAst.range![1],
     tokens[tokens.length - 1]?.range[1] ?? 0,
-    comments[comments.length - 1]?.range![1] ?? 0
+    comments[comments.length - 1]?.range![1] ?? 0,
   );
   let lastChar = code[lastIndex];
   while (

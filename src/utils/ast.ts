@@ -25,7 +25,7 @@ import type {
  * Checks if given node is JSONExpression
  */
 export function isExpression<N extends JSONNode>(
-  node: N
+  node: N,
 ): node is N & JSONExpression {
   if (node.type === "JSONIdentifier" || node.type === "JSONLiteral") {
     const parent = node.parent!;
@@ -50,7 +50,7 @@ export function isExpression<N extends JSONNode>(
  * Checks if given node is JSONNumberIdentifier
  */
 export function isNumberIdentifier(
-  node: JSONIdentifier
+  node: JSONIdentifier,
 ): node is JSONNumberIdentifier {
   return (
     isExpression(node) && (node.name === "Infinity" || node.name === "NaN")
@@ -61,7 +61,7 @@ export function isNumberIdentifier(
  * Checks if given node is JSONUndefinedIdentifier
  */
 export function isUndefinedIdentifier(
-  node: JSONIdentifier
+  node: JSONIdentifier,
 ): node is JSONUndefinedIdentifier {
   return isExpression(node) && node.name === "undefined";
 }
@@ -181,26 +181,26 @@ export function getStaticJSONValue(
     | JSONUnaryExpression
     | JSONNumberIdentifier
     | JSONNumberLiteral
-    | JSONBinaryExpression
+    | JSONBinaryExpression,
 ): number;
 export function getStaticJSONValue(node: JSONUndefinedIdentifier): undefined;
 export function getStaticJSONValue(
-  node: JSONTemplateLiteral | JSONTemplateElement | JSONStringLiteral
+  node: JSONTemplateLiteral | JSONTemplateElement | JSONStringLiteral,
 ): string;
 export function getStaticJSONValue(node: JSONKeywordLiteral): boolean | null;
 export function getStaticJSONValue(node: JSONRegExpLiteral): RegExp;
 export function getStaticJSONValue(node: JSONBigIntLiteral): bigint;
 export function getStaticJSONValue(
-  node: JSONLiteral
+  node: JSONLiteral,
 ): string | number | boolean | RegExp | bigint | null;
 export function getStaticJSONValue(
-  node: Exclude<JSONExpression, JSONObjectExpression | JSONArrayExpression>
+  node: Exclude<JSONExpression, JSONObjectExpression | JSONArrayExpression>,
 ): Exclude<JSONValue, JSONObjectValue | JSONValue[]>;
 
 export function getStaticJSONValue(node: JSONObjectExpression): JSONObjectValue;
 export function getStaticJSONValue(node: JSONArrayExpression): JSONValue[];
 export function getStaticJSONValue(
-  node: JSONExpression | JSONExpressionStatement | JSONProgram | JSONNode
+  node: JSONExpression | JSONExpressionStatement | JSONProgram | JSONNode,
 ): JSONValue;
 
 /**

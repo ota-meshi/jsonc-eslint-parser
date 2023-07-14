@@ -27,7 +27,7 @@ describe("Parser options.", () => {
       : []),
   ]) {
     it(`${JSON.stringify(code)} with parserOptions: ${JSON.stringify(
-      parserOptions
+      parserOptions,
     )}`, () => {
       const linter = new Linter();
       linter.defineParser("jsonc-eslint-parser", {
@@ -40,7 +40,7 @@ describe("Parser options.", () => {
           parser: "jsonc-eslint-parser",
           parserOptions: parserOptions as never,
         },
-        "test.json"
+        "test.json",
       );
       assert.deepStrictEqual(result, errors);
     });

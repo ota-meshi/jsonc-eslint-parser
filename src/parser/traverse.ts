@@ -15,7 +15,7 @@ import { getVisitorKeys } from "./visitor-keys";
 function fallbackKeysFilter(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
   this: any,
-  key: string
+  key: string,
 ): boolean {
   let value = null;
   return (
@@ -60,7 +60,7 @@ export function getKeys(node: JSONNode, visitorKeys?: VisitorKeys): string[] {
 export function* getNodes(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
   node: any,
-  key: string
+  key: string,
 ): IterableIterator<JSONNode> {
   const child = node[key];
   if (Array.isArray(child)) {
@@ -81,7 +81,7 @@ export function* getNodes(
  */
 function isNode(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-  x: any
+  x: any,
 ): x is JSONNode {
   return x !== null && typeof x === "object" && typeof x.type === "string";
 }
@@ -95,7 +95,7 @@ function isNode(
 function traverse(
   node: JSONNode,
   parent: JSONNode | null,
-  visitor: Visitor<JSONNode>
+  visitor: Visitor<JSONNode>,
 ): void {
   visitor.enterNode(node, parent);
 
@@ -127,7 +127,7 @@ export function traverseNodes(node: JSONNode, visitor: Visitor<JSONNode>): void;
  */
 export function traverseNodes(
   node: JSONNode,
-  visitor: Visitor<JSONNode>
+  visitor: Visitor<JSONNode>,
 ): void {
   traverse(node, null, visitor);
 }

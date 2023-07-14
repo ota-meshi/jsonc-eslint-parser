@@ -33,7 +33,7 @@ export {
 export function parseJSON(
   code: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-  options?: any
+  options?: any,
 ): AST.JSONProgram {
   return parseForESLint(code, options).ast as never;
 }

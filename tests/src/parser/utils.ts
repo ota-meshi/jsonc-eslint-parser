@@ -67,7 +67,7 @@ function normalizeObject(value: any) {
   let entries = Object.entries(value);
   if (isNode) {
     entries = entries.filter(
-      ([k]) => k !== "parent" && k !== "start" && k !== "end"
+      ([k]) => k !== "parent" && k !== "start" && k !== "end",
     );
   }
   const nodeType: string | null = isNode ? value.type : null;

@@ -34,17 +34,17 @@ describe("Check for AST.", () => {
         f.endsWith("input.json6") ||
         f.endsWith("input.jsonx") ||
         f.endsWith("input.jsonc") ||
-        f.endsWith("input.json")
+        f.endsWith("input.json"),
     )) {
     const inputFileName = path.join(FIXTURE_ROOT, filename);
     const outputFileName = inputFileName.replace(
       /input\.json[56cx]?$/u,
-      "output.json"
+      "output.json",
     );
 
     const requirementsPath = inputFileName.replace(
       /input\.json[56cx]?$/u,
-      "requirements.json"
+      "requirements.json",
     );
     const requirements = fs.existsSync(requirementsPath)
       ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
@@ -76,7 +76,7 @@ describe("Check for AST.", () => {
 
       assert.deepStrictEqual(
         value,
-        new Function(`return (${input.trim()}\n)`)()
+        new Function(`return (${input.trim()}\n)`)(),
       );
     });
   }

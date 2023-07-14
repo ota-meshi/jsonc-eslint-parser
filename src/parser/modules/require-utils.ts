@@ -6,12 +6,12 @@ import type ModuleClass from "module";
  * createRequire
  */
 export function createRequire(
-  filename: string
+  filename: string,
 ): ReturnType<typeof ModuleClass.createRequire> {
   // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports, @typescript-eslint/naming-convention -- special require
   const Module = require("module");
   const fn: (
-    fileName: string
+    fileName: string,
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
   any =
     // Added in v12.2.0
@@ -99,7 +99,7 @@ export function requireFromCwd<T>(module: string): T | null {
  * Get the newest `espree` kind from the loaded ESLint or dependency.
  */
 export function loadNewest<T>(
-  items: { getPkg: () => { version: string } | null; get: () => T | null }[]
+  items: { getPkg: () => { version: string } | null; get: () => T | null }[],
 ): T {
   let target: { version: string; get: () => T | null } | null = null;
   for (const item of items) {
