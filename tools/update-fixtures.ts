@@ -31,12 +31,12 @@ for (const filename of fs
       f.endsWith("input.json6") ||
       f.endsWith("input.jsonx") ||
       f.endsWith("input.jsonc") ||
-      f.endsWith("input.json")
+      f.endsWith("input.json"),
   )) {
   const inputFileName = path.join(FIXTURE_ROOT, filename);
   const outputFileName = inputFileName.replace(
     /input\.json[56cx]?$/u,
-    "output.json"
+    "output.json",
   );
 
   const input = fs.readFileSync(inputFileName, "utf8");
@@ -48,7 +48,7 @@ for (const filename of fs
     fs.writeFileSync(
       outputFileName,
       `${e.message}@line:${e.lineNumber},column:${e.column}`,
-      "utf8"
+      "utf8",
     );
   }
 }

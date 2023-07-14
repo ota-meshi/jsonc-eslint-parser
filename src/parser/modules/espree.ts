@@ -61,10 +61,10 @@ export function getNewestEspreeKind(): NewestKind {
     return kindCache;
   }
   const cwdPkg: { version: string } | null = requireFromCwd(
-    "espree/package.json"
+    "espree/package.json",
   );
   const linterPkg: { version: string } | null = requireFromLinter(
-    "espree/package.json"
+    "espree/package.json",
   );
   // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- ignore
   const self: { version: string } = require("espree/package.json");

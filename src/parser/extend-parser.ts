@@ -40,7 +40,7 @@ export function getParser(): typeof Parser {
         nodes: Node[];
       },
       code: string,
-      pos: number
+      pos: number,
     ) {
       super(
         ((): Options => {
@@ -84,7 +84,7 @@ export function getParser(): typeof Parser {
           };
         })(),
         code,
-        pos
+        pos,
       );
       this[PRIVATE] = {
         code,
@@ -118,7 +118,7 @@ export function getParser(): typeof Parser {
         message,
         pos,
         loc.line,
-        loc.column + 1 // acorn uses 0-based columns
+        loc.column + 1, // acorn uses 0-based columns
       );
       throw err;
     }
@@ -171,12 +171,12 @@ export function getAnyTokenErrorParser(): typeof Parser {
           onToken: (token) => {
             return throwUnexpectedTokenError(
               code.slice(...token.range!),
-              token
+              token,
             );
           },
         },
         code,
-        pos
+        pos,
       );
     }
   };

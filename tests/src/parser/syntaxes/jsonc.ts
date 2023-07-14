@@ -180,7 +180,7 @@ describe("Check that parsing error is correct for JSONC.", () => {
           index: e.index,
           char: code[e.index],
         },
-        { message, lineNumber, column, index, char }
+        { message, lineNumber, column, index, char },
       );
     });
   }

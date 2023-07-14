@@ -21,7 +21,7 @@ export class TokenStore {
 
   private findIndexByOffset(offset: number): number {
     return this.tokens.findIndex(
-      (token) => token.range[0] <= offset && offset < token.range[1]
+      (token) => token.range[0] <= offset && offset < token.range[1],
     );
   }
 
@@ -50,7 +50,7 @@ export class TokenStore {
    */
   public getTokenBefore(
     nodeOrToken: MaybeNodeOrToken,
-    filter?: (token: AST.Token) => boolean
+    filter?: (token: AST.Token) => boolean,
   ): AST.Token | null {
     const tokenIndex = this.findIndexByOffset(nodeOrToken.range![0]);
 
@@ -68,7 +68,7 @@ export class TokenStore {
    */
   public getTokenAfter(
     nodeOrToken: MaybeNodeOrToken,
-    filter?: (token: AST.Token) => boolean
+    filter?: (token: AST.Token) => boolean,
   ): AST.Token | null {
     const tokenIndex = this.findIndexByOffset(nodeOrToken.range![0]);
 
@@ -86,7 +86,7 @@ export class TokenStore {
  * Checks if given token is comma
  */
 export function isComma(
-  token: AST.Token
+  token: AST.Token,
 ): token is AST.Token & { type: "Punctuator"; value: "," } {
   return token.type === "Punctuator" && token.value === ",";
 }

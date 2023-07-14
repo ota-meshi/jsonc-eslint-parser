@@ -83,7 +83,7 @@ export class TokenConvertor {
       if (this.templateBuffer.length === 0) {
         return throwUnexpectedTokenError(
           this.code.slice(...token.range!),
-          token
+          token,
         );
       }
       this.templateBuffer.push(token);
@@ -146,7 +146,7 @@ export function convertProgramNode(
   node: Node | JSONNode,
   tokens: TokenStore,
   ctx: JSONSyntaxContext,
-  code: string
+  code: string,
 ): JSONProgram {
   /* istanbul ignore next */
   if (

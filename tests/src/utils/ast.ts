@@ -58,7 +58,7 @@ function stringify(value: any): string {
 
       return val;
     },
-    2
+    2,
   );
 }
 
@@ -82,24 +82,24 @@ describe("isExpression", () => {
     const ast: JSONProgram = parse("{a: 1}").ast as never;
     assert.ok(
       !isExpression(
-        (ast.body[0].expression as JSONObjectExpression).properties[0]
-      )
+        (ast.body[0].expression as JSONObjectExpression).properties[0],
+      ),
     );
   });
   it("property literal key is not expression", () => {
     const ast: JSONProgram = parse('{"a": 1}').ast as never;
     assert.ok(
       !isExpression(
-        (ast.body[0].expression as JSONObjectExpression).properties[0].key
-      )
+        (ast.body[0].expression as JSONObjectExpression).properties[0].key,
+      ),
     );
   });
   it("property key is not expression", () => {
     const ast: JSONProgram = parse("{a: 1}").ast as never;
     assert.ok(
       !isExpression(
-        (ast.body[0].expression as JSONObjectExpression).properties[0].key
-      )
+        (ast.body[0].expression as JSONObjectExpression).properties[0].key,
+      ),
     );
   });
 });
@@ -123,7 +123,7 @@ describe("getStaticJSONValue", () => {
       assert.strictEqual(
         stringify(getStaticJSONValue(ast as any)),
         // eslint-disable-next-line no-eval -- for test
-        stringify(eval(`(${code})`))
+        stringify(eval(`(${code})`)),
       );
     });
   }
@@ -172,7 +172,7 @@ describe("getStaticJSONValue", () => {
     try {
       getStaticJSONValue(
         (ast.body[0].expression as JSONObjectExpression).properties[0]
-          .key as any
+          .key as any,
       );
       assert.fail("Expected error");
     } catch {

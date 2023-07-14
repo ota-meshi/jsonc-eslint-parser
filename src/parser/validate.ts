@@ -60,7 +60,7 @@ function hasUnicodeCodepointEscapes(code: string) {
 export function validateNode(
   node: Node,
   tokens: TokenStore,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): void {
   if (node.type === "ObjectExpression") {
     validateObjectExpressionNode(node, tokens, ctx);
@@ -108,7 +108,7 @@ export function validateNode(
 function validateObjectExpressionNode(
   node: ObjectExpression,
   tokens: TokenStore,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): void {
   /* istanbul ignore next */
   if (node.type !== "ObjectExpression") {
@@ -133,7 +133,7 @@ function validateObjectExpressionNode(
 function validatePropertyNode(
   node: Property,
   tokens: TokenStore,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): void {
   if (node.type !== "Property") {
     throw throwUnexpectedNodeError(node, tokens);
@@ -184,7 +184,7 @@ function validatePropertyNode(
 function validateArrayExpressionNode(
   node: ArrayExpression,
   tokens: TokenStore,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): void {
   /* istanbul ignore next */
   if (node.type !== "ArrayExpression") {
@@ -209,7 +209,7 @@ function validateArrayExpressionNode(
           : tokens.getFirstToken(node);
       throw throwUnexpectedTokenError(
         ",",
-        tokens.getTokenAfter(before, isComma)!
+        tokens.getTokenAfter(before, isComma)!,
       );
     }
     if (child.type === "Identifier") {
@@ -227,7 +227,7 @@ function validateArrayExpressionNode(
 function validateLiteralNode(
   node: Literal,
   tokens: TokenStore,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): void {
   /* istanbul ignore next */
   if (node.type !== "Literal") {
@@ -354,7 +354,7 @@ function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
 function validateUnaryExpressionNode(
   node: UnaryExpression,
   tokens: TokenStore,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): void {
   /* istanbul ignore next */
   if (node.type !== "UnaryExpression") {
@@ -396,7 +396,7 @@ function validateUnaryExpressionNode(
 function validateIdentifierNode(
   node: Identifier,
   tokens: TokenStore,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): void {
   /* istanbul ignore next */
   if (node.type !== "Identifier") {
@@ -416,7 +416,7 @@ function validateIdentifierNode(
 function validateTemplateLiteralNode(
   node: TemplateLiteral,
   tokens: TokenStore,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): void {
   /* istanbul ignore next */
   if (node.type !== "TemplateLiteral") {
@@ -455,7 +455,7 @@ function validateTemplateLiteralNode(
  */
 function validateTemplateElementNode(
   node: TemplateElement,
-  tokens: TokenStore
+  tokens: TokenStore,
 ): void {
   /* istanbul ignore next */
   if (node.type !== "TemplateElement") {
@@ -486,7 +486,7 @@ function validateTemplateElementNode(
 function validateBinaryExpressionNode(
   node: BinaryExpression,
   tokens: TokenStore,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): void {
   /* istanbul ignore next */
   if (node.type !== "BinaryExpression") {
@@ -534,8 +534,8 @@ function validateBinaryExpressionNode(
       operator,
       tokens.getTokenAfter(
         tokens.getFirstToken(node),
-        (t) => t.value === operator
-      ) || node
+        (t) => t.value === operator,
+      ) || node,
     );
   }
 }
@@ -545,7 +545,7 @@ function validateBinaryExpressionNode(
  */
 export function isStaticValueIdentifier<I extends Identifier | JSONIdentifier>(
   node: I,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): node is I & { name: "NaN" | "Infinity" | "undefined" } {
   if (isNumberIdentifier(node, ctx)) {
     return true;
@@ -558,7 +558,7 @@ export function isStaticValueIdentifier<I extends Identifier | JSONIdentifier>(
  */
 function isNumberIdentifier<I extends Identifier | JSONIdentifier>(
   node: I,
-  ctx: JSONSyntaxContext
+  ctx: JSONSyntaxContext,
 ): node is I & { name: "NaN" | "Infinity" } {
   if (node.name === "Infinity" && ctx.infinities) {
     return true;

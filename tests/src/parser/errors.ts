@@ -63,7 +63,7 @@ describe("Check that parsing error is correct.", () => {
           index: e.index,
           char: code[e.index],
         },
-        { message, lineNumber, column, index, char }
+        { message, lineNumber, column, index, char },
       );
     });
   }
@@ -346,7 +346,7 @@ typeof 123
           index: e.index,
           char: code[e.index],
         },
-        { message, lineNumber, column, index, char }
+        { message, lineNumber, column, index, char },
       );
     });
   }

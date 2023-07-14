@@ -7,6 +7,6 @@ export class PatternMatcher {
 
   public [Symbol.replace](
     str: string,
-    replacer: string | ((...ss: string[]) => string)
+    replacer: string | ((...ss: string[]) => string),
   ): string;
 }
