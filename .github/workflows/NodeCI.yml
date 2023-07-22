@@ -12,10 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
-      with:
-        node-version: 14
     - name: Install Packages
-      run: npm install
+      run: npm install -f
     - name: Lint
       run: npm run lint
     - name: Build
@@ -24,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x, 18.x, 20.x]
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -33,6 +31,23 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install Target Packages
       run: |+
+          npm install --legacy-peer-deps
+    - name: Test
+      run: npm test
+  test-for-old-node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install Target Packages
+      run: |+
+          npm install @typescript-eslint/parser@5 --legacy-peer-deps
           npm install --legacy-peer-deps
     - name: Test
       run: npm test
