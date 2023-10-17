@@ -26,9 +26,9 @@ import type { JSONIdentifier } from "./ast";
 import type { JSONSyntaxContext } from "./syntax-context";
 
 const lineBreakPattern = /\r\n|[\n\r\u2028\u2029]/u;
-const octalNumericLiteralPattern = /^0[Oo]/u;
+const octalNumericLiteralPattern = /^0o/iu;
 const legacyOctalNumericLiteralPattern = /^0\d/u;
-const binaryNumericLiteralPattern = /^0[Bb]/u;
+const binaryNumericLiteralPattern = /^0b/iu;
 
 const unicodeCodepointEscapePattern = /\\u\{[\dA-Fa-f]+\}/uy;
 
