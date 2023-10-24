@@ -1,4 +1,5 @@
-import type { Token, Comment } from "../types";
+import type { AST as ESLintAST } from "eslint";
+import type { Comment } from "estree";
 
 export interface Locations {
   loc: SourceLocation;
@@ -33,7 +34,7 @@ export interface JSONProgram extends BaseJSONNode {
   type: "Program";
   body: [JSONExpressionStatement];
   comments: Comment[];
-  tokens: Token[];
+  tokens: ESLintAST.Token[];
   parent: null;
 }
 

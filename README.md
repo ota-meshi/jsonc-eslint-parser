@@ -69,6 +69,7 @@ If not specified, all syntaxes that express static values ​​are accepted. Fo
 ## Usage for Custom Rules / Plugins
 
 - [AST.md](./docs/AST.md) is AST specification.
+- [Plugins.md](./docs/Plugins.md) describes using this in an ESLint plugin.
 - [no-template-literals.ts](https://github.com/ota-meshi/eslint-plugin-jsonc/blob/master/lib/rules/no-template-literals.ts) is an example.
 - You can see the AST on the [Online DEMO](https://ota-meshi.github.io/jsonc-eslint-parser/).
 

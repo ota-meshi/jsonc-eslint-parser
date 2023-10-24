@@ -1,8 +1,7 @@
 import type { TokenStore } from "./token-store";
 import { validateNode } from "./validate";
 import type { Parser, Options, Node } from "acorn";
-import type { Comment } from "../types";
-import type { Node as ESTreeNode } from "estree";
+import type { Comment, Node as ESTreeNode } from "estree";
 import { getAcorn } from "./modules/acorn";
 import {
   ParseError,

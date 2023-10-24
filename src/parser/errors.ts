@@ -1,6 +1,5 @@
-import type { Node } from "estree";
+import type { Comment, Node } from "estree";
 import type { TokenStore, MaybeNodeOrToken } from "./token-store";
-import type { Comment } from "../types";
 import type { JSONNode } from "./ast";
 import { isRegExpLiteral } from "./utils";
 
