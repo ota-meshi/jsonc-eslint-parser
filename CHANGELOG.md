@@ -1,5 +1,11 @@
 # jsonc-eslint-parser
 
+## 2.4.0
+
+### Minor Changes
+
+- [#186](https://github.com/ota-meshi/jsonc-eslint-parser/pull/186) [`8027edd`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/8027eddbb8a54f965dc480792fb31382bad131f2) Thanks [@JoshuaKGoldberg](https://github.com/JoshuaKGoldberg)! - Added ESLint-oriented types, with plugin docs
+
 ## 2.3.0
 
 ### Minor Changes
