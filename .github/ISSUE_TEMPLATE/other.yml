@@ -1,0 +1,13 @@
+name: Other
+description: An issue that doesn't fit into the other categories.
+labels: []
+
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        A clear and concise description.  
+        Also give a few code examples.
+    validations:
+      required: true
