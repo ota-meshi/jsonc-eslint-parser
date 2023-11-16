@@ -143,18 +143,18 @@ const resolver: { [key in JSONNode["type"]]: (node: any) => JSONValue } = {
     return node.operator === "+"
       ? left + right
       : node.operator === "-"
-      ? left - right
-      : node.operator === "*"
-      ? left * right
-      : node.operator === "/"
-      ? left / right
-      : node.operator === "%"
-      ? left % right
-      : node.operator === "**"
-      ? left ** right
-      : (() => {
-          throw new Error(`Unknown operator: ${node.operator}`);
-        })();
+        ? left - right
+        : node.operator === "*"
+          ? left * right
+          : node.operator === "/"
+            ? left / right
+            : node.operator === "%"
+              ? left % right
+              : node.operator === "**"
+                ? left ** right
+                : (() => {
+                    throw new Error(`Unknown operator: ${node.operator}`);
+                  })();
   },
   JSONIdentifier(node: JSONIdentifier) {
     if (node.name === "Infinity") {

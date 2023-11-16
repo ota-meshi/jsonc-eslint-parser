@@ -18,10 +18,10 @@ function parse(code: string, fileName: string) {
       ext === ".json"
         ? "JSON"
         : ext === ".jsonc"
-        ? "JSONC"
-        : ext === ".json5"
-        ? "JSON5"
-        : undefined,
+          ? "JSONC"
+          : ext === ".json5"
+            ? "JSON5"
+            : undefined,
   });
 }
 

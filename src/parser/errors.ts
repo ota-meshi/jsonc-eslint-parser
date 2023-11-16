@@ -154,10 +154,10 @@ export function throwUnexpectedNodeError(
     const type = (node as any).bigint
       ? "bigint"
       : isRegExpLiteral(node)
-      ? "regex"
-      : node.value === null
-      ? "null"
-      : typeof node.value;
+        ? "regex"
+        : node.value === null
+          ? "null"
+          : typeof node.value;
     const locs = getLocation(node);
     const err = new ParseError(
       `Unexpected ${type} literal.`,

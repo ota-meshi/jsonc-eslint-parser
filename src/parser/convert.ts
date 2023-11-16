@@ -29,7 +29,12 @@ export class TokenConvertor {
   }
 
   // eslint-disable-next-line complexity -- X
-  public convertToken(token: AcornToken): AST.Token | null {
+  public convertToken(
+    token: AcornToken & {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
+      value: any;
+    },
+  ): AST.Token | null {
     const { tokTypes } = this;
     let type: AST.Token["type"], value: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore

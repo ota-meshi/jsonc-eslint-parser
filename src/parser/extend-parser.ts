@@ -22,7 +22,10 @@ export function getParser(): typeof Parser {
     return parserCache;
   }
 
-  parserCache = class ExtendParser extends getAcorn().Parser {
+  parserCache = class ExtendParser
+    // @ts-expect-error -- Ignore
+    extends getAcorn().Parser
+  {
     private [PRIVATE]: {
       code: string;
       ctx: JSONSyntaxContext;
@@ -48,7 +51,7 @@ export function getParser(): typeof Parser {
           const onToken: Options["onToken"] =
             options.onToken ||
             ((token) => {
-              const t = tokenConvertor.convertToken(token);
+              const t = tokenConvertor.convertToken(token as never);
               if (t) {
                 this[PRIVATE].tokenStore.add(t);
               }
@@ -94,13 +97,27 @@ export function getParser(): typeof Parser {
       };
     }
 
-    public finishNode(...args: Parameters<Parser["finishNode"]>) {
-      const result: Node = super.finishNode(...args);
+    public finishNode(
+      ...args: Parameters<
+        // @ts-expect-error -- Ignore
+        Parser["finishNode"]
+      >
+    ) {
+      const result: Node =
+        // @ts-expect-error -- Ignore
+        super.finishNode(...args);
       return this[PRIVATE_PROCESS_NODE](result);
     }
 
-    public finishNodeAt(...args: Parameters<Parser["finishNodeAt"]>) {
-      const result: Node = super.finishNodeAt(...args);
+    public finishNodeAt(
+      ...args: Parameters<
+        // @ts-expect-error -- Ignore
+        Parser["finishNodeAt"]
+      >
+    ) {
+      const result: Node =
+        // @ts-expect-error -- Ignore
+        super.finishNodeAt(...args);
       return this[PRIVATE_PROCESS_NODE](result);
     }
 
@@ -162,7 +179,10 @@ export function getParser(): typeof Parser {
 
 /** Get extend parser */
 export function getAnyTokenErrorParser(): typeof Parser {
-  const parser = class ExtendParser extends getParser() {
+  const parser = class ExtendParser
+    // @ts-expect-error -- Ignore
+    extends getParser()
+  {
     public constructor(options: Options, code: string, pos: number) {
       super(
         {
