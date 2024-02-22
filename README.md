@@ -22,7 +22,26 @@ See [eslint-plugin-jsonc] for details.
 npm i --save-dev jsonc-eslint-parser
 ```
 
-## :book: Usage
+## :book: Usage (Flat Config)
+
+In your ESLint configuration file, set the `parser` property:
+
+```js
+import jsoncParser from "jsonc-eslint-parser";
+
+export default [
+  {
+    // ...
+    // Add the following settings.
+    files: ["*.json", "*.json5"], // Specify the extension or pattern you want to parse as JSON.
+    languageOptions: {
+      parser: jsoncParser, // Set this parser.
+    }
+  },
+];
+```
+
+## :book: Usage (Legacy Config)
 
 In your ESLint configuration file, set the `overrides` > `parser` property:
 
