@@ -63,7 +63,7 @@
     "@typescript-eslint/parser": "^7.0.0",
     "benchmark": "^2.1.4",
     "env-cmd": "^10.1.0",
-    "eslint": "^8.0.0",
+    "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-json-schema-validator": "^5.0.0",
