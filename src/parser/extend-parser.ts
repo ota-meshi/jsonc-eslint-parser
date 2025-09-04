@@ -23,7 +23,6 @@ export function getParser(): typeof Parser {
   }
 
   parserCache = class ExtendParser
-    // @ts-expect-error -- Ignore
     extends getAcorn().Parser
   {
     private [PRIVATE]: {
@@ -180,7 +179,6 @@ export function getParser(): typeof Parser {
 /** Get extend parser */
 export function getAnyTokenErrorParser(): typeof Parser {
   const parser = class ExtendParser
-    // @ts-expect-error -- Ignore
     extends getParser()
   {
     public constructor(options: Options, code: string, pos: number) {

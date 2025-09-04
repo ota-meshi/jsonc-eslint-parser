@@ -506,6 +506,9 @@ function validateBinaryExpressionNode(
   ) {
     throw throwOperatorError();
   }
+  if(left.type === 'PrivateIdentifier') {
+    throw throwUnexpectedNodeError(left, tokens);
+  }
   validateExpr(left, throwOperatorError);
   validateExpr(right, () => throwUnexpectedNodeError(right, tokens));
 
