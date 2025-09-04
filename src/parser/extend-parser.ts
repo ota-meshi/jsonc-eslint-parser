@@ -22,9 +22,7 @@ export function getParser(): typeof Parser {
     return parserCache;
   }
 
-  parserCache = class ExtendParser
-    extends getAcorn().Parser
-  {
+  parserCache = class ExtendParser extends getAcorn().Parser {
     private [PRIVATE]: {
       code: string;
       ctx: JSONSyntaxContext;
@@ -178,9 +176,7 @@ export function getParser(): typeof Parser {
 
 /** Get extend parser */
 export function getAnyTokenErrorParser(): typeof Parser {
-  const parser = class ExtendParser
-    extends getParser()
-  {
+  const parser = class ExtendParser extends getParser() {
     public constructor(options: Options, code: string, pos: number) {
       super(
         {
