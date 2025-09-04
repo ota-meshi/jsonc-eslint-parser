@@ -29,7 +29,7 @@ body:
   - type: textarea
     id: eslint-plugin-jsonc-version
     attributes:
-      label: What version of `eslint-plugin-jsonc` and ` jsonc-eslint-parser` are you using?
+      label: What version of `eslint-plugin-jsonc` and `jsonc-eslint-parser` are you using?
       value: |
         - jsonc-eslint-parser@0.0.0
         - eslint-plugin-jsonc@0.0.0 (if you have installed.)
