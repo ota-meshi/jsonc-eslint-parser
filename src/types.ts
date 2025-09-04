@@ -6,7 +6,8 @@ export interface JSONParserOptions {
   jsonSyntax?: JSONSyntax;
 }
 
-export type RuleFunction<Node extends AST.JSONNode = never> = (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- used for compatibility with ESLint types
+export type RuleFunction<Node extends AST.JSONNode = any> = (
   node: Node,
 ) => void;
 
