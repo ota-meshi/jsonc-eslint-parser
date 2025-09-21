@@ -1,5 +1,11 @@
 # jsonc-eslint-parser
 
+## 2.4.1
+
+### Patch Changes
+
+- [#228](https://github.com/ota-meshi/jsonc-eslint-parser/pull/228) [`46c1f97`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/46c1f97d50daf959df636e0681a109fe09a98138) Thanks [@michaelfaith](https://github.com/michaelfaith)! - improve type compatibility with eslint
+
 ## 2.4.0
 
 ### Minor Changes
