@@ -27,7 +27,7 @@
     "benchmark": "ts-node --transpile-only benchmark/index.ts",
     "prerelease": "npm run clean && npm run build",
     "release": "changeset publish",
-    "version:ci": "env-cmd -e version-ci npm run build:meta && changeset version"
+    "version:ci": "env-cmd -e version-ci -- npm run build:meta && changeset version"
   },
   "repository": {
     "type": "git",
