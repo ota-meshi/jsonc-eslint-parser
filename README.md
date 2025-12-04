@@ -45,16 +45,16 @@ export default [
 
 In your ESLint configuration file, set the `overrides` > `parser` property:
 
-```json5
+```json
 {
   // ...
   // Add the following settings.
-  overrides: [
+  "overrides": [
     {
-      files: ["*.json", "*.jsonc", "*.json5"], // Specify the extension or pattern you want to parse as JSON.
-      parser: "jsonc-eslint-parser", // Set this parser.
-    },
-  ],
+      "files": ["*.json", "*.jsonc", "*.json5"], // Specify the extension or pattern you want to parse as JSON.
+      "parser": "jsonc-eslint-parser" // Set this parser.
+    }
+  ]
 }
 ```
 
