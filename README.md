@@ -62,19 +62,19 @@ In your ESLint configuration file, set the `overrides` > `parser` property:
 
 The following additional configuration options are available by specifying them in [parserOptions](https://eslint.org/docs/user-guide/configuring#specifying-parser-options-1) in your ESLint configuration file.
 
-```json5
+```json
 {
   // ...
-  overrides: [
+  "overrides": [
     {
-      files: ["*.json", "*.json5"],
-      parser: "jsonc-eslint-parser",
+      "files": ["*.json", "*.json5"],
+      "parser": "jsonc-eslint-parser",
       // Additional configuration options
-      parserOptions: {
-        jsonSyntax: "JSON5",
-      },
-    },
-  ],
+      "parserOptions": {
+        "jsonSyntax": "JSON5"
+      }
+    }
+  ]
 }
 ```
 
