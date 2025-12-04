@@ -13,7 +13,7 @@ import { name } from "./meta";
 
 // We use a named export since it is more idiomatic in modern TypeScript.
 // https://medium.com/@stayyabmazhar19991/why-default-exports-are-bad-in-javascript-a-comprehensive-guide-7c77abc7061d
-export const jsoncParser = {
+export const jsoncESLintParser = {
   meta,
   name,
 
@@ -30,9 +30,33 @@ export const jsoncParser = {
   isUndefinedIdentifier,
 };
 
-// We also export the named export as the default export for backwards compatibility.
-export default jsoncParser;
-
 // Types must be exported separately.
 export type * from "./types";
 export { AST };
+
+// Remove the following legacy code block in the next major version.
+
+// -------------------------------------------------------------------------------------------------
+
+// The old way of importing this plugin was: `import jsoncParser from "jsonc-eslint-parser";`
+// We export the individual members to ensure that this syntax will still work.
+// eslint-disable-next-line @typescript-eslint/naming-convention -- required name by ESLint
+const VisitorKeys = getVisitorKeys();
+export {
+  meta,
+  name,
+
+  // parser
+  parseJSON,
+  parseForESLint,
+  traverseNodes,
+  VisitorKeys,
+
+  // utils
+  getStaticJSONValue,
+  isExpression,
+  isNumberIdentifier,
+  isUndefinedIdentifier,
+};
+
+// -------------------------------------------------------------------------------------------------

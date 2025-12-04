@@ -27,16 +27,16 @@ npm i --save-dev jsonc-eslint-parser
 In your ESLint configuration file, set the `parser` property:
 
 ```js
-import jsoncParser from "jsonc-eslint-parser";
+import { jsoncESLintParser } from "jsonc-eslint-parser";
 
 export default [
   {
     // ...
     // Add the following settings.
-    files: ["*.json", "*.json5"], // Specify the extension or pattern you want to parse as JSON.
+    files: ["*.json", "*.jsonc", "*.json5"], // Specify the extension or pattern you want to parse as JSON.
     languageOptions: {
-      parser: jsoncParser, // Set this parser.
-    }
+      parser: jsoncESLintParser, // Set this parser.
+    },
   },
 ];
 ```
@@ -49,10 +49,10 @@ In your ESLint configuration file, set the `overrides` > `parser` property:
 {
   // ...
   // Add the following settings.
-  "overrides": [
+  overrides: [
     {
-      "files": ["*.json", "*.json5"], // Specify the extension or pattern you want to parse as JSON.
-      "parser": "jsonc-eslint-parser", // Set this parser.
+      files: ["*.json", "*.jsonc", "*.json5"], // Specify the extension or pattern you want to parse as JSON.
+      parser: "jsonc-eslint-parser", // Set this parser.
     },
   ],
 }
@@ -65,14 +65,14 @@ The following additional configuration options are available by specifying them 
 ```json5
 {
   // ...
-  "overrides": [
+  overrides: [
     {
-      "files": ["*.json", "*.json5"],
-      "parser": "jsonc-eslint-parser",
+      files: ["*.json", "*.json5"],
+      parser: "jsonc-eslint-parser",
       // Additional configuration options
-      "parserOptions": {
-        "jsonSyntax": "JSON5"
-      }
+      parserOptions: {
+        jsonSyntax: "JSON5",
+      },
     },
   ],
 }
@@ -80,8 +80,8 @@ The following additional configuration options are available by specifying them 
 
 ### `parserOptions.jsonSyntax`
 
-Set to `"JSON"`, `"JSONC"` or `"JSON5"`. Select the JSON syntax you are using.  
-If not specified, all syntaxes that express static values ​​are accepted. For example, template literals without interpolation.  
+Set to `"JSON"`, `"JSONC"` or `"JSON5"`. Select the JSON syntax you are using.
+If not specified, all syntaxes that express static values ​​are accepted. For example, template literals without interpolation.
 
 **Note** : Recommended to loosen the syntax checking by the parser and use check rules of [eslint-plugin-jsonc] to automatically fix it.
 
