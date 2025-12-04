@@ -1,5 +1,5 @@
 import assert from "assert";
-import * as parser from "../../src";
+import { jsoncParser } from "../../src";
 import { version } from "../../package.json";
 const expectedMeta = {
   name: "jsonc-eslint-parser",
@@ -7,7 +7,7 @@ const expectedMeta = {
 };
 
 describe("Test for meta object", () => {
-  it("A parser should have a meta object.", () => {
-    assert.deepStrictEqual(parser.meta, expectedMeta);
+  it("The parser should have a meta object.", () => {
+    assert.deepStrictEqual(jsoncParser.meta, expectedMeta);
   });
 });

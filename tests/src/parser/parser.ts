@@ -5,7 +5,8 @@ import path from "path";
 import fs from "fs";
 import semver from "semver";
 
-import { getStaticJSONValue, parseJSON } from "../../../src/index";
+import { getStaticJSONValue } from "../../../src/utils/ast";
+import { parseJSON } from "../../../src/parser/parser";
 import { nodeReplacer } from "./utils";
 
 const FIXTURE_ROOT = path.resolve(__dirname, "../../fixtures/parser/ast");

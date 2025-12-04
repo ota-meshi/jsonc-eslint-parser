@@ -9,8 +9,20 @@ import type { JSONProgram } from "./ast";
 import { lte } from "semver";
 import { getAnyTokenErrorParser, getParser } from "./extend-parser";
 import type { JSONSyntaxContext } from "./syntax-context";
+import type * as ParserAST from "./ast";
 
 const DEFAULT_ECMA_VERSION = "latest";
+
+/**
+ * Parse JSON source code
+ */
+export function parseJSON(
+  code: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+  options?: any,
+): ParserAST.JSONProgram {
+  return parseForESLint(code, options).ast as never;
+}
 
 /**
  * Parse source code
