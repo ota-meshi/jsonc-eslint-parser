@@ -106,3 +106,6 @@ dist
 /lib
 /dist-ts
 /index.d.ts
+
+# Agents
+.claude
