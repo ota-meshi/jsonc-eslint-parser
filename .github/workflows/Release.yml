@@ -5,27 +5,37 @@ on:
     branches:
       - master
 
-permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+permissions: {}
+
+# Allow one concurrent deployment
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   release:
+    # prevents this action from running on forks
+    if: github.repository == 'ota-meshi/jsonc-eslint-parser'
+    permissions:
+      contents: write # to create release (changesets/action)
+      id-token: write # OpenID Connect token needed for provenance
+      pull-requests: write # to create pull request (changesets/action)
     name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
           fetch-depth: 0
-
       - name: Setup Node.js
         uses: actions/setup-node@v6
-
+        with:
+          node-version: lts/*
       - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install
+      - name: Build
+        run: npm run build
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
@@ -39,4 +49,3 @@ jobs:
           title: "chore: release jsonc-eslint-parser"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

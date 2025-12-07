@@ -6,12 +6,21 @@ on:
   pull_request:
     branches: [master]
 
+# Allow one concurrent deployment
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/setup-node@v6
+    - uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-${{ hashFiles('package.json') }}-${{ github.ref }}
     - name: Install Packages
       run: npm install -f
     - name: Lint
@@ -22,16 +31,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [16.x, 18.x, 20.x, 22.x, 24.x]
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Install Target Packages
-      run: |+
-          npm install --legacy-peer-deps
+    - name: Install Packages
+      run: npm install -f
     - name: Test
       run: npm test
   test-for-old-node:
@@ -51,18 +59,3 @@ jobs:
           npm install --legacy-peer-deps
     - name: Test
       run: npm test
-  test-and-coverage:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v5
-    - uses: actions/setup-node@v6
-      with:
-        node-version: 24.x
-    - name: Install Packages
-      run: npm install
-    - name: Test
-      run: npm run test:nyc
-    - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}

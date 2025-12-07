@@ -6,17 +6,24 @@ on:
 permissions:
   contents: write
 
+# Allow one concurrent deployment
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   format:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup node
         uses: actions/setup-node@v6
       - name: Install deps
-        run: npm install -f
+        run: npm install
+      - name: Build
+        run: npm run build
       - name: Format
         run: npm run eslint-fix
       - name: Commit

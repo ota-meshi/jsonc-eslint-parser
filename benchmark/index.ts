@@ -1,5 +1,4 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair -- ignore
-/* eslint-disable require-jsdoc, no-console -- ignore */
+/* eslint-disable jsdoc/require-jsdoc, no-console -- benchmark */
 import * as Benchmark from "benchmark";
 import fs from "fs";
 import { parseForESLint } from "..";
@@ -73,3 +72,4 @@ for (const no of [1, 2, 3]) {
 }
 
 suite.run();
+/* eslint-enable jsdoc/require-jsdoc, no-console -- benchmark */
