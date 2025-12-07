@@ -1,5 +1,11 @@
 # jsonc-eslint-parser
 
+## 2.4.2
+
+### Patch Changes
+
+- [#252](https://github.com/ota-meshi/jsonc-eslint-parser/pull/252) [`afaafe7`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/afaafe79b66c4e3adec94a6346b1fd6a93deab7b) Thanks [@ota-meshi](https://github.com/ota-meshi)! - use npm trusted publishing
+
 ## 2.4.1
 
 ### Patch Changes
