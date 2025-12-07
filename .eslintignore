@@ -1,9 +1,0 @@
-/.nyc_output
-/coverage
-/lib
-/node_modules
-/tests/fixtures/integrations
-/assets
-/tests/fixtures
-/explorer/node_modules
-/explorer/dist

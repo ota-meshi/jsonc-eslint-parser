@@ -29,7 +29,7 @@ describe("Parser options.", () => {
     it(`${JSON.stringify(code)} with parserOptions: ${JSON.stringify(
       parserOptions,
     )}`, () => {
-      const linter = new Linter();
+      const linter = new Linter({ configType: "eslintrc" });
       linter.defineParser("jsonc-eslint-parser", {
         parseForESLint: parseForESLint as never,
       });
