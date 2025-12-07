@@ -27,13 +27,13 @@ npm i --save-dev jsonc-eslint-parser
 In your ESLint configuration file, set the `parser` property:
 
 ```js
-import jsoncParser from "jsonc-eslint-parser";
+import * as jsoncParser from "jsonc-eslint-parser";
 
 export default [
   {
     // ...
     // Add the following settings.
-    files: ["*.json", "*.json5"], // Specify the extension or pattern you want to parse as JSON.
+    files: ["**/*.json", "**/*.json5"], // Specify the extension or pattern you want to parse as JSON.
     languageOptions: {
       parser: jsoncParser, // Set this parser.
     }
@@ -60,21 +60,14 @@ In your ESLint configuration file, set the `overrides` > `parser` property:
 
 ## :gear: Configuration
 
-The following additional configuration options are available by specifying them in [parserOptions](https://eslint.org/docs/user-guide/configuring#specifying-parser-options-1) in your ESLint configuration file.
+The following additional configuration options are available by specifying them in [parserOptions](https://eslint.org/docs/latest/use/configure/parser#configure-parser-options) in your ESLint configuration file.
 
 ```json5
 {
-  // ...
-  "overrides": [
-    {
-      "files": ["*.json", "*.json5"],
-      "parser": "jsonc-eslint-parser",
-      // Additional configuration options
-      "parserOptions": {
-        "jsonSyntax": "JSON5"
-      }
-    },
-  ],
+  // Additional configuration options
+  "parserOptions": {
+    "jsonSyntax": "JSON5"
+  }
 }
 ```
 
