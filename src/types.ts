@@ -20,7 +20,6 @@ export type BuiltInRuleListenerExits = {
 };
 
 export interface RuleListener
-  extends BuiltInRuleListeners,
-    BuiltInRuleListenerExits {
+  extends BuiltInRuleListeners, BuiltInRuleListenerExits {
   [key: string]: RuleFunction | undefined;
 }
