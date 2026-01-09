@@ -3,9 +3,7 @@
 </template>
 
 <script>
-const monacoScript = Array.from(
-    window.document.head.querySelectorAll("script"),
-).find((script) => script.src && script.src.includes("monaco"))
+const monacoScript = window.document.head.querySelector('script[src*="/monaco-editor/"]')
 window.require.config({
     paths: {
         vs: monacoScript.src.replace(/\/vs\/.*$/u, "/vs"),
@@ -18,9 +16,11 @@ window.require.config({
 })
 const editorLoaded = new Promise((resolve) => {
     window.require(["vs/editor/editor.main"], (r) => {
-        resolve(r)
+        // monaco module is returned inside `m` property
+        resolve(r.m)
     })
 })
+
 export default {
     name: "MonacoEditor",
     props: {
