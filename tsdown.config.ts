@@ -7,5 +7,8 @@ export default defineConfig({
   dts: true,
   clean: true,
   platform: "node",
-  external: ["eslint", "@eslint/core", "@types/estree", "estree"],
+  // Type-only imports are stripped by TypeScript, no need to externalize them
+  external: [],
+  // Allow bundling of type-only dependencies
+  inlineOnly: false,
 });

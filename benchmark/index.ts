@@ -4,7 +4,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseForESLint } from "../lib/index.mjs";
-import { parseForESLint as parseOld } from "../node_modules/jsonc-eslint-parser/lib/index.js";
+// Import the old version from the published package for comparison
+import { parseForESLint as parseOld } from "jsonc-eslint-parser";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __filename polyfill
 const __filename = fileURLToPath(import.meta.url);
