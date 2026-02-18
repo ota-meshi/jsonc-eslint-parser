@@ -20,7 +20,7 @@
     "declaration": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "nodenext",
 
     "skipLibCheck": true
   },
