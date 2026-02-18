@@ -1,6 +1,6 @@
-import path from "path";
+import path from "node:path";
 import { lte } from "semver";
-import type ModuleClass from "module";
+import type ModuleClass from "node:module";
 
 /**
  * createRequire
@@ -9,7 +9,7 @@ export function createRequire(
   filename: string,
 ): ReturnType<typeof ModuleClass.createRequire> {
   // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports, @typescript-eslint/naming-convention -- special require
-  const Module = require("module");
+  const Module = require("node:module");
   const fn: (
     fileName: string,
   ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any

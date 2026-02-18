@@ -22,6 +22,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "noEmit": true,
 
     "skipLibCheck": true

@@ -1,17 +1,17 @@
-import { parseForESLint, parseJSON } from "./parser/parser";
-import { traverseNodes } from "./parser/traverse";
+import { parseForESLint, parseJSON } from "./parser/parser.ts";
+import { traverseNodes } from "./parser/traverse.ts";
 import {
   getStaticJSONValue,
   isExpression,
   isNumberIdentifier,
   isUndefinedIdentifier,
-} from "./utils/ast";
+} from "./utils/ast.ts";
 
-import type * as AST from "./parser/ast";
-import { getVisitorKeys } from "./parser/visitor-keys";
-export * as meta from "./meta";
-export { name } from "./meta";
-export type * from "./types";
+import type * as AST from "./parser/ast.ts";
+import { getVisitorKeys } from "./parser/visitor-keys.ts";
+export * as meta from "./meta.ts";
+export { name } from "./meta.ts";
+export type * from "./types.ts";
 
 // parser
 export { parseForESLint };
@@ -34,4 +34,4 @@ export {
 export { parseJSON };
 
 // types
-export { AST };
+export type { AST };

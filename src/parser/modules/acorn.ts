@@ -1,12 +1,13 @@
-import type * as acorn from "acorn";
-import { createRequire } from "module";
+import * as acorn from "acorn";
+import acornPkg from "acorn/package.json" with { type: "json" };
+import { createRequire } from "node:module";
 import {
   getRequireFromCwd,
   getRequireFromLinter,
   loadNewest,
   requireFromCwd,
   requireFromLinter,
-} from "./require-utils";
+} from "./require-utils.ts";
 
 let acornCache: typeof acorn | undefined;
 /**
@@ -34,12 +35,10 @@ export function getAcorn(): typeof acorn {
       },
       {
         getPkg() {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-          return require("acorn/package.json");
+          return acornPkg;
         },
         get() {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-          return require("acorn");
+          return acorn;
         },
       },
     ]);

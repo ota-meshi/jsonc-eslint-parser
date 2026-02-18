@@ -18,12 +18,12 @@ import {
   throwInvalidNumberError,
   throwUnexpectedSpaceError,
   throwUnexpectedError,
-} from "./errors";
-import type { TokenStore, MaybeNodeOrToken } from "./token-store";
-import { isComma } from "./token-store";
-import { isRegExpLiteral } from "./utils";
-import type { JSONIdentifier } from "./ast";
-import type { JSONSyntaxContext } from "./syntax-context";
+} from "./errors.ts";
+import type { TokenStore, MaybeNodeOrToken } from "./token-store.ts";
+import { isComma } from "./token-store.ts";
+import { isRegExpLiteral } from "./utils.ts";
+import type { JSONIdentifier } from "./ast.ts";
+import type { JSONSyntaxContext } from "./syntax-context.ts";
 
 const lineBreakPattern = /\r\n|[\n\r\u2028\u2029]/u;
 const octalNumericLiteralPattern = /^0o/iu;

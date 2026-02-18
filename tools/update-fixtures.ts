@@ -1,6 +1,6 @@
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 
 import { parseForESLint } from "../src/parser/parser.js";
 import { nodeReplacer } from "../tests/src/parser/utils.js";

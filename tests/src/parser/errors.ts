@@ -1,7 +1,7 @@
-import assert from "assert";
+import assert from "node:assert";
 
-import { parseForESLint } from "../../../src/parser/parser";
-import type { ParseError } from "../../../src/parser/errors";
+import { parseForESLint } from "../../../src/parser/parser.ts";
+import type { ParseError } from "../../../src/parser/errors.ts";
 
 function getParseError(code: string): ParseError {
   try {

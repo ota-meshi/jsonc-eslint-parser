@@ -1,5 +1,5 @@
 import type { Literal, RegExpLiteral } from "estree";
-import type { JSONLiteral, JSONRegExpLiteral } from "./ast";
+import type { JSONLiteral, JSONRegExpLiteral } from "./ast.ts";
 
 export function isRegExpLiteral(node: JSONLiteral): node is JSONRegExpLiteral;
 export function isRegExpLiteral(node: Literal): node is RegExpLiteral;

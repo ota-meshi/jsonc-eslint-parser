@@ -1,7 +1,7 @@
 import type { Comment, Node } from "estree";
-import type { TokenStore, MaybeNodeOrToken } from "./token-store";
-import type { JSONNode } from "./ast";
-import { isRegExpLiteral } from "./utils";
+import type { TokenStore, MaybeNodeOrToken } from "./token-store.ts";
+import type { JSONNode } from "./ast.ts";
+import { isRegExpLiteral } from "./utils.ts";
 
 /**
  * JSON parse errors.

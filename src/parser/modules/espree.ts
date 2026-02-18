@@ -1,5 +1,12 @@
-import { loadNewest, requireFromCwd, requireFromLinter } from "./require-utils";
+import {
+  loadNewest,
+  requireFromCwd,
+  requireFromLinter,
+} from "./require-utils.ts";
 import { lte } from "semver";
+
+import * as espree from "espree";
+import espreePkg from "espree/package.json" with { type: "json" };
 
 /**
  * The interface of ESLint custom parsers.
@@ -36,17 +43,15 @@ export function getEspree(): ESPree {
       },
       {
         getPkg() {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-          return require("espree/package.json");
+          return espreePkg;
         },
         get() {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-          return require("espree");
+          return espree as unknown as ESPree;
         },
       },
     ]);
   }
-  return espreeCache!;
+  return espreeCache;
 }
 
 type NewestKind = "cwd" | "linter" | "self";

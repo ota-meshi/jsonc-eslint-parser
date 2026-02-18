@@ -1,14 +1,17 @@
 /* eslint @typescript-eslint/no-require-imports:0, @typescript-eslint/no-var-requires:0 -- for test */
-/* globals process, require -- for test */
-import assert from "assert";
-import path from "path";
-import fs from "fs";
+/* globals process -- for test */
+import assert from "node:assert";
+import path from "node:path";
+import fs from "node:fs";
 import semver from "semver";
 
-import { getStaticJSONValue, parseJSON } from "../../../src/index";
-import { nodeReplacer } from "./utils";
+import { getStaticJSONValue, parseJSON } from "../../../src/index.ts";
+import { nodeReplacer } from "./utils.ts";
+import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 
-const FIXTURE_ROOT = path.resolve(__dirname, "../../fixtures/parser/ast");
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const FIXTURE_ROOT = path.resolve(dirname, "../../fixtures/parser/ast");
 
 function parse(code: string, fileName: string) {
   const ext = path.extname(fileName);
@@ -51,6 +54,7 @@ describe("Check for AST.", () => {
       : {};
     if (
       Object.entries(requirements).some(([pkgName, pkgVersion]) => {
+        const require = createRequire(import.meta.url);
         const version =
           pkgName === "node"
             ? process.version

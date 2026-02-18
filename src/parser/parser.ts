@@ -1,14 +1,14 @@
 import type { Comment, Node } from "estree";
 import type { AST, SourceCode } from "eslint";
-import type { ESPree } from "./modules/espree";
-import { getEspree } from "./modules/espree";
-import { getVisitorKeys } from "./visitor-keys";
-import { convertProgramNode } from "./convert";
-import { TokenStore } from "./token-store";
-import type { JSONProgram } from "./ast";
+import type { ESPree } from "./modules/espree.ts";
+import { getEspree } from "./modules/espree.ts";
+import { getVisitorKeys } from "./visitor-keys.ts";
+import { convertProgramNode } from "./convert.ts";
+import { TokenStore } from "./token-store.ts";
+import type { JSONProgram } from "./ast.ts";
 import { lte } from "semver";
-import { getAnyTokenErrorParser, getParser } from "./extend-parser";
-import type { JSONSyntaxContext } from "./syntax-context";
+import { getAnyTokenErrorParser, getParser } from "./extend-parser.ts";
+import type { JSONSyntaxContext } from "./syntax-context.ts";
 
 const DEFAULT_ECMA_VERSION = "latest";
 

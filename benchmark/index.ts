@@ -1,9 +1,9 @@
 /* eslint-disable jsdoc/require-jsdoc, no-console -- benchmark */
 import * as Benchmark from "benchmark";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { parseForESLint } from "../lib/index.js";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { parseForESLint } from "../lib/index.mjs";
 import { parseForESLint as parseOld } from "../node_modules/jsonc-eslint-parser/lib/index.js";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __filename polyfill

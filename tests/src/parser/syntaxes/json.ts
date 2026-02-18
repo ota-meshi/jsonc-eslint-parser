@@ -1,9 +1,10 @@
 /* eslint @typescript-eslint/no-require-imports:0, @typescript-eslint/no-var-requires:0 -- for test */
-import assert from "assert";
+import assert from "node:assert";
 import semver from "semver";
 
-import { parseForESLint } from "../../../../src/parser/parser";
-import type { ParseError } from "../../../../src/parser/errors";
+import { parseForESLint } from "../../../../src/parser/parser.ts";
+import type { ParseError } from "../../../../src/parser/errors.ts";
+import espreePkg from "espree/package.json" with { type: "json" };
 
 function getParseError(code: string): ParseError {
   try {
@@ -59,7 +60,7 @@ describe("Check that parsing error is correct for JSON.", () => {
       index: 13,
       char: "/",
     },
-    ...(semver.satisfies(require("espree/package.json").version, ">=7.2.0")
+    ...(semver.satisfies(espreePkg.version, ">=7.2.0")
       ? [
           {
             code: '{"foo": 1_2_3}',

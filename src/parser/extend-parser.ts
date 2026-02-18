@@ -1,15 +1,15 @@
-import type { TokenStore } from "./token-store";
-import { validateNode } from "./validate";
+import type { TokenStore } from "./token-store.ts";
+import { validateNode } from "./validate.ts";
 import type { Parser, Options, Node } from "acorn";
 import type { Comment, Node as ESTreeNode } from "estree";
-import { getAcorn } from "./modules/acorn";
+import { getAcorn } from "./modules/acorn.ts";
 import {
   ParseError,
   throwUnexpectedCommentError,
   throwUnexpectedTokenError,
-} from "./errors";
-import { TokenConvertor } from "./convert";
-import type { JSONSyntaxContext } from "./syntax-context";
+} from "./errors.ts";
+import { TokenConvertor } from "./convert.ts";
+import type { JSONSyntaxContext } from "./syntax-context.ts";
 
 let parserCache: typeof Parser | undefined;
 
