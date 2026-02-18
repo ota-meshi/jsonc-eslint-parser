@@ -5,12 +5,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.js"
+      "types": "./lib/index.d.mts",
+      "default": "./lib/index.mjs"
     },
     "./package.json": "./package.json"
   },
-  "types": "lib/index.d.ts",
+  "types": "lib/index.d.mts",
   "files": [
     "lib"
   ],
@@ -18,8 +18,7 @@
     "node": "^20.19.0 || ^22.13.0 || >=24"
   },
   "scripts": {
-    "build": "npm run build:meta && npm run build:bundle",
-    "build:meta": "tsx ./tools/update-meta.ts",
+    "build": "npm run build:bundle",
     "build:bundle": "tsdown",
     "clean": "rimraf .nyc_output lib coverage",
     "lint": "eslint .",
@@ -35,7 +34,7 @@
     "benchmark": "tsx benchmark/index.ts",
     "prerelease": "npm run clean && npm run build",
     "release": "changeset publish",
-    "version:ci": "env-cmd -e version-ci -- npm run build:meta && changeset version"
+    "version:ci": "changeset version"
   },
   "repository": {
     "type": "git",

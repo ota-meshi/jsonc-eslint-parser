@@ -13,6 +13,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "rootDir": ".",
     "baseUrl": ".",
     "paths": {
       "*": ["typings/*"]
@@ -20,7 +21,8 @@
     "declaration": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
 
     "skipLibCheck": true
   },
