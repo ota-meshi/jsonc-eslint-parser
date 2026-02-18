@@ -1,8 +1,12 @@
 import path from "path";
 import fs from "fs";
+import { fileURLToPath } from "url";
 
-import { parseForESLint } from "../src/parser/parser";
-import { nodeReplacer } from "../tests/src/parser/utils";
+import { parseForESLint } from "../src/parser/parser.js";
+import { nodeReplacer } from "../tests/src/parser/utils.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const FIXTURE_ROOT = path.resolve(__dirname, "../tests/fixtures/parser/ast");
 

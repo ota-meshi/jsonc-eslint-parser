@@ -1,11 +1,16 @@
 /* eslint-disable jsdoc/require-jsdoc, no-console -- benchmark */
 import * as Benchmark from "benchmark";
 import fs from "fs";
-import { parseForESLint } from "..";
-import { parseForESLint as parseOld } from "../node_modules/jsonc-eslint-parser";
+import path from "path";
+import { fileURLToPath } from "url";
+import { parseForESLint } from "../lib/index.js";
+import { parseForESLint as parseOld } from "../node_modules/jsonc-eslint-parser/lib/index.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const contents = `${fs.readFileSync(
-  require.resolve("../package.json"),
+  path.join(__dirname, "../package.json"),
   "utf-8",
 )}// comments`;
 
