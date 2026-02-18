@@ -29,7 +29,8 @@
     "tests/src/**/*",
     "tools/**/*",
     "typings/**/*",
-    "benchmark/**/*"
+    "benchmark/**/*",
+    "tsdown.config.ts"
   ],
   "exclude": ["lib/**/*"]
 }

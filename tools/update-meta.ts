@@ -5,7 +5,9 @@ import { ESLint } from "eslint";
 import { name, version } from "../package.json" with { type: "json" };
 import { getNewVersion } from "./lib/changesets-util.js";
 
+// eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __filename polyfill
 const __filename = fileURLToPath(import.meta.url);
+// eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __dirname polyfill
 const __dirname = path.dirname(__filename);
 
 const META_PATH = path.join(__dirname, "../src/meta.ts");

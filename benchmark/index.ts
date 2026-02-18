@@ -6,7 +6,9 @@ import { fileURLToPath } from "url";
 import { parseForESLint } from "../lib/index.js";
 import { parseForESLint as parseOld } from "../node_modules/jsonc-eslint-parser/lib/index.js";
 
+// eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __filename polyfill
 const __filename = fileURLToPath(import.meta.url);
+// eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __dirname polyfill
 const __dirname = path.dirname(__filename);
 
 const contents = `${fs.readFileSync(
