@@ -1,4 +1,4 @@
-import { parseForESLint } from "./parser/parser";
+import { parseForESLint, parseJSON } from "./parser/parser";
 import { traverseNodes } from "./parser/traverse";
 import {
   getStaticJSONValue,
@@ -31,13 +31,7 @@ export {
 /**
  * Parse JSON source code
  */
-export function parseJSON(
-  code: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-  options?: any,
-): AST.JSONProgram {
-  return parseForESLint(code, options).ast as never;
-}
+export { parseJSON };
 
 // types
 export { AST };

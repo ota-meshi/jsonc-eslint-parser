@@ -13,19 +13,13 @@ import type { JSONSyntaxContext } from "./syntax-context";
 const DEFAULT_ECMA_VERSION = "latest";
 
 /**
- * Parse source code
+ * Parse JSON source code
  */
-export function parseForESLint(
+export function parseJSON(
   code: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
   options?: any,
-): {
-  ast: JSONProgram;
-  visitorKeys: SourceCode.VisitorKeys;
-  services: {
-    isJSON: boolean;
-  };
-} {
+): JSONProgram {
   const parserOptions = Object.assign(
     { filePath: "<input>", ecmaVersion: DEFAULT_ECMA_VERSION },
     options || {},
@@ -76,6 +70,24 @@ export function parseForESLint(
   }
   ast.tokens = tokens;
   ast.comments = comments;
+  return ast;
+}
+
+/**
+ * Parse source code
+ */
+export function parseForESLint(
+  code: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+  options?: any,
+): {
+  ast: JSONProgram;
+  visitorKeys: SourceCode.VisitorKeys;
+  services: {
+    isJSON: boolean;
+  };
+} {
+  const ast = parseJSON(code, options);
   return {
     ast,
     visitorKeys: getVisitorKeys(),
