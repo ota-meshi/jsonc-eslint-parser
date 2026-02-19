@@ -5,20 +5,10 @@ import {
   resolveFromCwd,
   resolveFromLinter,
 } from "./require-utils.ts";
-import * as espree from "espree";
-import espreePkg from "espree/package.json" with { type: "json" };
 import path from "node:path";
 
-/**
- * The interface of ESLint custom parsers.
- */
-export interface ESPree {
-  latestEcmaVersion?: number;
-  version: string;
-}
-type NewestKind = "cwd" | "linter" | "self";
+type NewestKind = "cwd" | "linter" | "none";
 type ESPreeData = {
-  module: ESPree;
   packageJsonPath: string;
   kind: NewestKind;
 };
@@ -26,30 +16,27 @@ type ESPreeData = {
 let espreeCache: ESPreeData | null = null;
 
 /**
- * Load `espree` from the loaded ESLint.
- * If the loaded ESLint was not found, just returns `require("espree")`.
- */
-export function getEspree(): ESPree {
-  return getEspreeData().module;
-}
-/**
  * Get the path to the loaded `espree`'s package.json.
  * If the loaded ESLint was not found, just returns `require.resolve("espree/package.json")`.
  */
-export function getEspreePath(): string {
-  return path.dirname(getEspreeData().packageJsonPath);
+export function getEspreePath(): string | null {
+  const data = getEspreeData();
+  if (!data) {
+    return null;
+  }
+  return path.dirname(data.packageJsonPath);
 }
 /**
  * Get the newest `espree` kind from the loaded ESLint or dependency.
  */
 export function getNewestEspreeKind(): NewestKind {
-  return getEspreeData().kind;
+  return getEspreeData()?.kind ?? "none";
 }
 
 /**
  *
  */
-function getEspreeData(): ESPreeData {
+function getEspreeData(): ESPreeData | null {
   if (!espreeCache) {
     espreeCache = loadNewest<ESPreeData>([
       {
@@ -57,11 +44,10 @@ function getEspreeData(): ESPreeData {
           return requireFromCwd("espree/package.json");
         },
         get() {
-          const module = requireFromCwd<ESPree>("espree");
-          if (!module) return null;
+          const packageJsonPath = resolveFromCwd("espree/package.json");
+          if (!packageJsonPath) return null;
           return {
-            module,
-            packageJsonPath: resolveFromCwd("espree/package.json")!,
+            packageJsonPath,
             kind: "cwd",
           };
         },
@@ -71,32 +57,11 @@ function getEspreeData(): ESPreeData {
           return requireFromLinter("espree/package.json");
         },
         get() {
-          const module = requireFromLinter<ESPree>("espree");
-          if (!module) return null;
+          const packageJsonPath = resolveFromLinter("espree/package.json");
+          if (!packageJsonPath) return null;
           return {
-            module,
-            packageJsonPath: resolveFromLinter("espree/package.json")!,
+            packageJsonPath,
             kind: "linter",
-          };
-        },
-      },
-      {
-        getPkg() {
-          return espreePkg;
-        },
-        get() {
-          let module: ESPree | typeof espree = espree;
-          if (!("version" in module)) {
-            module = {
-              ...module,
-              version: espreePkg.version,
-            };
-          }
-
-          return {
-            module: module as ESPree,
-            packageJsonPath: import.meta.resolve("espree/package.json"),
-            kind: "self",
           };
         },
       },

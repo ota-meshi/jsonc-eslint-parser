@@ -1,16 +1,11 @@
 import type { Comment, Node } from "estree";
 import type { AST, SourceCode } from "eslint";
-import type { ESPree } from "./modules/espree.ts";
-import { getEspree } from "./modules/espree.ts";
 import { getVisitorKeys } from "./visitor-keys.ts";
 import { convertProgramNode } from "./convert.ts";
 import { TokenStore } from "./token-store.ts";
 import type { JSONProgram } from "./ast.ts";
-import { lte } from "semver";
 import { getAnyTokenErrorParser, getParser } from "./extend-parser.ts";
 import type { JSONSyntaxContext } from "./syntax-context.ts";
-
-const DEFAULT_ECMA_VERSION = "latest";
 
 /**
  * Parse JSON source code
@@ -21,7 +16,7 @@ export function parseJSON(
   options?: any,
 ): JSONProgram {
   const parserOptions = Object.assign(
-    { filePath: "<input>", ecmaVersion: DEFAULT_ECMA_VERSION },
+    { filePath: "<input>", ecmaVersion: "latest" },
     options || {},
     {
       loc: true,
@@ -33,7 +28,6 @@ export function parseJSON(
       eslintScopeManager: true,
     },
   );
-  parserOptions.ecmaVersion = normalizeEcmaVersion(parserOptions.ecmaVersion);
   const ctx: JSONSyntaxContext = getJSONSyntaxContext(parserOptions.jsonSyntax);
   const tokens: AST.Token[] = [];
   const comments: Comment[] = [];
@@ -216,41 +210,4 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
     parentheses: true,
     staticExpressions: true,
   };
-}
-
-/**
- * Normalize ECMAScript version
- */
-function normalizeEcmaVersion(version: number | "latest" | undefined) {
-  const espree = getEspree();
-  const latestEcmaVersion = getLatestEcmaVersion(espree);
-  if (version == null || version === "latest") {
-    return latestEcmaVersion;
-  }
-  return Math.min(getEcmaVersionYear(version), latestEcmaVersion);
-}
-
-/**
- * Get the latest ecma version from espree
- */
-function getLatestEcmaVersion(espree: ESPree): number {
-  if (espree.latestEcmaVersion == null) {
-    for (const { v, latest } of [
-      { v: "6.1.0", latest: 2020 },
-      { v: "4.0.0", latest: 2019 },
-    ]) {
-      if (lte(v, espree.version)) {
-        return latest;
-      }
-    }
-    return 2018;
-  }
-  return getEcmaVersionYear(espree.latestEcmaVersion);
-}
-
-/**
- * Get ECMAScript version year
- */
-function getEcmaVersionYear(version: number) {
-  return version > 5 && version < 2015 ? version + 2009 : version;
 }

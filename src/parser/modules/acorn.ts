@@ -48,7 +48,11 @@ export function getAcorn(): typeof acorn {
 function requireFromEspree<T>(module: string): T | null {
   // Lookup the loaded espree
   try {
-    const relativeTo = path.join(getEspreePath(), "__placeholder__.js");
+    const espreePath = getEspreePath();
+    if (!espreePath) {
+      return null;
+    }
+    const relativeTo = path.join(espreePath, "__placeholder__.js");
     return createRequire(relativeTo)(module);
   } catch {
     // ignore
