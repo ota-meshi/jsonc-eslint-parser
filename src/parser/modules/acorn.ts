@@ -1,13 +1,9 @@
 import * as acorn from "acorn";
 import acornPkg from "acorn/package.json" with { type: "json" };
 import { createRequire } from "node:module";
-import {
-  getRequireFromCwd,
-  getRequireFromLinter,
-  loadNewest,
-  requireFromCwd,
-  requireFromLinter,
-} from "./require-utils.ts";
+import { loadNewest, requireFromCwd } from "./require-utils.ts";
+import { getEspreePath } from "./espree.ts";
+import path from "node:path";
 
 let acornCache: typeof acorn | undefined;
 /**
@@ -52,40 +48,10 @@ export function getAcorn(): typeof acorn {
 function requireFromEspree<T>(module: string): T | null {
   // Lookup the loaded espree
   try {
-    return createRequire(getEspreePath())(module);
+    const relativeTo = path.join(getEspreePath(), "__placeholder__.js");
+    return createRequire(relativeTo)(module);
   } catch {
     // ignore
   }
   return null;
-}
-
-/** Get espree path */
-function getEspreePath(): string {
-  return loadNewest([
-    {
-      getPkg() {
-        return requireFromCwd("espree/package.json");
-      },
-      get() {
-        return getRequireFromCwd()!.resolve("espree");
-      },
-    },
-    {
-      getPkg() {
-        return requireFromLinter("espree/package.json");
-      },
-      get() {
-        return getRequireFromLinter()!.resolve("espree");
-      },
-    },
-    {
-      getPkg() {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-        return require("espree/package.json");
-      },
-      get() {
-        return require.resolve("espree");
-      },
-    },
-  ]);
 }

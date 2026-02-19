@@ -7,5 +7,5 @@ export default defineConfig({
   dts: true,
   clean: true,
   platform: "node",
-  external: ["eslint", "@eslint/core", "@types/estree", "estree"],
+  external: ["eslint", "@eslint/core", "estree"],
 });
