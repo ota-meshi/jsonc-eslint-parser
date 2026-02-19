@@ -1,11 +1,19 @@
 /* eslint-disable jsdoc/require-jsdoc, no-console -- benchmark */
 import * as Benchmark from "benchmark";
-import fs from "fs";
-import { parseForESLint } from "..";
-import { parseForESLint as parseOld } from "../node_modules/jsonc-eslint-parser";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { parseForESLint } from "../lib/index.mjs";
+// Compare against the old version installed in node_modules
+import { parseForESLint as parseOld } from "../node_modules/jsonc-eslint-parser/lib/index.js";
+
+// eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __filename polyfill
+const __filename = fileURLToPath(import.meta.url);
+// eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __dirname polyfill
+const __dirname = path.dirname(__filename);
 
 const contents = `${fs.readFileSync(
-  require.resolve("../package.json"),
+  path.join(__dirname, "../package.json"),
   "utf-8",
 )}// comments`;
 

@@ -1,7 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "exclude": ["tests/**/*", "tools/**/*", "typings/**/*", "benchmark/**/*"],
-  "compilerOptions": {
-    "removeComments": true /* Do not emit comments to output. */
-  }
-}

@@ -19,7 +19,7 @@ import type {
   JSONLiteral,
   JSONProperty,
   JSONBinaryExpression,
-} from "../parser/ast";
+} from "../parser/ast.ts";
 
 /**
  * Checks if given node is JSONExpression

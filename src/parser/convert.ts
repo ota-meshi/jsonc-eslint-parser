@@ -5,13 +5,16 @@ import type {
   JSONProgram,
   JSONExpressionStatement,
   Locations,
-} from "./ast";
-import type { TokenStore } from "./token-store";
+} from "./ast.ts";
+import type { TokenStore } from "./token-store.ts";
 import type { Token as AcornToken, tokTypes as AcornTokTypes } from "acorn";
-import { isStaticValueIdentifier } from "./validate";
-import { throwUnexpectedNodeError, throwUnexpectedTokenError } from "./errors";
-import { getAcorn } from "./modules/acorn";
-import type { JSONSyntaxContext } from "./syntax-context";
+import { isStaticValueIdentifier } from "./validate.ts";
+import {
+  throwUnexpectedNodeError,
+  throwUnexpectedTokenError,
+} from "./errors.ts";
+import { getAcorn } from "./modules/acorn.ts";
+import type { JSONSyntaxContext } from "./syntax-context.ts";
 
 export class TokenConvertor {
   private readonly ctx: JSONSyntaxContext;

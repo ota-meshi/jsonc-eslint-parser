@@ -1,12 +1,12 @@
-import assert from "assert";
-import { getStaticJSONValue, isExpression } from "../../../src/utils/ast";
-import { parseForESLint } from "../../../src/parser/parser";
+import assert from "node:assert";
+import { getStaticJSONValue, isExpression } from "../../../src/utils/ast.ts";
+import { parseForESLint } from "../../../src/parser/parser.ts";
 import * as espree from "espree";
 import type {
   JSONProgram,
   JSONObjectExpression,
-} from "../../../src/parser/ast";
-import { traverseNodes } from "../../../src/parser/traverse";
+} from "../../../src/parser/ast.ts";
+import { traverseNodes } from "../../../src/parser/traverse.ts";
 
 function parse(code: string) {
   const result = parseForESLint(code, {

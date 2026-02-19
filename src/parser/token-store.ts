@@ -1,5 +1,5 @@
 import type { AST } from "eslint";
-import type { SourceLocation } from "./ast";
+import type { SourceLocation } from "./ast.ts";
 
 export type MaybeNodeOrToken = {
   range?: [number, number];

@@ -1,11 +1,12 @@
 import type { SourceCode } from "eslint";
-import type * as Evk from "eslint-visitor-keys";
-import type { JSONNode } from "./ast";
+import * as Evk from "eslint-visitor-keys";
+import evkPkg from "eslint-visitor-keys/package.json" with { type: "json" };
+import type { JSONNode } from "./ast.ts";
 import {
   loadNewest,
   requireFromCwd,
   requireFromLinter,
-} from "./modules/require-utils";
+} from "./modules/require-utils.ts";
 
 const jsonKeys: { [key in JSONNode["type"]]: string[] } = {
   Program: ["body"],
@@ -46,12 +47,10 @@ export function getVisitorKeys(): SourceCode.VisitorKeys {
       },
       {
         getPkg() {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-          return require("eslint-visitor-keys/package.json");
+          return evkPkg;
         },
         get() {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-          return require("eslint-visitor-keys");
+          return Evk;
         },
       },
     ]);

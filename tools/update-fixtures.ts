@@ -1,8 +1,14 @@
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 
-import { parseForESLint } from "../src/parser/parser";
-import { nodeReplacer } from "../tests/src/parser/utils";
+import { parseForESLint } from "../src/parser/parser.js";
+import { nodeReplacer } from "../tests/src/parser/utils.js";
+
+// eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __filename polyfill
+const __filename = fileURLToPath(import.meta.url);
+// eslint-disable-next-line @typescript-eslint/naming-convention -- ESM __dirname polyfill
+const __dirname = path.dirname(__filename);
 
 const FIXTURE_ROOT = path.resolve(__dirname, "../tests/fixtures/parser/ast");
 

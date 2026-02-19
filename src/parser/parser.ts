@@ -1,33 +1,22 @@
 import type { Comment, Node } from "estree";
 import type { AST, SourceCode } from "eslint";
-import type { ESPree } from "./modules/espree";
-import { getEspree } from "./modules/espree";
-import { getVisitorKeys } from "./visitor-keys";
-import { convertProgramNode } from "./convert";
-import { TokenStore } from "./token-store";
-import type { JSONProgram } from "./ast";
-import { lte } from "semver";
-import { getAnyTokenErrorParser, getParser } from "./extend-parser";
-import type { JSONSyntaxContext } from "./syntax-context";
-
-const DEFAULT_ECMA_VERSION = "latest";
+import { getVisitorKeys } from "./visitor-keys.ts";
+import { convertProgramNode } from "./convert.ts";
+import { TokenStore } from "./token-store.ts";
+import type { JSONProgram } from "./ast.ts";
+import { getAnyTokenErrorParser, getParser } from "./extend-parser.ts";
+import type { JSONSyntaxContext } from "./syntax-context.ts";
 
 /**
- * Parse source code
+ * Parse JSON source code
  */
-export function parseForESLint(
+export function parseJSON(
   code: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
   options?: any,
-): {
-  ast: JSONProgram;
-  visitorKeys: SourceCode.VisitorKeys;
-  services: {
-    isJSON: boolean;
-  };
-} {
+): JSONProgram {
   const parserOptions = Object.assign(
-    { filePath: "<input>", ecmaVersion: DEFAULT_ECMA_VERSION },
+    { filePath: "<input>", ecmaVersion: "latest" },
     options || {},
     {
       loc: true,
@@ -39,7 +28,6 @@ export function parseForESLint(
       eslintScopeManager: true,
     },
   );
-  parserOptions.ecmaVersion = normalizeEcmaVersion(parserOptions.ecmaVersion);
   const ctx: JSONSyntaxContext = getJSONSyntaxContext(parserOptions.jsonSyntax);
   const tokens: AST.Token[] = [];
   const comments: Comment[] = [];
@@ -76,6 +64,24 @@ export function parseForESLint(
   }
   ast.tokens = tokens;
   ast.comments = comments;
+  return ast;
+}
+
+/**
+ * Parse source code
+ */
+export function parseForESLint(
+  code: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
+  options?: any,
+): {
+  ast: JSONProgram;
+  visitorKeys: SourceCode.VisitorKeys;
+  services: {
+    isJSON: boolean;
+  };
+} {
+  const ast = parseJSON(code, options);
   return {
     ast,
     visitorKeys: getVisitorKeys(),
@@ -204,41 +210,4 @@ function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
     parentheses: true,
     staticExpressions: true,
   };
-}
-
-/**
- * Normalize ECMAScript version
- */
-function normalizeEcmaVersion(version: number | "latest" | undefined) {
-  const espree = getEspree();
-  const latestEcmaVersion = getLatestEcmaVersion(espree);
-  if (version == null || version === "latest") {
-    return latestEcmaVersion;
-  }
-  return Math.min(getEcmaVersionYear(version), latestEcmaVersion);
-}
-
-/**
- * Get the latest ecma version from espree
- */
-function getLatestEcmaVersion(espree: ESPree): number {
-  if (espree.latestEcmaVersion == null) {
-    for (const { v, latest } of [
-      { v: "6.1.0", latest: 2020 },
-      { v: "4.0.0", latest: 2019 },
-    ]) {
-      if (lte(v, espree.version)) {
-        return latest;
-      }
-    }
-    return 2018;
-  }
-  return getEcmaVersionYear(espree.latestEcmaVersion);
-}
-
-/**
- * Get ECMAScript version year
- */
-function getEcmaVersionYear(version: number) {
-  return version > 5 && version < 2015 ? version + 2009 : version;
 }

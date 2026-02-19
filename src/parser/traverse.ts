@@ -1,6 +1,6 @@
 import type { VisitorKeys } from "eslint-visitor-keys";
-import type { JSONNode } from "./ast";
-import { getVisitorKeys } from "./visitor-keys";
+import type { JSONNode } from "./ast.ts";
+import { getVisitorKeys } from "./visitor-keys.ts";
 
 //------------------------------------------------------------------------------
 // Helpers

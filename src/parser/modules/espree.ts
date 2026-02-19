@@ -1,29 +1,55 @@
-import { loadNewest, requireFromCwd, requireFromLinter } from "./require-utils";
-import { lte } from "semver";
+import {
+  loadNewest,
+  requireFromCwd,
+  requireFromLinter,
+  resolveFromCwd,
+  resolveFromLinter,
+} from "./require-utils.ts";
+import path from "node:path";
+
+type NewestKind = "cwd" | "linter" | "none";
+type ESPreeData = {
+  packageJsonPath: string;
+  kind: NewestKind;
+};
+
+let espreeCache: ESPreeData | null = null;
 
 /**
- * The interface of ESLint custom parsers.
+ * Get the path to the loaded `espree`'s package.json.
+ * If the loaded ESLint was not found, just returns `require.resolve("espree/package.json")`.
  */
-export interface ESPree {
-  latestEcmaVersion?: number;
-  version: string;
+export function getEspreePath(): string | null {
+  const data = getEspreeData();
+  if (!data) {
+    return null;
+  }
+  return path.dirname(data.packageJsonPath);
+}
+/**
+ * Get the newest `espree` kind from the loaded ESLint or dependency.
+ */
+export function getNewestEspreeKind(): NewestKind {
+  return getEspreeData()?.kind ?? "none";
 }
 
-let espreeCache: ESPree | null = null;
-
 /**
- * Load `espree` from the loaded ESLint.
- * If the loaded ESLint was not found, just returns `require("espree")`.
+ *
  */
-export function getEspree(): ESPree {
+function getEspreeData(): ESPreeData | null {
   if (!espreeCache) {
-    espreeCache = loadNewest([
+    espreeCache = loadNewest<ESPreeData>([
       {
         getPkg() {
           return requireFromCwd("espree/package.json");
         },
         get() {
-          return requireFromCwd("espree");
+          const packageJsonPath = resolveFromCwd("espree/package.json");
+          if (!packageJsonPath) return null;
+          return {
+            packageJsonPath,
+            kind: "cwd",
+          };
         },
       },
       {
@@ -31,53 +57,15 @@ export function getEspree(): ESPree {
           return requireFromLinter("espree/package.json");
         },
         get() {
-          return requireFromLinter("espree");
-        },
-      },
-      {
-        getPkg() {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-          return require("espree/package.json");
-        },
-        get() {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- special require
-          return require("espree");
+          const packageJsonPath = resolveFromLinter("espree/package.json");
+          if (!packageJsonPath) return null;
+          return {
+            packageJsonPath,
+            kind: "linter",
+          };
         },
       },
     ]);
   }
-  return espreeCache!;
-}
-
-type NewestKind = "cwd" | "linter" | "self";
-
-let kindCache: NewestKind | null = null;
-
-/**
- * Get the newest `espree` kind from the loaded ESLint or dependency.
- */
-export function getNewestEspreeKind(): NewestKind {
-  if (kindCache) {
-    return kindCache;
-  }
-  const cwdPkg: { version: string } | null = requireFromCwd(
-    "espree/package.json",
-  );
-  const linterPkg: { version: string } | null = requireFromLinter(
-    "espree/package.json",
-  );
-  // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- ignore
-  const self: { version: string } = require("espree/package.json");
-
-  let target: { kind: NewestKind; version: string } = {
-    kind: "self",
-    version: self.version,
-  };
-  if (cwdPkg != null && lte(target.version, cwdPkg.version)) {
-    target = { kind: "cwd", version: cwdPkg.version };
-  }
-  if (linterPkg != null && lte(target.version, linterPkg.version)) {
-    target = { kind: "linter", version: linterPkg.version };
-  }
-  return (kindCache = target.kind);
+  return espreeCache;
 }
