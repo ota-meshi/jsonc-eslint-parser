@@ -93,7 +93,7 @@
   },
   "dependencies": {
     "acorn": "^8.5.0",
-    "eslint-visitor-keys": "^3.0.0",
+    "eslint-visitor-keys": "^5.0.0",
     "semver": "^7.3.5"
   },
   "publishConfig": {
