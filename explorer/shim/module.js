@@ -1,3 +1,1 @@
-module.exports = {
-  createRequire: () => () => null,
-};
+export const createRequire = () => () => null;

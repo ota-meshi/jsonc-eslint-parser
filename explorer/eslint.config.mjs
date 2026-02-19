@@ -13,6 +13,9 @@ export default [
     languageOptions: {
       sourceType: "module",
       ecmaVersion: 2020,
+      globals: {
+        URL: "readonly",
+      },
     },
     rules: {
       "n/no-unsupported-features/es-syntax": "off",
