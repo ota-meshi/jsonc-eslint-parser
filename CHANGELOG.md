@@ -1,5 +1,13 @@
 # jsonc-eslint-parser
 
+## 3.0.0
+
+### Major Changes
+
+- [#266](https://github.com/ota-meshi/jsonc-eslint-parser/pull/266) [`6d1679d`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/6d1679d4d9dfac8f28b1cc0519a2aee50671efaa) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Drop support for Node.js versions older than 20.19.0. The new minimum supported versions are: ^20.19.0 || ^22.13.0 || >=24
+
+- [#268](https://github.com/ota-meshi/jsonc-eslint-parser/pull/268) [`e1c554a`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/e1c554a1e16d09585fc2fb3d00c9739d330c3e3d) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Change to ESM-only package. This is a breaking change that requires Node.js environments that support ESM.
+
 ## 2.4.2
 
 ### Patch Changes
