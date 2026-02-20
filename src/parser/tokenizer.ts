@@ -74,16 +74,24 @@ export function tokenize(
   }
   const result: (AST.Token | Comment)[] = [];
   let commentIndex = 0;
-  for (const token of tokens) {
-    result.push(token);
 
+  for (const token of tokens) {
+    // Add comments that come before this token
     while (
       commentIndex < comments.length &&
-      comments[commentIndex].range![1] <= token.range[0]
+      comments[commentIndex].range![0] < token.range[0]
     ) {
       result.push(comments[commentIndex]);
       commentIndex++;
     }
+    result.push(token);
   }
+
+  // Add remaining comments
+  while (commentIndex < comments.length) {
+    result.push(comments[commentIndex]);
+    commentIndex++;
+  }
+
   return result;
 }

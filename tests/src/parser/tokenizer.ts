@@ -222,5 +222,64 @@ describe("tokenize", () => {
         assert(lastToken.range[1] >= code.length);
       }
     });
+
+    it("should maintain order when comments are included", () => {
+      const code = `// comment before
+42
+// comment after`;
+      const items = tokenize(code, {
+        jsonSyntax: "JSONC",
+        includeComments: true,
+      });
+
+      let previousEnd = 0;
+      for (const item of items) {
+        assert(
+          item.range![0] >= previousEnd,
+          `Items should be in order by position. Current: ${item.range![0]}, Previous end: ${previousEnd}`,
+        );
+        previousEnd = item.range![1];
+      }
+    });
+
+    it("should include trailing comments", () => {
+      const code = `42
+// trailing comment`;
+      const items = tokenize(code, {
+        jsonSyntax: "JSONC",
+        includeComments: true,
+      });
+
+      const comments = items.filter(
+        (item): item is Comment => "type" in item && item.type === "Line",
+      );
+      assert(comments.length > 0, "Should include trailing comment");
+    });
+
+    it("should maintain order with multiple comments and tokens", () => {
+      const code = `// comment 1
+{ "a": 1 } // comment 2
+// comment 3`;
+      const items = tokenize(code, {
+        jsonSyntax: "JSONC",
+        includeComments: true,
+      });
+
+      // Verify items are ordered by position
+      let previousEnd = 0;
+      for (const item of items) {
+        assert(
+          item.range![0] >= previousEnd,
+          `Items should be in order. Got range [${item.range![0]}, ${item.range![1]}] after position ${previousEnd}`,
+        );
+        previousEnd = item.range![1];
+      }
+
+      // Check that we have comments
+      const comments = items.filter(
+        (item): item is Comment => "type" in item && item.type === "Line",
+      );
+      assert.strictEqual(comments.length, 3, "Should have 3 comments");
+    });
   });
 });
