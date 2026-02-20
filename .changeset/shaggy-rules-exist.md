@@ -2,4 +2,4 @@
 "jsonc-eslint-parser": minor
 ---
 
-feat: add `tokenizer()`
+feat: add `tokenize()`
