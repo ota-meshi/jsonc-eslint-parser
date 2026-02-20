@@ -15,7 +15,6 @@ const FIXTURE_ROOT = path.resolve(dirname, "../../fixtures/parser/ast");
 function parse(code: string, fileName: string) {
   const ext = path.extname(fileName);
   return parseJSON(code, {
-    ecmaVersion: 2021,
     jsonSyntax:
       ext === ".json"
         ? "JSON"

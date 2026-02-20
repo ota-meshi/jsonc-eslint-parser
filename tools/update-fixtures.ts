@@ -16,17 +16,7 @@ const FIXTURE_ROOT = path.resolve(__dirname, "../tests/fixtures/parser/ast");
  * Parse
  */
 function parse(code: string) {
-  return parseForESLint(code, {
-    comment: true,
-    ecmaVersion: 2021,
-    eslintScopeManager: true,
-    eslintVisitorKeys: true,
-    filePath: "test.json",
-    loc: true,
-    range: true,
-    raw: true,
-    tokens: true,
-  });
+  return parseForESLint(code, {});
 }
 
 for (const filename of fs

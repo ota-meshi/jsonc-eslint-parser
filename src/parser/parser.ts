@@ -5,30 +5,31 @@ import { convertProgramNode } from "./convert.ts";
 import { TokenStore } from "./token-store.ts";
 import type { JSONProgram } from "./ast.ts";
 import { getAnyTokenErrorParser, getParser } from "./extend-parser.ts";
-import type { JSONSyntaxContext } from "./syntax-context.ts";
+import {
+  getJSONSyntaxContext,
+  type JSONSyntaxContext,
+} from "./syntax-context.ts";
+import type { ParserOptions } from "./parser-options.ts";
+import type { Options as AcornOptions } from "acorn";
 
 /**
  * Parse JSON source code
  */
-export function parseJSON(
-  code: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-  options?: any,
-): JSONProgram {
-  const parserOptions = Object.assign(
-    { filePath: "<input>", ecmaVersion: "latest" },
-    options || {},
-    {
-      loc: true,
-      range: true,
-      raw: true,
-      tokens: true,
-      comment: true,
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-    },
-  );
-  const ctx: JSONSyntaxContext = getJSONSyntaxContext(parserOptions.jsonSyntax);
+export function parseJSON(code: string, options?: ParserOptions): JSONProgram {
+  const parserOptions: AcornOptions & {
+    ctx?: JSONSyntaxContext;
+    tokenStore?: TokenStore;
+    comments?: Comment[];
+    nodes?: Node[];
+  } = Object.assign({ filePath: "<input>" }, options || {}, {
+    loc: true,
+    range: true,
+    raw: true,
+    tokens: true,
+    comment: true,
+    ecmaVersion: "latest" as const,
+  });
+  const ctx: JSONSyntaxContext = getJSONSyntaxContext(options?.jsonSyntax);
   const tokens: AST.Token[] = [];
   const comments: Comment[] = [];
   const tokenStore = new TokenStore(tokens);
@@ -72,8 +73,7 @@ export function parseJSON(
  */
 export function parseForESLint(
   code: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any
-  options?: any,
+  options?: ParserOptions,
 ): {
   ast: JSONProgram;
   visitorKeys: SourceCode.VisitorKeys;
@@ -88,126 +88,5 @@ export function parseForESLint(
     services: {
       isJSON: true,
     },
-  };
-}
-
-/**
- * Normalize json syntax option
- */
-function getJSONSyntaxContext(str?: string | null): JSONSyntaxContext {
-  const upperCase = str?.toUpperCase();
-  if (upperCase === "JSON") {
-    return {
-      trailingCommas: false,
-      comments: false,
-      plusSigns: false,
-      spacedSigns: false,
-      leadingOrTrailingDecimalPoints: false,
-      infinities: false,
-      nans: false,
-      numericSeparators: false,
-      binaryNumericLiterals: false,
-      octalNumericLiterals: false,
-      legacyOctalNumericLiterals: false,
-      invalidJsonNumbers: false,
-      multilineStrings: false,
-      unquoteProperties: false,
-      singleQuotes: false,
-      numberProperties: false,
-      undefinedKeywords: false,
-      sparseArrays: false,
-      regExpLiterals: false,
-      templateLiterals: false,
-      bigintLiterals: false,
-      unicodeCodepointEscapes: false,
-      escapeSequenceInIdentifier: false,
-      parentheses: false,
-      staticExpressions: false,
-    };
-  }
-  if (upperCase === "JSONC") {
-    return {
-      trailingCommas: true,
-      comments: true,
-      plusSigns: false,
-      spacedSigns: false,
-      leadingOrTrailingDecimalPoints: false,
-      infinities: false,
-      nans: false,
-      numericSeparators: false,
-      binaryNumericLiterals: false,
-      octalNumericLiterals: false,
-      legacyOctalNumericLiterals: false,
-      invalidJsonNumbers: false,
-      multilineStrings: false,
-      unquoteProperties: false,
-      singleQuotes: false,
-      numberProperties: false,
-      undefinedKeywords: false,
-      sparseArrays: false,
-      regExpLiterals: false,
-      templateLiterals: false,
-      bigintLiterals: false,
-      unicodeCodepointEscapes: false,
-      escapeSequenceInIdentifier: false,
-      parentheses: false,
-      staticExpressions: false,
-    };
-  }
-  if (upperCase === "JSON5") {
-    return {
-      trailingCommas: true,
-      comments: true,
-      plusSigns: true,
-      spacedSigns: true,
-      leadingOrTrailingDecimalPoints: true,
-      infinities: true,
-      nans: true,
-      numericSeparators: false,
-      binaryNumericLiterals: false,
-      octalNumericLiterals: false,
-      legacyOctalNumericLiterals: false,
-      invalidJsonNumbers: true,
-      multilineStrings: true,
-      unquoteProperties: true,
-      singleQuotes: true,
-      numberProperties: false,
-      undefinedKeywords: false,
-      sparseArrays: false,
-      regExpLiterals: false,
-      templateLiterals: false,
-      bigintLiterals: false,
-      unicodeCodepointEscapes: false,
-      escapeSequenceInIdentifier: false,
-      parentheses: false,
-      staticExpressions: false,
-    };
-  }
-  return {
-    trailingCommas: true,
-    comments: true,
-    plusSigns: true,
-    spacedSigns: true,
-    leadingOrTrailingDecimalPoints: true,
-    infinities: true,
-    nans: true,
-    numericSeparators: true,
-    binaryNumericLiterals: true,
-    octalNumericLiterals: true,
-    legacyOctalNumericLiterals: true,
-    invalidJsonNumbers: true,
-    multilineStrings: true,
-    unquoteProperties: true,
-    singleQuotes: true,
-    numberProperties: true,
-    undefinedKeywords: true,
-    sparseArrays: true,
-    regExpLiterals: true,
-    templateLiterals: true,
-    bigintLiterals: true,
-    unicodeCodepointEscapes: true,
-    escapeSequenceInIdentifier: true,
-    parentheses: true,
-    staticExpressions: true,
   };
 }

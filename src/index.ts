@@ -1,4 +1,5 @@
 import { parseForESLint, parseJSON } from "./parser/parser.ts";
+import { tokenize } from "./parser/tokenizer.ts";
 import { traverseNodes } from "./parser/traverse.ts";
 import {
   getStaticJSONValue,
@@ -31,7 +32,7 @@ export {
 /**
  * Parse JSON source code
  */
-export { parseJSON };
+export { parseJSON, tokenize };
 
 // types
 export type { AST };

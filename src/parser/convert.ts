@@ -42,7 +42,9 @@ export class TokenConvertor {
     let type: AST.Token["type"], value: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
     const additional: any = {};
-    if (token.type === tokTypes.string) {
+    if (token.type === tokTypes.eof) {
+      return null;
+    } else if (token.type === tokTypes.string) {
       type = "String";
       value = this.code.slice(...token.range!);
     } else if (token.type === tokTypes.num) {

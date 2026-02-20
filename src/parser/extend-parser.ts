@@ -16,13 +16,21 @@ let parserCache: typeof Parser | undefined;
 const PRIVATE = Symbol("ExtendParser#private");
 const PRIVATE_PROCESS_NODE = Symbol("ExtendParser#processNode");
 
+export interface Tokenizer {
+  /** Collect tokens. */
+  tokenize(): void;
+}
+
 /** Get extend parser */
 export function getParser(): typeof Parser {
   if (parserCache) {
     return parserCache;
   }
 
-  parserCache = class ExtendParser extends getAcorn().Parser {
+  parserCache = class ExtendParser
+    extends getAcorn().Parser
+    implements Tokenizer
+  {
     private [PRIVATE]: {
       code: string;
       ctx: JSONSyntaxContext;
@@ -92,6 +100,23 @@ export function getParser(): typeof Parser {
         comments: options.comments,
         nodes: options.nodes,
       };
+    }
+
+    /**
+     * Collect tokens.
+     */
+    public tokenize() {
+      const acornInstance = this as unknown as {
+        next(): void;
+        type: { label: string };
+      };
+      const tokTypes = getAcorn().tokTypes;
+      do {
+        acornInstance.next();
+      } while (acornInstance.type !== tokTypes.eof);
+
+      // Consume the final eof token
+      acornInstance.next();
     }
 
     public finishNode(

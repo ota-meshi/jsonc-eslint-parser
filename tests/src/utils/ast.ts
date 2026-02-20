@@ -9,17 +9,7 @@ import type {
 import { traverseNodes } from "../../../src/parser/traverse.ts";
 
 function parse(code: string) {
-  const result = parseForESLint(code, {
-    comment: true,
-    ecmaVersion: 2021,
-    eslintScopeManager: true,
-    eslintVisitorKeys: true,
-    filePath: "test.json",
-    loc: true,
-    range: true,
-    raw: true,
-    tokens: true,
-  });
+  const result = parseForESLint(code, {});
   traverseNodes(result.ast, {
     enterNode(node, parent) {
       (node as any).parent = parent;
