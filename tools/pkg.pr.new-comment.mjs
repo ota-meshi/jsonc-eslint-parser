@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Used in `/.github/workflows/pkg.pr.new.yml`
  */

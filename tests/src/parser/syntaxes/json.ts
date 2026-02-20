@@ -8,15 +8,6 @@ import espreePkg from "espree/package.json" with { type: "json" };
 function getParseError(code: string): ParseError {
   try {
     parseForESLint(code, {
-      comment: true,
-      ecmaVersion: 2021,
-      eslintScopeManager: true,
-      eslintVisitorKeys: true,
-      filePath: "test.json",
-      loc: true,
-      range: true,
-      raw: true,
-      tokens: true,
       jsonSyntax: "json",
     });
   } catch (e: any) {

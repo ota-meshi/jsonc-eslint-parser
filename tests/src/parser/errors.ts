@@ -5,17 +5,7 @@ import type { ParseError } from "../../../src/parser/errors.ts";
 
 function getParseError(code: string): ParseError {
   try {
-    parseForESLint(code, {
-      comment: true,
-      ecmaVersion: 2021,
-      eslintScopeManager: true,
-      eslintVisitorKeys: true,
-      filePath: "test.json",
-      loc: true,
-      range: true,
-      raw: true,
-      tokens: true,
-    });
+    parseForESLint(code, {});
   } catch (e: any) {
     return e;
   }

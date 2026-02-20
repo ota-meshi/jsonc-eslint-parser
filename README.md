@@ -78,6 +78,84 @@ If not specified, all syntaxes that express static values ​​are accepted. Fo
 
 **Note** : Recommended to loosen the syntax checking by the parser and use check rules of [eslint-plugin-jsonc] to automatically fix it.
 
+## :gear: API
+
+### `parseJSON(code, options?)`
+
+Parses the given JSON source code and returns the AST.
+
+```js
+import { parseJSON } from "jsonc-eslint-parser";
+
+const ast = parseJSON('{"key": "value"}', { jsonSyntax: "JSON" });
+console.log(ast);
+```
+
+**Parameters:**
+
+- `code` (string): The JSON source code to parse.
+- `options` (object, optional): Parser options.
+  - `jsonSyntax` (`"JSON"` | `"JSONC"` | `"JSON5"`): The JSON syntax to use.
+
+**Returns:** `JSONProgram` - The root AST node.
+
+### `parseForESLint(code, options?)`
+
+Parses the given JSON source code for ESLint. This is the main parser function used by ESLint.
+
+```js
+import { parseForESLint } from "jsonc-eslint-parser";
+
+const result = parseForESLint('{"key": "value"}', { jsonSyntax: "JSON" });
+console.log(result.ast);
+console.log(result.services);
+console.log(result.visitorKeys);
+```
+
+**Parameters:**
+
+- `code` (string): The JSON source code to parse.
+- `options` (object, optional): Parser options (same as `parseJSON`).
+
+**Returns:** An object containing:
+
+- `ast`: The root AST node.
+- `services`: An object with helper methods like `getStaticJSONValue()`.
+- `visitorKeys`: Visitor keys for traversing the AST.
+
+### `tokenize(code, options?)`
+
+Tokenizes the given JSON source code and returns an array of tokens.
+
+```js
+import { tokenize } from "jsonc-eslint-parser";
+
+const tokens = tokenize('{"key": "value"}', { jsonSyntax: "JSON" });
+console.log(tokens);
+// [
+//   { type: 'Punctuator', value: '{', range: [0, 1], loc: {...} },
+//   { type: 'String', value: '"key"', range: [1, 6], loc: {...} },
+//   { type: 'Punctuator', value: ':', range: [6, 7], loc: {...} },
+//   { type: 'String', value: '"value"', range: [8, 15], loc: {...} },
+//   { type: 'Punctuator', value: '}', range: [15, 16], loc: {...} }
+// ]
+
+// Include comments in the result
+const tokensWithComments = tokenize('{"key": "value" /* comment */}', {
+  jsonSyntax: "JSONC",
+  includeComments: true
+});
+```
+
+**Parameters:**
+
+- `code` (string): The JSON source code to tokenize.
+- `options` (object, optional): Parser options.
+  - `jsonSyntax` (`"JSON"` | `"JSONC"` | `"JSON5"`): The JSON syntax to use.
+  - `includeComments` (boolean): If `true`, comments are included in the result array.
+
+**Returns:** `Token[]` or `(Token | Comment)[]` - An array of tokens, optionally including comments.
+
 ## Usage for Custom Rules / Plugins
 
 - [AST.md](./docs/AST.md) is AST specification.
