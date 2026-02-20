@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- for benchmark
+// @ts-nocheck
 /* eslint-disable jsdoc/require-jsdoc, no-console -- benchmark */
 import * as Benchmark from "benchmark";
 import fs from "node:fs";
