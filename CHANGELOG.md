@@ -1,5 +1,11 @@
 # jsonc-eslint-parser
 
+## 3.1.0
+
+### Minor Changes
+
+- [#275](https://github.com/ota-meshi/jsonc-eslint-parser/pull/275) [`38d5905`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/38d5905ede808f7cc5ff2530552cebd0fadc6c5e) Thanks [@ota-meshi](https://github.com/ota-meshi)! - feat: add `tokenize()`
+
 ## 3.0.0
 
 ### Major Changes
