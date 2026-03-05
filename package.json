@@ -83,7 +83,7 @@
     "mocha": "^11.0.0",
     "nyc": "^18.0.0",
     "prettier": "~3.8.0",
-    "tsdown": "^0.20.3",
+    "tsdown": "^0.21.0",
     "tsx": "^4.21.0",
     "typescript": "~5.9.0",
     "typescript-eslint": "^8.0.0",
