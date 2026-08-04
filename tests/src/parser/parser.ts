@@ -2,7 +2,7 @@
 import assert from "node:assert";
 import path from "node:path";
 import fs from "node:fs";
-import semver from "semver";
+import { satisfies } from "verkit";
 
 import { getStaticJSONValue, parseJSON } from "../../../src/index.ts";
 import { nodeReplacer } from "./utils.ts";
@@ -57,7 +57,7 @@ describe("Check for AST.", () => {
           pkgName === "node"
             ? process.version
             : require(`${pkgName}/package.json`).version;
-        return !semver.satisfies(version, pkgVersion as string);
+        return !satisfies(version, pkgVersion as string);
       })
     ) {
       continue;

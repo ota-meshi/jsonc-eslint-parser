@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import semver from "semver";
+import { satisfies } from "verkit";
 
 import * as jsoncParser from "../../../src/index.ts";
 import { Linter } from "eslint";
@@ -7,7 +7,7 @@ import espreePkg from "espree/package.json" with { type: "json" };
 
 describe("Parser options.", () => {
   for (const { code, parserOptions, errors } of [
-    ...(semver.satisfies(espreePkg.version, ">=7.2.0")
+    ...(satisfies(espreePkg.version, ">=7.2.0")
       ? [
           {
             code: "1_2_3",
