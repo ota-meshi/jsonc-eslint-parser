@@ -202,7 +202,7 @@ export function convertProgramNode(
         column: endLoc.column,
       },
     },
-    parent: null as never,
+    parent: null,
   };
   setParent(body, nn);
   return nn;

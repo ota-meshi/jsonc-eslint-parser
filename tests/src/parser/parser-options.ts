@@ -37,7 +37,7 @@ describe("Parser options.", () => {
           files: ["*.json"],
           languageOptions: {
             parser: jsoncParser,
-            parserOptions: parserOptions as never,
+            parserOptions,
           },
         },
         "test.json",
