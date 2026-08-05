@@ -64,12 +64,12 @@ describe("isExpression", () => {
     "`template`",
   ]) {
     it(code, () => {
-      const ast: JSONProgram = parse(code).ast as never;
+      const ast: JSONProgram = parse(code).ast;
       assert.ok(isExpression(ast.body[0].expression));
     });
   }
   it("property is not expression", () => {
-    const ast: JSONProgram = parse("{a: 1}").ast as never;
+    const ast: JSONProgram = parse("{a: 1}").ast;
     assert.ok(
       !isExpression(
         (ast.body[0].expression as JSONObjectExpression).properties[0],
@@ -77,7 +77,7 @@ describe("isExpression", () => {
     );
   });
   it("property literal key is not expression", () => {
-    const ast: JSONProgram = parse('{"a": 1}').ast as never;
+    const ast: JSONProgram = parse('{"a": 1}').ast;
     assert.ok(
       !isExpression(
         (ast.body[0].expression as JSONObjectExpression).properties[0].key,
@@ -85,7 +85,7 @@ describe("isExpression", () => {
     );
   });
   it("property key is not expression", () => {
-    const ast: JSONProgram = parse("{a: 1}").ast as never;
+    const ast: JSONProgram = parse("{a: 1}").ast;
     assert.ok(
       !isExpression(
         (ast.body[0].expression as JSONObjectExpression).properties[0].key,
@@ -158,7 +158,7 @@ describe("getStaticJSONValue", () => {
     }
   });
   it("Error on property key", () => {
-    const ast: JSONProgram = parse("{a: 1}").ast as never;
+    const ast: JSONProgram = parse("{a: 1}").ast;
     try {
       getStaticJSONValue(
         (ast.body[0].expression as JSONObjectExpression).properties[0]
