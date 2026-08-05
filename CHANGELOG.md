@@ -1,5 +1,11 @@
 # jsonc-eslint-parser
 
+## 3.2.0
+
+### Minor Changes
+
+- [#300](https://github.com/ota-meshi/jsonc-eslint-parser/pull/300) [`7831e18`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/7831e1831368cc12e9392428aae9a27facb78182) Thanks [@sxzz](https://github.com/sxzz)! - refactor: replace semver with verkit
+
 ## 3.1.0
 
 ### Minor Changes
