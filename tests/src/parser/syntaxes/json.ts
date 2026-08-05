@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import semver from "semver";
+import { satisfies } from "verkit";
 
 import { parseForESLint } from "../../../../src/parser/parser.ts";
 import type { ParseError } from "../../../../src/parser/errors.ts";
@@ -50,7 +50,7 @@ describe("Check that parsing error is correct for JSON.", () => {
       index: 13,
       char: "/",
     },
-    ...(semver.satisfies(espreePkg.version, ">=7.2.0")
+    ...(satisfies(espreePkg.version, ">=7.2.0")
       ? [
           {
             code: '{"foo": 1_2_3}',

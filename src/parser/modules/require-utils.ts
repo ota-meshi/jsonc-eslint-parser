@@ -1,6 +1,6 @@
 import path from "node:path";
-import { lte } from "semver";
 import { createRequire } from "node:module";
+import { isLessOrEqual } from "verkit";
 
 /**
  * Get NodeJS.Require from Linter
@@ -90,7 +90,10 @@ export function loadNewest<T>(
   let target: { version: string; get: () => T | null } | null = null;
   for (const item of items) {
     const pkg = item.getPkg();
-    if (pkg != null && (!target || lte(target.version, pkg.version))) {
+    if (
+      pkg != null &&
+      (!target || isLessOrEqual(target.version, pkg.version))
+    ) {
       target = { version: pkg.version, get: item.get };
     }
   }
