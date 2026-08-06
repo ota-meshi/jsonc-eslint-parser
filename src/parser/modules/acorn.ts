@@ -1,9 +1,8 @@
 import * as acorn from "acorn";
 import acornPkg from "acorn/package.json" with { type: "json" };
-import { createRequire } from "node:module";
+import { createRequire, path } from "./require-utils.ts";
 import { loadNewest, requireFromCwd } from "./require-utils.ts";
 import { getEspreePath } from "./espree.ts";
-import path from "node:path";
 
 let acornCache: typeof acorn | undefined;
 /**
@@ -46,6 +45,7 @@ export function getAcorn(): typeof acorn {
  * Get module from espree
  */
 function requireFromEspree<T>(module: string): T | null {
+  if (!createRequire || !path) return null;
   // Lookup the loaded espree
   try {
     const espreePath = getEspreePath();

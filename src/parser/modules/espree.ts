@@ -5,7 +5,7 @@ import {
   resolveFromCwd,
   resolveFromLinter,
 } from "./require-utils.ts";
-import path from "node:path";
+import { path } from "./require-utils.ts";
 
 type NewestKind = "cwd" | "linter" | "none";
 type ESPreeData = {
@@ -20,6 +20,9 @@ let espreeCache: ESPreeData | null = null;
  * If the loaded ESLint was not found, just returns `require.resolve("espree/package.json")`.
  */
 export function getEspreePath(): string | null {
+  if (!path) {
+    return null;
+  }
   const data = getEspreeData();
   if (!data) {
     return null;
