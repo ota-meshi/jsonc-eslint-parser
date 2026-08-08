@@ -8,15 +8,14 @@
     "outDir": "./lib",
     "strict": true,
     "noImplicitAny": true,
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "types": ["node", "mocha"],
     "rootDir": ".",
-    "baseUrl": ".",
     "paths": {
-      "*": ["typings/*"]
+      "*": ["./typings/*"]
     },
     "declaration": true,
     "esModuleInterop": true,
