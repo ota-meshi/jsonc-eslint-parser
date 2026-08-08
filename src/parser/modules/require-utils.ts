@@ -1,11 +1,18 @@
-import path from "node:path";
-import { createRequire } from "node:module";
+import type { Module } from "node:module";
+import type { PlatformPath } from "node:path";
 import { isLessOrEqual } from "verkit";
+
+export const path: PlatformPath | undefined =
+  globalThis.process?.getBuiltinModule("node:path");
+export const createRequire: (typeof Module)["createRequire"] | undefined =
+  globalThis.process?.getBuiltinModule("node:module")?.createRequire;
 
 /**
  * Get NodeJS.Require from Linter
  */
 export function getRequireFromLinter(): NodeJS.Require | null {
+  if (!createRequire || !path) return null;
+
   try {
     const eslintPkgPath = getRequireFromCwd()?.resolve("eslint/package.json");
     if (!eslintPkgPath) return null;
@@ -23,7 +30,9 @@ export function getRequireFromLinter(): NodeJS.Require | null {
 /**
  * Get NodeJS.Require from Cwd
  */
-export function getRequireFromCwd(): NodeJS.Require | null {
+function getRequireFromCwd(): NodeJS.Require | null {
+  if (!createRequire || !path) return null;
+
   try {
     const cwd = process.cwd();
     const relativeTo = path.join(cwd, "__placeholder__.js");
