@@ -1,5 +1,11 @@
 # jsonc-eslint-parser
 
+## 3.3.0
+
+### Minor Changes
+
+- [#304](https://github.com/ota-meshi/jsonc-eslint-parser/pull/304) [`6d0c4fc`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/6d0c4fc93d017785152be9c3f3eed875bdc59cb4) Thanks [@sxzz](https://github.com/sxzz)! - feat: support run on browsers
+
 ## 3.2.0
 
 ### Minor Changes
