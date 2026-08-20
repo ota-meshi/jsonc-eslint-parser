@@ -26,8 +26,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v7
     - uses: actions/setup-node@v7
-    - name: Update npm
-      run: npm install -g npm@11
+      with:
+        node-version: lts/*
     - name: Install And Build
       run: |+
         npm install
