@@ -17,6 +17,8 @@ jobs:
     steps:
     - uses: actions/checkout@v7
     - uses: actions/setup-node@v7
+      with:
+        node-version: lts/*
     - uses: actions/cache@v6
       with:
         path: node_modules
@@ -38,6 +40,10 @@ jobs:
       uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node-version }}
+    # Node 20/22 bundle npm 10, whose dependency resolution crashes with
+    # `Cannot read properties of null (reading 'edgesOut')`
+    - name: Update npm
+      run: npm install -g npm@11
     - name: Install Packages
       run: npm install -f
     - name: Test
