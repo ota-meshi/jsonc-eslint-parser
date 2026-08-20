@@ -21,6 +21,9 @@ jobs:
       with:
         path: node_modules
         key: ${{ runner.os }}-${{ hashFiles('package.json') }}-${{ github.ref }}
+    # Avoid a crash in npm 10's dependency resolution (`Cannot read properties of null (reading 'edgesOut')`)
+    - name: Update npm
+      run: npm install -g npm@11
     - name: Install Packages
       run: npm install -f
     - name: Lint
@@ -38,6 +41,8 @@ jobs:
       uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Update npm
+      run: npm install -g npm@11
     - name: Install Packages
       run: npm install -f
     - name: Test

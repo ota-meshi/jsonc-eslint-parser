@@ -19,6 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
+      - name: Update npm
+        run: npm install -g npm@11
       - name: Install Packages
         run: npm install
       - name: Build
