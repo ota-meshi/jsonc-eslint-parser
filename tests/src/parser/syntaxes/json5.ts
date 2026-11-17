@@ -1,7 +1,67 @@
 import assert from "node:assert";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
+import { getStaticJSONValue, parseJSON } from "../../../../src/index.ts";
 import { parseForESLint } from "../../../../src/parser/parser.ts";
 import type { ParseError } from "../../../../src/parser/errors.ts";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const FIXTURE_ROOT = path.resolve(
+  dirname,
+  "../../../fixtures/parser/json5-tests",
+);
+
+type ExpectedJSONValue =
+  | ["null"]
+  | ["boolean", boolean]
+  | ["string", string]
+  | ["number", string]
+  | ["array", ExpectedJSONValue[]]
+  | ["object", [string, ExpectedJSONValue][]];
+
+const EXPECTED_VALUES = JSON.parse(
+  fs.readFileSync(path.join(FIXTURE_ROOT, "expected.json"), "utf8"),
+) as Record<string, ExpectedJSONValue>;
+
+function getExpectedValue(value: ExpectedJSONValue): unknown {
+  switch (value[0]) {
+    case "null":
+      return null;
+    case "boolean":
+    case "string":
+      return value[1];
+    case "number":
+      switch (value[1]) {
+        case "NaN":
+          return Number.NaN;
+        case "+Infinity":
+          return Number.POSITIVE_INFINITY;
+        case "-Infinity":
+          return Number.NEGATIVE_INFINITY;
+        case "-0":
+          return -0;
+        default:
+          return Buffer.from(value[1], "hex").readDoubleBE(0);
+      }
+    case "array":
+      return value[1].map(getExpectedValue);
+    case "object":
+      return Object.fromEntries(
+        value[1].map(([key, entry]) => [key, getExpectedValue(entry)]),
+      );
+    default:
+      return assert.fail(`Unexpected expected value type: ${value[0]}`);
+  }
+}
+
+function getFixtureFiles(directory: string): string[] {
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const fileName = path.join(directory, entry.name);
+    return entry.isDirectory() ? getFixtureFiles(fileName) : [fileName];
+  });
+}
 
 function getParseError(code: string): ParseError {
   try {
@@ -181,6 +241,39 @@ describe("Check that parsing error is correct for JSON5.", () => {
         },
         { message, lineNumber, column, index, char },
       );
+    });
+  }
+});
+
+describe("JSON5 test vectors", () => {
+  for (const fileName of getFixtureFiles(FIXTURE_ROOT)
+    .filter(
+      (f) =>
+        [".json", ".json5", ".js", ".txt"].includes(path.extname(f)) &&
+        path.relative(FIXTURE_ROOT, f) !== "expected.json",
+    )
+    .sort()) {
+    const id = path.relative(FIXTURE_ROOT, fileName).split(path.sep).join("/");
+
+    if (id === "todo/unicode-escaped-unquoted-key.json5") {
+      // JSON5 mode disables identifier escapes (see src/parser/syntax-context.ts).
+      it.skip(`JSON5: ${id}`);
+      continue;
+    }
+
+    it(`JSON5: ${id}`, () => {
+      const code = fs.readFileSync(fileName, "utf8");
+      if ([".json", ".json5"].includes(path.extname(fileName))) {
+        const ast = parseJSON(code, { jsonSyntax: "JSON5" });
+        const expected = EXPECTED_VALUES[id];
+        assert.ok(expected, `Missing expected value for ${id}`);
+        assert.deepStrictEqual(
+          getStaticJSONValue(ast),
+          getExpectedValue(expected),
+        );
+      } else {
+        assert.throws(() => parseJSON(code, { jsonSyntax: "JSON5" }));
+      }
     });
   }
 });

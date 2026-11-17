@@ -1,0 +1,4 @@
+/tests/fixtures/parser/json5-tests/new-lines/comment-cr.json5 binary
+/tests/fixtures/parser/json5-tests/new-lines/comment-crlf.json5 binary
+/tests/fixtures/parser/json5-tests/new-lines/escaped-cr.json5 binary
+/tests/fixtures/parser/json5-tests/new-lines/escaped-crlf.json5 binary
