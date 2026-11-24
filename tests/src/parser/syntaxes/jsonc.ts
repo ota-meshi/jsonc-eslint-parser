@@ -160,6 +160,14 @@ describe("Check that parsing error is correct for JSONC.", () => {
       index: 0,
       char: "4",
     },
+    {
+      code: '"a\\\u2028b"',
+      message: "Unexpected multiline string.",
+      lineNumber: 1,
+      column: 1,
+      index: 0,
+      char: '"',
+    },
   ]) {
     it(`JSONC parseForESLint error on ${JSON.stringify(code)}`, () => {
       const e = getParseError(code);
@@ -173,6 +181,16 @@ describe("Check that parsing error is correct for JSONC.", () => {
         },
         { message, lineNumber, column, index, char },
       );
+    });
+  }
+});
+
+describe("Check that parsing is correct for JSONC.", () => {
+  for (const code of ['"a\u2028b"', '["a\u2029b"]', '"a\\\\\u2028b"']) {
+    it(`JSONC parseForESLint on ${JSON.stringify(code)}`, () => {
+      parseForESLint(code, {
+        jsonSyntax: "jsonc",
+      });
     });
   }
 });

@@ -184,3 +184,13 @@ describe("Check that parsing error is correct for JSON5.", () => {
     });
   }
 });
+
+describe("Check that parsing is correct for JSON5.", () => {
+  for (const code of ["null\u00a0", "1\u2028", "[1]\ufeff"]) {
+    it(`JSON5 parseForESLint on ${JSON.stringify(code)}`, () => {
+      parseForESLint(code, {
+        jsonSyntax: "json5",
+      });
+    });
+  }
+});

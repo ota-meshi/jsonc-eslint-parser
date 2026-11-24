@@ -83,3 +83,11 @@ describe("Check for AST.", () => {
     });
   }
 });
+
+describe("Check that parsing is correct for the default syntax.", () => {
+  for (const code of ["null\ufeff", "null\u00a0", "1\u2029"]) {
+    it(`parseJSON on ${JSON.stringify(code)}`, () => {
+      parseJSON(code);
+    });
+  }
+});
