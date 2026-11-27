@@ -1,5 +1,11 @@
 # jsonc-eslint-parser
 
+## 3.3.1
+
+### Patch Changes
+
+- [#332](https://github.com/ota-meshi/jsonc-eslint-parser/pull/332) [`aafd311`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/aafd3112847620861cd21b26417ce82f107b179e) Thanks [@sxzz](https://github.com/sxzz)! - chore: upgrade verkit
+
 ## 3.3.0
 
 ### Minor Changes
