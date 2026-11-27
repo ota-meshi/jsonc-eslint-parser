@@ -4,10 +4,7 @@
   "description": "JSON, JSONC and JSON5 parser for use with ESLint plugins",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./lib/index.d.mts",
-      "default": "./lib/index.mjs"
-    },
+    ".": "./lib/index.mjs",
     "./package.json": "./package.json"
   },
   "types": "lib/index.d.mts",
@@ -91,7 +88,7 @@
   "dependencies": {
     "acorn": "^8.5.0",
     "eslint-visitor-keys": "^5.0.0",
-    "verkit": "^0.4.0"
+    "verkit": "^0.5.0"
   },
   "publishConfig": {
     "access": "public"

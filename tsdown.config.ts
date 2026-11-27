@@ -5,6 +5,7 @@ export default defineConfig({
   outDir: "lib",
   dts: true,
   fixedExtension: true,
+  exports: true,
   platform: "neutral",
   deps: {
     dts: {
