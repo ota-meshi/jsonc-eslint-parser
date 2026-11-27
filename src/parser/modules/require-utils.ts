@@ -1,6 +1,6 @@
 import type { Module } from "node:module";
 import type { PlatformPath } from "node:path";
-import { isLessOrEqual } from "verkit";
+import { isLessThanOrEqual } from "verkit";
 
 export const path: PlatformPath | undefined =
   globalThis.process?.getBuiltinModule("node:path");
@@ -101,7 +101,7 @@ export function loadNewest<T>(
     const pkg = item.getPkg();
     if (
       pkg != null &&
-      (!target || isLessOrEqual(target.version, pkg.version))
+      (!target || isLessThanOrEqual(target.version, pkg.version))
     ) {
       target = { version: pkg.version, get: item.get };
     }
