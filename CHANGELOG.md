@@ -1,5 +1,11 @@
 # jsonc-eslint-parser
 
+## 3.3.2
+
+### Patch Changes
+
+- [#331](https://github.com/ota-meshi/jsonc-eslint-parser/pull/331) [`f5bd023`](https://github.com/ota-meshi/jsonc-eslint-parser/commit/f5bd0230dd536797bce2e4e460a8108d1b30fdf2) Thanks [@tlq5l](https://github.com/tlq5l)! - fix: allow Unicode whitespace after the root value, and unescaped U+2028/U+2029 in strings for JSON/JSONC syntax
+
 ## 3.3.1
 
 ### Patch Changes
