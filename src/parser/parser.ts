@@ -12,6 +12,8 @@ import {
 import type { ParserOptions } from "./parser-options.ts";
 import type { Options as AcornOptions } from "acorn";
 
+const whitespacePattern = /\s/u;
+
 /**
  * Parse JSON source code
  */
@@ -51,12 +53,7 @@ export function parseJSON(code: string, options?: ParserOptions): JSONProgram {
     comments[comments.length - 1]?.range![1] ?? 0,
   );
   let lastChar = code[lastIndex];
-  while (
-    lastChar === "\n" ||
-    lastChar === "\r" ||
-    lastChar === " " ||
-    lastChar === "\t"
-  ) {
+  while (lastChar && whitespacePattern.test(lastChar)) {
     lastIndex++;
     lastChar = code[lastIndex];
   }

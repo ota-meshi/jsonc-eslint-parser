@@ -25,7 +25,8 @@ import { isRegExpLiteral } from "./utils.ts";
 import type { JSONIdentifier } from "./ast.ts";
 import type { JSONSyntaxContext } from "./syntax-context.ts";
 
-const lineBreakPattern = /\r\n|[\n\r\u2028\u2029]/u;
+const lineContinuationPattern =
+  /(?<!\\)(?:\\\\)*\\(?:\r\n|[\n\r\u2028\u2029])/u;
 const octalNumericLiteralPattern = /^0o/iu;
 const legacyOctalNumericLiteralPattern = /^0\d/u;
 const binaryNumericLiteralPattern = /^0b/iu;
@@ -334,7 +335,7 @@ function validateLiteral(node: Literal, ctx: JSONSyntaxContext) {
       }
     }
     if (!ctx.multilineStrings) {
-      if (lineBreakPattern.test(node.raw!)) {
+      if (lineContinuationPattern.test(node.raw!)) {
         throw throwUnexpectedError("multiline string", node);
       }
     }

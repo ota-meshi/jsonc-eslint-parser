@@ -142,6 +142,14 @@ describe("Check that parsing error is correct for JSON.", () => {
       index: 0,
       char: "4",
     },
+    {
+      code: '"a\\\u2028b"',
+      message: "Unexpected multiline string.",
+      lineNumber: 1,
+      column: 1,
+      index: 0,
+      char: '"',
+    },
   ]) {
     it(`JSON parseForESLint error on ${JSON.stringify(code)}`, () => {
       const e = getParseError(code);
@@ -155,6 +163,22 @@ describe("Check that parsing error is correct for JSON.", () => {
         },
         { message, lineNumber, column, index, char },
       );
+    });
+  }
+});
+
+describe("Check that parsing is correct for JSON.", () => {
+  for (const code of [
+    '"\u2028"',
+    '"a\u2029b"',
+    '"a\\\\\u2028b"',
+    "null\u00a0",
+    "null\ufeff",
+  ]) {
+    it(`JSON parseForESLint on ${JSON.stringify(code)}`, () => {
+      parseForESLint(code, {
+        jsonSyntax: "json",
+      });
     });
   }
 });
