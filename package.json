@@ -54,7 +54,7 @@
   },
   "homepage": "https://github.com/ota-meshi/jsonc-eslint-parser#readme",
   "devDependencies": {
-    "@changesets/changelog-github": "^1.0.0",
+    "@changesets/changelog-github": "^2.0.0",
     "@changesets/cli": "^3.0.0",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.3.0",
     "@ota-meshi/eslint-plugin": "^0.21.0",
